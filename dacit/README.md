@@ -1,6 +1,6 @@
 # dacit
 
-A new Flutter project.
+Dicalect adapted cochlear implant training
 
 ## Getting Started
 

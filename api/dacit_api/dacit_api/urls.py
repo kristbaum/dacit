@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path
 
 urlpatterns = [
-    path('api/', include('acuoapi.urls')),
+    path('api/', include('dacitapi.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:acuo/minimal_pairs_page.dart';
-import 'package:acuo/record_audio.dart';
-import 'package:acuo/settings_page.dart';
-import 'package:acuo/speaker_dis_page.dart';
-import 'package:acuo/about_page.dart';
+import 'package:dacit/minimal_pairs_page.dart';
+import 'package:dacit/record_audio.dart';
+import 'package:dacit/settings_page.dart';
+import 'package:dacit/speaker_dis_page.dart';
+import 'package:dacit/about_page.dart';
 import 'package:record/record.dart';
 
 void main() {
@@ -20,13 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Acuo',
+      title: 'Dacit',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: AcuoPage(title: 'Acuo'),
+      home: DacitPage(title: 'Dacit'),
       routes: {
         '/minpairs': (context) => MinimalPairs(),
         '/record': (context) => RecordPage(),
@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AcuoPage extends StatefulWidget {
-  AcuoPage({Key? key, required this.title}) : super(key: key);
+class DacitPage extends StatefulWidget {
+  DacitPage({Key? key, required this.title}) : super(key: key);
 
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
@@ -50,10 +50,10 @@ class AcuoPage extends StatefulWidget {
   final String title;
 
   @override
-  _AcuoPageState createState() => _AcuoPageState();
+  _DacitPageState createState() => _DacitPageState();
 }
 
-class _AcuoPageState extends State<AcuoPage> {
+class _DacitPageState extends State<DacitPage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -160,7 +160,7 @@ Widget drawer(BuildContext context) {
         decoration: BoxDecoration(
           color: Colors.blue,
         ),
-        child: Text('Acuo an audio training app for cochlear implant users',
+        child: Text('Dacit an audio training app for cochlear implant users',
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 20,
@@ -231,4 +231,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
     _audioRecorder.dispose();
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) {}
 }

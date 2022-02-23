@@ -12,7 +12,7 @@ services:
       - "127.0.0.1:5432:5432"
 
   api:
-    image: acuo/api
+    image: dacit/api
     build:
       context: .
       dockerfile: ./api/Dockerfile
@@ -36,7 +36,7 @@ services:
 #      - ./api/src/artigo_api/.env
     
   web:
-    image: acuo/client
+    image: dacit/client
     build:
       context: ./web
     volumes:

@@ -1,12 +1,12 @@
 openapi: 3.0.3
 info:
-  title: "Acuo"
-  description: "Acuo API definition"
+  title: "Dacit"
+  description: "Dacit API definition"
   version: "0.1"
   license:
     name: GPLv3
 servers:
-  - url: https://acuo.kristbaum.org
+  - url: https://dacit.kristbaum.org
 paths:
   /recording:
     post:

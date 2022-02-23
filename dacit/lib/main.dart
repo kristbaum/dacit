@@ -11,7 +11,6 @@ import 'package:acuo/speaker_dis_page.dart';
 import 'package:acuo/about_page.dart';
 import 'package:record/record.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -214,8 +213,8 @@ class _AudioRecorderState extends State<AudioRecorder> {
   bool _isRecording = false;
   bool _isPaused = false;
   int _recordDuration = 0;
-  Timer? _timer;
-  Timer? _ampTimer;
+  //Timer? _timer;
+  //Timer? _ampTimer;
   final _audioRecorder = Record();
   Amplitude? _amplitude;
 
@@ -227,8 +226,8 @@ class _AudioRecorderState extends State<AudioRecorder> {
 
   @override
   void dispose() {
-    _timer?.cancel();
-    _ampTimer?.cancel();
+    //  _timer?.cancel();
+    //  _ampTimer?.cancel();
     _audioRecorder.dispose();
     super.dispose();
   }

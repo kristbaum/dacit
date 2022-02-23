@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dacit">
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
    <application
         android:label="dacit"
         android:icon="@mipmap/ic_launcher">

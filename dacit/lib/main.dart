@@ -9,7 +9,6 @@ import 'package:dacit/record_audio.dart';
 import 'package:dacit/settings_page.dart';
 import 'package:dacit/speaker_dis_page.dart';
 import 'package:dacit/about_page.dart';
-import 'package:record/record.dart';
 
 void main() {
   runApp(MyApp());
@@ -166,15 +165,15 @@ Widget drawer(BuildContext context) {
               fontSize: 20,
             )),
       ),
-      _tile(AppLocalizations.of(context)!.recordAudio, "Record new audio",
+      _tile(AppLocalizations.of(context).recordAudio, "Record new audio",
           "record", Icons.record_voice_over, context),
-      _tile(AppLocalizations.of(context)!.minimalPairs, "Identify single words",
+      _tile(AppLocalizations.of(context).minimalPairs, "Identify single words",
           "minpairs", Icons.audiotrack, context),
-      _tile(AppLocalizations.of(context)!.speakerDisambiguation,
+      _tile(AppLocalizations.of(context).speakerDisambiguation,
           "Identify speakers", "speakerdis", Icons.audiotrack, context),
-      _tile(AppLocalizations.of(context)!.settings, "", "settings",
+      _tile(AppLocalizations.of(context).settings, "", "settings",
           Icons.settings, context),
-      _tile(AppLocalizations.of(context)!.about, "Additional information",
+      _tile(AppLocalizations.of(context).about, "Additional information",
           "about", Icons.info, context),
     ],
   ));
@@ -198,40 +197,4 @@ ListTile _tile(String title, String subtitle, String path, IconData icon,
       Navigator.pushNamed(context, '/' + path);
     },
   );
-}
-
-class AudioRecorder extends StatefulWidget {
-  final void Function(String path) onStop;
-
-  const AudioRecorder({required this.onStop});
-
-  @override
-  _AudioRecorderState createState() => _AudioRecorderState();
-}
-
-class _AudioRecorderState extends State<AudioRecorder> {
-  bool _isRecording = false;
-  bool _isPaused = false;
-  int _recordDuration = 0;
-  //Timer? _timer;
-  //Timer? _ampTimer;
-  final _audioRecorder = Record();
-  Amplitude? _amplitude;
-
-  @override
-  void initState() {
-    _isRecording = false;
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    //  _timer?.cancel();
-    //  _ampTimer?.cancel();
-    _audioRecorder.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {}
 }

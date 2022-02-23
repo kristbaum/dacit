@@ -1,0 +1,52 @@
+version: "3.2"
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - ./db/:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=artigo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  api:
+    image: acuo/api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    volumes:
+      - type: bind
+        source: ./dump/
+        target: /dump
+      - type: bind
+        source: ./api/
+        target: /api
+    working_dir: /api/src/artigo_api
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=False
+      - PYTHONPATH=/api/src/
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:8000:8000"
+# Activate again when shipping container
+#    env_file:
+#      - ./api/src/artigo_api/.env
+    
+  web:
+    image: acuo/client
+    build:
+      context: ./web
+    volumes:
+      - type: bind
+        source: ./web/
+        target: /web
+    working_dir: /web
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:80:80"
+      # Only for development
+      - "127.0.0.1:8080:8080"

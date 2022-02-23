@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: "Acuo"
+  description: "Acuo API definition"
+  version: "0.1"
+  license:
+    name: GPLv3
+servers:
+  - url: https://acuo.kristbaum.org
+paths:
+  /recording:
+    post:
+      summary: Upload Recordings
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                address:
+                  # default Content-Type for objects is `application/json`
+                  type: object
+                  properties: {}
+                recordingFile:
+                  # default Content-Type for string/binary is `application/octet-stream`
+                  type: string
+                  format: binary
+                children:
+                  # default Content-Type for arrays is based on the `inner` type (text/plain here)
+                  type: array
+                  items:
+                    type: string
+                addresses:
+                  # default Content-Type for arrays is based on the `inner` type (object shown, so `application/json` in this example)
+                  type: array
+                  items:
+                    type: '#/components/schemas/Address'
+      responses:
+        '201':
+          description: Created
+
+components:
+  schemas:
+    Recording:
+      properties:
+        id:
+          type: integer
+          format: int64
+    UploadBody:
+      
+    
+      

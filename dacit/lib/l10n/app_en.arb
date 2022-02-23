@@ -1,0 +1,11 @@
+{
+    "minimalPairs": "Train Minimal Pairs",
+    "@minimalPairs": {
+    "description": "The label for the Navigation and Title of the minimal pairs training",
+    "type": "text"
+    },
+    "recordAudio": "Record Audio",
+    "speakerDisambiguation": "Train Speaker Disambiguation",
+    "settings": "Settings",
+    "about": "About"
+}

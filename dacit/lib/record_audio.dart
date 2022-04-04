@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart' as ap;
 import 'package:record/record.dart';
 import 'package:dacit/audio_player.dart';

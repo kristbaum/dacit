@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -6,7 +8,6 @@ import 'package:record/record.dart';
 import 'package:dacit/audio_player.dart';
 
 class RecordPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Main();
@@ -15,21 +16,16 @@ class RecordPage extends StatelessWidget {
 
 /// This is the stateless widget that the main application instantiates.
 class Main extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Record Audio'),
       ),
-      body: Center(
-        child: RecorderApp()
-      ),
+      body: Center(child: RecorderApp()),
     );
   }
 }
-
-
 
 class AudioRecorder extends StatefulWidget {
   final void Function(String path) onStop;
@@ -233,7 +229,6 @@ class _AudioRecorderState extends State<AudioRecorder> {
   }
 }
 
-
 class RecorderApp extends StatefulWidget {
   @override
   _RecorderAppState createState() => _RecorderAppState();
@@ -267,6 +262,7 @@ class _RecorderAppState extends State<RecorderApp> {
               : AudioRecorder(
                   onStop: (path) {
                     setState(() {
+                      log(path);
                       audioSource = ap.AudioSource.uri(Uri.parse(path));
                       showPlayer = true;
                     });

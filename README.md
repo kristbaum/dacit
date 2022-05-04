@@ -46,3 +46,7 @@ flutter doctor
 """
 
 Install command-line tools https://web.archive.org/web/20211204120608/https://www.fluttercampus.com/guide/202/cmdline-tools-component-is-missing-error-flutter/
+
+Build translations the first time:
+cd dacit
+flutter gen-l10n

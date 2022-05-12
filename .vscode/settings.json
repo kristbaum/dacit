@@ -1,3 +1,6 @@
 {
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "dart.env": {
+        "CHROME_EXECUTABLE": "/snap/bin/chromium"
+    }
 }

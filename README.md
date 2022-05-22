@@ -30,8 +30,8 @@ poetry install
 Install Flutter
 
 """
-sudo snap install flutter
-sudo snap install android-studio
+sudo snap install --classic flutter
+sudo snap install --classic android-studio
 sudo snap install chromium
 echo -e "export CHROME_EXECUTABLE=/snap/bin/chromium" >> ~/.bashrc
 echo -e "alias google-chrome='chromium'" >> ~/.bashrc

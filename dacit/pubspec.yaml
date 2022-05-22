@@ -1,5 +1,5 @@
 name: dacit
-description: A new Flutter project.
+description: Dialect adapted cochlear implant training.
 publish_to: 'none'
 
 # The following defines the version and build number for your application.
@@ -26,7 +26,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.3
   just_audio: ^0.9.18
-  record: ^3.0.2
+  record: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -37,7 +37,7 @@ flutter:
   generate: true
 
   assets:
-    - assets/audio/
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,3 +1,3 @@
 # dacit
 
-Dicalect adapted cochlear implant training
+Dialect adapted cochlear implant training

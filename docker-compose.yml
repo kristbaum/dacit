@@ -16,13 +16,6 @@ services:
     build:
       context: .
       dockerfile: ./api/Dockerfile
-    volumes:
-      - type: bind
-        source: ./dump/
-        target: /dump
-      - type: bind
-        source: ./api/
-        target: /api
     working_dir: /api/src/artigo_api
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
@@ -36,14 +29,15 @@ services:
 #      - ./api/src/artigo_api/.env
     
   web:
-    image: dacit/client
+    image: dacit/dacit
     build:
-      context: ./web
-    volumes:
-      - type: bind
-        source: ./web/
-        target: /web
-    working_dir: /web
+      context: .
+      dockerfile: ./dacit/Dockerfile
+#    volumes:
+#      - type: bind
+#        source: ./web/
+#        target: /web
+    working_dir: /dacit
     depends_on:
       - api
     ports:

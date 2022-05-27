@@ -33,14 +33,12 @@ services:
     build:
       context: .
       dockerfile: ./dacit/Dockerfile
-#    volumes:
-#      - type: bind
-#        source: ./web/
-#        target: /web
+    volumes:
+      - type: bind
+        source: ./dacit/build/web/
+        target: /web
     working_dir: /dacit
     depends_on:
       - api
     ports:
       - "127.0.0.1:80:80"
-      # Only for development
-      - "127.0.0.1:8080:8080"

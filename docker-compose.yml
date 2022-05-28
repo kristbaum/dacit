@@ -33,7 +33,7 @@ services:
       dockerfile: ./dacit/Dockerfile
     volumes:
       - type: bind
-        source: ./dacit/build/web/
+        source: ./dacit/build/web
         target: /web
     working_dir: /dacit
     depends_on:

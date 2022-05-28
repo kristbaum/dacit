@@ -1,7 +1,7 @@
 {
-  "minimalPairs": "Minimal Paare trainieren",
+  "minimalPairs": "Minimal Paare Trainieren",
   "recordAudio": "Audio Aufnehmen",
-  "speakerDisambiguation": "Train Speaker Disambiguation",
+  "speakerDisambiguation": "Sprecher Unterscheiden",
   "settings": "Einstellungen",
   "about": "Über"
 }

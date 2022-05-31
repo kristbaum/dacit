@@ -15,6 +15,10 @@ services:
       context: .
       dockerfile: ./api/Dockerfile
     working_dir: /api/src/artigo_api
+    volumes:
+      - type: bind
+        source: ./api
+        target: /api
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/api/src/

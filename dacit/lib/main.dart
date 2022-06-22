@@ -23,7 +23,24 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        //primarySwatch: Colors.green,
+        brightness: Brightness.light,
+        primaryColor: Colors.lightBlue[800],
+
+        // Define the default font family.
+        fontFamily: 'Georgia',
+
+        // Define the default `TextTheme`. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: Theme.of(context).textTheme.apply(
+          fontSizeFactor: 1.5,
+          fontSizeDelta: 2.0,
+        ),
+          //fontSizeFactor: 1.1
+          //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          //bodyText1: TextStyle(fontSize: 34.0, fontFamily: 'Hind'),
+        
       ),
       home: DacitPage(title: 'Dacit'),
       routes: {
@@ -73,13 +90,25 @@ class _DacitPageState extends State<DacitPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      drawer: drawer(context),
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Container(
+        drawer: drawer(context),
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+        ),
+        body: Container(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Willkommen zu DACIT",
+                  style: TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
+                )
+              ],
+            ),
+          ),
+/*       body: Container(
         child: Center(
           child: Column(
             // Invoke "debug painting" (press "p" in the console, choose the
@@ -114,8 +143,8 @@ class _DacitPageState extends State<DacitPage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+      ), */
+        ));
   }
 }
 
@@ -156,17 +185,23 @@ Widget drawer(BuildContext context) {
     padding: EdgeInsets.zero,
     children: [
       const DrawerHeader(
-        decoration: BoxDecoration(
-          color: Colors.blue,
+        // decoration: BoxDecoration(
+        //   color: Colors.blue,
+        // ),
+        child: Text(
+          'Dacit an audio training app for cochlear implant users',
+          // style: const TextStyle(
+          //   fontWeight: FontWeight.w500,
+          //   fontSize: 20,
+          // )
         ),
-        child: Text('Dacit an audio training app for cochlear implant users',
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            )),
       ),
-      _tile(AppLocalizations.of(context).recordAudio, "Record new audio",
-          "record", Icons.record_voice_over, context),
+      _tile(
+          AppLocalizations.of(context).recordAudio,
+          AppLocalizations.of(context).recordAudioDesc,
+          "record",
+          Icons.record_voice_over,
+          context),
       _tile(AppLocalizations.of(context).minimalPairs, "Identify single words",
           "minpairs", Icons.audiotrack, context),
       _tile(AppLocalizations.of(context).speakerDisambiguation,

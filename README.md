@@ -1,5 +1,7 @@
 # Dacit
 
+Dialect adapted cochlear implant training
+
 Crowdsourcing dialectal and situational utterances for training cochlear implant wearers
 
 # Client

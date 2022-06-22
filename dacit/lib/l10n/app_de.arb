@@ -1,6 +1,7 @@
 {
   "minimalPairs": "Minimal Paare Trainieren",
   "recordAudio": "Audio Aufnehmen",
+  "recordAudioDesc": "Nehme Hörbeispiele auf",
   "speakerDisambiguation": "Sprecher Unterscheiden",
   "settings": "Einstellungen",
   "about": "Über"

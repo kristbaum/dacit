@@ -1,6 +1,7 @@
 {
     "minimalPairs": "Train Minimal Pairs",
     "recordAudio": "Record Audio",
+    "recordAudioDesc": "Record new audio",
     "speakerDisambiguation": "Train Speaker Disambiguation",
     "settings": "Settings",
     "about": "About"

@@ -47,8 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-
-    'api',
+    'dacit_app',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'api.urls'
+ROOT_URLCONF = 'dacit_api.urls'
 
 TEMPLATES = [
     {

@@ -1,7 +1,5 @@
 from django.db import models
 
-
-
 class CI_User(models.Model):
     COCHLEARLIMITED = 'CL'
     ADVANCEDBIONICS = 'AB'
@@ -23,14 +21,15 @@ class CI_User(models.Model):
     name = models.CharField(max_length=100)
     theraphist = models.CharField(max_length=100)
     birthdate = models.DateField()
-    created = models.DateTimeField(auto_now_add=True) 
+    created = models.DateTimeField(auto_now_add=True)
+
 
 class Speaker(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    
+
     PARENT = 'P'
     SIBLING = 'S'
     FRIEND = 'F'
@@ -46,7 +45,7 @@ class Speaker(models.Model):
     relationship = models.CharField(
         max_length=1,
         choices=RELATIONSHIP_TYPES,
-    )    
+    )
 
 
 class Audio(models.Model):
@@ -54,6 +53,7 @@ class Audio(models.Model):
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)
+
 
 class CI_User_Language(models.Model):
     language = models.CharField(max_length=2)

@@ -18,16 +18,47 @@ class Settings extends StatelessWidget {
           body: Center(
               child: Column(
             children: <Widget>[
-              Text('Language'),
-              LanguageSelectionDropdown(),
-              Text("Cochlear Implantat Hersteller"),
-              CISelectionDropdown(),
+              Text("Ihre App-ID: 1293084076"),
               Text("Rolle"),
               RoleSelectionDropdown(),
-              TextFormField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Gebe die ID deiner Bezugsperson ein',
+              // TODO: Don't show the other sections until selected
+              // When SprecherIn
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Geben Sie die ID Ihrer Bezugsperson ein',
+                  ),
+                ),
+              ),
+
+
+              Text('Was ist Ihre Muttersprache? '),
+              LanguageSelectionDropdown(),
+
+              
+              
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Welchen Dialekt sprechen Sie?',
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'In welchem Jahr sind Sie geboren?',
+                    //Todo: Limit to 4 Int
+                  ),
                 ),
               ),
             ],

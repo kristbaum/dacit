@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class RoleSelectionDropdown extends StatefulWidget {
-  const RoleSelectionDropdown({Key? key}) : super(key: key);
+class DialectSelectionDropdown extends StatefulWidget {
+  const DialectSelectionDropdown({Key? key}) : super(key: key);
 
   @override
-  State<RoleSelectionDropdown> createState() => _RoleSelectionDropdownState();
+  State<DialectSelectionDropdown> createState() => _DialectSelectionDropdownState();
 }
 
-class _RoleSelectionDropdownState extends State<RoleSelectionDropdown> {
-  String dropdownValue = 'Parent';
+class _DialectSelectionDropdownState extends State<DialectSelectionDropdown> {
+  String dropdownValue = 'Cochlear Limited';
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +21,11 @@ class _RoleSelectionDropdownState extends State<RoleSelectionDropdown> {
         });
       },
       items: <String>[
-        'CI-User',
-        'Parent',
-        'Sibling',
-        'Friend',
-        'Grandparent',
-        'Therapist',
-        'Other',
+        'Niederfrä',
+        'Advanced Bionics',
+        'MED-EL',
+        'Neurelec',
+        'Nurotron'
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -37,4 +35,3 @@ class _RoleSelectionDropdownState extends State<RoleSelectionDropdown> {
     );
   }
 }
-

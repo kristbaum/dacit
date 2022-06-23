@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class CI_User(models.Model):
     COCHLEARLIMITED = 'CL'
     ADVANCEDBIONICS = 'AB'
@@ -53,6 +54,37 @@ class Audio(models.Model):
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)
+
+
+class Text_Stimulus(models.Model):
+    text = models.CharField(max_length=500, blank=False)
+    s_user_creatable = models.BooleanField(default=True)
+
+    class Language(models.TextChoices):
+        GERMAN = 'DE'
+        ENGLISH = 'EN'
+    language = models.CharField(
+        max_length=2,
+        choices=Language.choices,
+        default=Language.GERMAN,
+        blank=False
+    )
+
+    class Min_Pair_Class(models.TextChoices):
+        B_W = 'B_W'
+        F_W = 'F_W'
+        H_R = 'H_R'
+        K_T = 'K_T'
+        PF_F = 'PF_T'
+        PF_F = 'R_L'
+    min_pair_class = models.CharField(
+        max_length=3,
+        choices=Min_Pair_Class.choices,
+        default=None,
+    )
+
+    min_pair = models.ForeignKey('self', on_delete=models.CASCADE)
+    
 
 
 class CI_User_Language(models.Model):

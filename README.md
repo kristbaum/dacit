@@ -1,6 +1,7 @@
 # Dacit
 
 Dialect adapted cochlear implant training
+A training app for people with Cochlea Implants
 
 Crowdsourcing dialectal and situational utterances for training cochlear implant wearers
 
@@ -14,8 +15,10 @@ flutter gen-l10n
 
 # Server
 
-
-A training app for people with Cochlea Implants
+## Migrate
+```
+sudo docker-compose exec api python manage.py migrate
+```
 
 # Structure
 

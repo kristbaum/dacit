@@ -3,9 +3,9 @@ services:
   db:
     image: postgres:14
     volumes:
-      - ./db/:/var/lib/postgresql/data
+      - db/:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=artigo
+      - POSTGRES_DB=dacit
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
@@ -44,3 +44,6 @@ services:
       - api
     ports:
       - 5001:80
+
+volumes:
+  db:

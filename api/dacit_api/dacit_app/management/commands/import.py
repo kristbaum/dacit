@@ -161,26 +161,25 @@ class CreateCreator(Create):
         )
 
 
-class CreateResource(Create):
-    name = 'Resource'
+class CreateTextStimulus(Create):
+    name = 'TextStimulus'
 
     def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'resource.csv')
+        self.file_path = os.path.join(folder_path, 'B_W_MIN_PAARE.csv')
         self.obj = Resource
 
     def convert(self, row):
         return self.obj(
-            id = toInt(row.get('id')),
-            hash_id = row.get('hash_id'),
-            source_id = toInt(row.get('source_id')),
-            created_start = toInt(row.get('created_start')),
-            created_end = toInt(row.get('created_end')),
-            location = row.get('location'),
-            institution = row.get('institution'),
-            origin = toURL(row.get('origin')),
-            enabled = row.get('enabled'),
+            text = row.get('Wort_1'),
+            user_audio_creatable = True,
+            language = 'DE',
+            min_pair_class = 'B_W',
         )
 
+
+
+
+    min_pair = models.ForeignKey('self', on_delete=models.CASCADE)
 
 class CreateTitle(Create):
     name = 'Title'
@@ -335,17 +334,9 @@ class Command(BaseCommand):
 
         if os.path.isdir(options['input']):
             if options['format'] == 'csv':
-                # CreateUser(options['input']).process()
-                # CreateSource(options['input']).process()
-                # CreateCreator(options['input']).process()
-                CreateResource(options['input']).process()
-                # CreateTitle(options['input']).process()
-                # CreateGamesession(options['input']).process()
-                # CreateGameround(options['input']).process()
-                # CreateTag(options['input']).process()
-                # CreateTagging(options['input']).process()
-                # CreateResourceTitle(options['input']).process()
-                # CreateResourceCreator(options['input']).process()
+
+                CreateTextStimulus(options['input']).process()
+
         else:
             raise CommandError('Input is not a directory.')
 

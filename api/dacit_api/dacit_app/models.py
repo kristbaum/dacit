@@ -58,7 +58,7 @@ class Audio(models.Model):
 
 class Text_Stimulus(models.Model):
     text = models.CharField(max_length=500, blank=False)
-    s_user_creatable = models.BooleanField(default=True)
+    user_audio_creatable = models.BooleanField(default=True)
 
     class Language(models.TextChoices):
         GERMAN = 'DE'
@@ -82,7 +82,6 @@ class Text_Stimulus(models.Model):
         choices=Min_Pair_Class.choices,
         default=None,
     )
-
     min_pair = models.ForeignKey('self', on_delete=models.CASCADE)
     
 

@@ -69,21 +69,29 @@ class Text_Stimulus(models.Model):
         default=Language.GERMAN,
         blank=False
     )
+    
+    wd_lexeme_url = models.CharField(max_length = 50)
+    wd_item_url = models.CharField(max_length = 50)
+    wc_picture_url = models.CharField(max_length = 300)
+    description = models.CharField(max_length = 1000)
+    creator = models.CharField(max_length = 50)
 
+class Min_Pair(models.Model):
+    first_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False)
+    second_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False)
+    
     class Min_Pair_Class(models.TextChoices):
         B_W = 'B_W'
         F_W = 'F_W'
         H_R = 'H_R'
         K_T = 'K_T'
         PF_F = 'PF_T'
-        PF_F = 'R_L'
+        R_L = 'R_L'
     min_pair_class = models.CharField(
         max_length=3,
         choices=Min_Pair_Class.choices,
         default=None,
     )
-    min_pair = models.ForeignKey('self', on_delete=models.CASCADE)
-    
 
 
 class CI_User_Language(models.Model):

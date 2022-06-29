@@ -161,12 +161,12 @@ class CreateCreator(Create):
         )
 
 
-class CreateTextStimulus(Create):
-    name = 'TextStimulus'
+class ImportBW(Create):
+    name = 'Text_Stimulus'
 
     def __init__(self, folder_path):
         self.file_path = os.path.join(folder_path, 'B_W_MIN_PAARE.csv')
-        self.obj = Resource
+        self.obj = Text_Stimulus
 
     def convert(self, row):
         return self.obj(
@@ -177,50 +177,21 @@ class CreateTextStimulus(Create):
         )
 
 
-
-
-    min_pair = models.ForeignKey('self', on_delete=models.CASCADE)
-
-class CreateTitle(Create):
-    name = 'Title'
+class ImportWordList(Create):
+    name = 'Text_Stimulus'
 
     def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'title.csv')
-        self.obj = Title
+        self.file_path = os.path.join(folder_path, 'WORTLISTE_IMPORTIERT.csv')
+        self.obj = Text_Stimulus
 
     def convert(self, row):
         return self.obj(
-            id = toInt(row.get('id')),
-            name = row.get('name'),
-            language = row.get('language'),
+            text = row.get('lemma'),
+            wd_lexeme_url = row.get('lexemeId'),
+            wd_item_url = row.get('q_concept'),
+            wc_picture_url = row.get('picture'),
+            description = row.get('q_conceptDescription'),
         )
-
-
-class CreateGamesession(Create):
-    name = 'Gamesession'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'gamesession.csv')
-        self.obj = Gamesession
-
-    def convert(self, row):
-        obj = self.obj(
-            id = toInt(row.get('id')),
-            created = toDatetime(row.get('created')),
-            user_id = toInt(row.get('user_id')),
-            rounds = toInt(row.get('rounds')),
-            round_duration = toInt(row.get('round_duration')),
-        )
-
-        if row.get('game_type'):
-            if not row['game_type'] in OBJ_MAPPING:
-                OBJ_MAPPING[row['game_type']], _ = GameType.objects \
-                    .get_or_create(name=row['game_type'])
-                OBJ_MAPPING[row['game_type']].save()
-
-            obj.game_type = OBJ_MAPPING[row['game_type']]
-
-        return obj
 
 
 class CreateGameround(Create):
@@ -326,17 +297,14 @@ class CreateResourceCreator(Create):
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument('-f', '--format', choices=['csv'], default='csv')
         parser.add_argument('--input', type=str, default='/import')
 
     def handle(self, *args, **options):
         start_time = timezone.now()
 
         if os.path.isdir(options['input']):
-            if options['format'] == 'csv':
-
-                CreateTextStimulus(options['input']).process()
-
+            ImportWordList(options['input']).process()
+            ImportBW(options['input']).process()
         else:
             raise CommandError('Input is not a directory.')
 

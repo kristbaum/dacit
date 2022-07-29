@@ -6,7 +6,7 @@ import uuid
 import hashlib
 
 from tqdm import tqdm
-from frontend.models import *
+from dacit_app.models import *
 from datetime import datetime
 from django.db import connection
 from django.apps import apps
@@ -19,7 +19,7 @@ from django.core.exceptions import ValidationError
 OBJ_MAPPING = {}
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
-TZINFO = pytz.timezone(settings.TIME_ZONE)
+TZINFO = pytz.timezone('UTC')
 
 
 def toInt(x):
@@ -132,51 +132,6 @@ class CreateUser(Create):
         )
 
 
-class CreateSource(Create):
-    name = 'Source'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'source.csv')
-        self.obj = Source
-
-    def convert(self, row):
-        return self.obj(
-            id = toInt(row.get('id')),
-            name = row.get('name'),
-            url = toURL(row.get('url')),
-        )
-
-
-class CreateCreator(Create):
-    name = 'Creator'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'creator.csv')
-        self.obj = Creator
-
-    def convert(self, row):
-        return self.obj(
-            id = toInt(row.get('id')),
-            name = row.get('name'),
-        )
-
-
-class ImportBW(Create):
-    name = 'Text_Stimulus'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'B_W_MIN_PAARE.csv')
-        self.obj = Text_Stimulus
-
-    def convert(self, row):
-        return self.obj(
-            text = row.get('Wort_1'),
-            user_audio_creatable = True,
-            language = 'DE',
-            min_pair_class = 'B_W',
-        )
-
-
 class ImportWordList(Create):
     name = 'Text_Stimulus'
 
@@ -193,106 +148,22 @@ class ImportWordList(Create):
             description = row.get('q_conceptDescription'),
         )
 
-
-class CreateGameround(Create):
-    name = 'Gameround'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'gameround.csv')
-        self.obj = Gameround
-
-    def convert(self, row):
-        obj = self.obj(
-            id = toInt(row.get('id')),
-            user_id = toInt(row.get('user_id')),
-            gamesession_id = toInt(row.get('gamesession_id')),
-            resource_id = toInt(row.get('resource_id')),
-            created = toDatetime(row.get('created')),
-            score = toScore(row.get('score')),
-        )
-
-        if row.get('opponent_type'):
-            if not row['opponent_type'] in OBJ_MAPPING:
-                OBJ_MAPPING[row['opponent_type']], _ = OpponentType.objects \
-                    .get_or_create(name=row['opponent_type'])
-                OBJ_MAPPING[row['opponent_type']].save()
-
-            obj.opponent_type = OBJ_MAPPING[row['opponent_type']]
-
-        if row.get('taboo_type'):
-            if not row['taboo_type'] in OBJ_MAPPING:
-                OBJ_MAPPING[row['taboo_type']], _ = TabooType.objects \
-                    .get_or_create(name=row['taboo_type'])
-                OBJ_MAPPING[row['taboo_type']].save()
-
-            obj.taboo_type = OBJ_MAPPING[row['taboo_type']]
-
-        return obj
-
-
-class CreateTag(Create):
-    name = 'Tag'
+class ImportBW(Create):
+    name = 'Text_Stimulus'
 
     def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'tag.csv')
-        self.obj = Tag
+        self.file_path = os.path.join(folder_path, 'B_W_MIN_PAARE.csv')
+        self.obj = Text_Stimulus
 
     def convert(self, row):
-        return self.obj(
-            id = toInt(row.get('id')),
-            name = row.get('name'),
-            language = row.get('language'),
-        )
-
-
-class CreateTagging(Create):
-    name = 'Tagging'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'tagging.csv')
-        self.obj = UserTagging
-
-    def convert(self, row):
-        return self.obj(
-            id = toInt(row.get('id')),
-            created = toDatetime(row.get('created')),
-            user_id = toInt(row.get('user_id')),
-            gameround_id = toInt(row.get('gameround_id')),
-            resource_id = toInt(row.get('resource_id')),
-            tag_id = toInt(row.get('tag_id')),
-            uploaded = not row.get('created'),
-            score = toScore(row.get('score')),
-        )
-
-
-class CreateResourceTitle(Create):
-    name = 'Resource title'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'title.csv')
-        self.obj = Resource.titles.through
-
-    def convert(self, row):
-        if row.get('resource_id'):
-            return self.obj(
-                resource_id = toInt(row.get('resource_id')),
-                title_id = toInt(row.get('id')),
-            )
-
-
-class CreateResourceCreator(Create):
-    name = 'Resource creator'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'resource.csv')
-        self.obj = Resource.creators.through
-
-    def convert(self, row):
-        if row.get('creator_id'):
-            return self.obj(
-                resource_id = toInt(row.get('id')),
-                creator_id = toInt(row.get('creator_id')),
-            )
+        print(ext_Stimulus.objects.get(text=row.get('Wort_1')))
+        print(ext_Stimulus.objects.get(text=row.get('Wort_2')))
+        #return self.obj(
+            #text = row.get('Wort_1'),
+            #user_audio_creatable = True,
+            #language = 'DE',
+            #min_pair_class = 'B_W',
+        #)
 
 
 class Command(BaseCommand):

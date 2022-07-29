@@ -1,0 +1,11 @@
+.vscode/
+.git
+
+**/venv
+**/dist
+**/node_modules
+**/__pycache__
+**/Dockerfile
+**/.dart_tool
+**/build
+**/.flutter-plugins

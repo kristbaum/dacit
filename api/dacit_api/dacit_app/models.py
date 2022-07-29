@@ -77,8 +77,8 @@ class Text_Stimulus(models.Model):
     creator = models.CharField(max_length = 50)
 
 class Min_Pair(models.Model):
-    first_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False)
-    second_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False)
+    first_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False, related_name="first_part")
+    second_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False, related_name="second_part")
     
     class Min_Pair_Class(models.TextChoices):
         B_W = 'B_W'
@@ -88,7 +88,7 @@ class Min_Pair(models.Model):
         PF_F = 'PF_T'
         R_L = 'R_L'
     min_pair_class = models.CharField(
-        max_length=3,
+        max_length=4,
         choices=Min_Pair_Class.choices,
         default=None,
     )

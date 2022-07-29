@@ -19,6 +19,9 @@ services:
       - type: bind
         source: ./api
         target: /api
+      - type: bind
+        source: ./import
+        target: /import
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/api/dacit_api/

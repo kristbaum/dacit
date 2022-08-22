@@ -5,22 +5,23 @@ A training app for people with Cochlea Implants
 
 Crowdsourcing dialectal and situational utterances for training cochlear implant wearers
 
-# Client
+# Development Setup
 
-## Building
+## Client
+
+### Building
 
 From the dacit directory.
 flutter gen-l10n
 
-
-# Server
+## Server
 
 ## Migrate
 ```
 sudo docker-compose exec api python manage.py migrate
 ```
 
-# Structure
+## Structure
 
 Django Backend / Flutter Frontend
 
@@ -60,3 +61,10 @@ Install command-line tools https://web.archive.org/web/20211204120608/https://ww
 Build translations the first time:
 cd dacit
 flutter gen-l10n
+
+# Start
+
+Run Database
+```
+docker run post
+```

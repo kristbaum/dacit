@@ -1,9 +1,10 @@
 version: "3.2"
+#name: dacit
 services:
   db:
     image: postgres:14
     volumes:
-      - db/:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=dacit
       - POSTGRES_USER=postgres
@@ -49,4 +50,4 @@ services:
       - 5001:80
 
 volumes:
-  db:
+  db-data:

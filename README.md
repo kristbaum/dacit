@@ -16,10 +16,6 @@ flutter gen-l10n
 
 ## Server
 
-## Migrate
-```
-sudo docker-compose exec api python manage.py migrate
-```
 
 ## Structure
 
@@ -67,4 +63,11 @@ flutter gen-l10n
 Run Database
 ```
 docker run post
+```
+
+## Migrate and Import
+```
+sudo docker-compose exec api python manage.py migrate
+python3 manage.py import
+python3 manage.py createsuperuser
 ```

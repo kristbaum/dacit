@@ -62,7 +62,8 @@ def toURL(x):
 
 def toDatetime(x):
     if x:
-        if '.' not in x: x += '.0'  # convert to proper date format
+        if '.' not in x:
+            x += '.0'  # convert to proper date format
 
         return datetime.strptime(x, DATE_FORMAT).replace(tzinfo=TZINFO)
 
@@ -87,7 +88,8 @@ class Create:
 
                     if len(processed_rows) > 5000:
                         try:
-                            self.obj.objects.bulk_create(processed_rows, **args)
+                            self.obj.objects.bulk_create(
+                                processed_rows, **args)
                         except Exception as error:
                             print(error)
 
@@ -121,14 +123,14 @@ class CreateUser(Create):
             row['password'] = hashlib.sha256(password).hexdigest()
 
         return self.obj(
-            id = toInt(row.get('id')),
-            username = row.get('username'),
-            email = row.get('email'),
-            password = row.get('password'),
-            first_name = row.get('first_name'),
-            last_name = row.get('last_name'),
-            date_joined = toDatetime(row.get('date_joined')),
-            is_anonymous = row.get('is_anonymous') == 'True',
+            id=toInt(row.get('id')),
+            username=row.get('username'),
+            email=row.get('email'),
+            password=row.get('password'),
+            first_name=row.get('first_name'),
+            last_name=row.get('last_name'),
+            date_joined=toDatetime(row.get('date_joined')),
+            is_anonymous=row.get('is_anonymous') == 'True',
         )
 
 
@@ -141,29 +143,52 @@ class ImportWordList(Create):
 
     def convert(self, row):
         return self.obj(
-            text = row.get('lemma'),
-            wd_lexeme_url = row.get('lexemeId'),
-            wd_item_url = row.get('q_concept'),
-            wc_picture_url = row.get('picture'),
-            description = row.get('q_conceptDescription'),
+            text=row.get('lemma'),
+            wd_lexeme_url=row.get('lexemeId'),
+            wd_item_url=row.get('q_concept'),
+            wc_picture_url=row.get('picture'),
+            description=row.get('q_conceptDescription'),
         )
 
+
 class ImportBW(Create):
-    name = 'Text_Stimulus'
+    name = 'Min_Pair'
 
     def __init__(self, folder_path):
         self.file_path = os.path.join(folder_path, 'B_W_MIN_PAARE.csv')
-        self.obj = Text_Stimulus
+        self.obj = Min_Pair
 
     def convert(self, row):
-        print(ext_Stimulus.objects.get(text=row.get('Wort_1')))
-        print(ext_Stimulus.objects.get(text=row.get('Wort_2')))
-        #return self.obj(
-            #text = row.get('Wort_1'),
-            #user_audio_creatable = True,
-            #language = 'DE',
-            #min_pair_class = 'B_W',
-        #)
+        word_1 = None
+        word_1_text = text=row.get('Wort_1')
+        word_2 = None
+        word_2_text = text=row.get('Wort_2')
+        print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
+
+        try:
+            word_1 = Text_Stimulus.objects.get(text=row.get('Wort_1'))
+        except Text_Stimulus.DoesNotExist:
+            print("Create missing Text_Simiulus")
+            word_1 = Text_Stimulus(text=row.get(
+                'Wort_1'), creator=row.get('Madoo_Nutzername'))
+            word_1.save()
+
+        try:
+            word_2 = Text_Stimulus.objects.get(text=row.get('Wort_2'))
+        except Text_Stimulus.DoesNotExist:
+            print("Create missing Text_Simiulus")
+            word_2 = Text_Stimulus(text=row.get(
+                'Wort_2'), creator=row.get('Madoo_Nutzername'))
+            word_2.save()
+
+        if (word_1 is not None) and (word_2 is not None):
+            print("Error, both words couldn't be found")
+
+        return self.obj(
+            min_pair_class="B_W",
+            first_part=word_1,
+            second_part=word_2,
+        )
 
 
 class Command(BaseCommand):
@@ -175,7 +200,7 @@ class Command(BaseCommand):
 
         if os.path.isdir(options['input']):
             ImportWordList(options['input']).process()
-            ImportBW(options['input']).process()
+ #           ImportBW(options['input']).process()
         else:
             raise CommandError('Input is not a directory.')
 

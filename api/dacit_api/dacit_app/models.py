@@ -72,9 +72,25 @@ class Text_Stimulus(models.Model):
     
     wd_lexeme_url = models.CharField(max_length = 50)
     wd_item_url = models.CharField(max_length = 50)
-    wc_picture_url = models.CharField(max_length = 300)
+    wc_picture_url = models.CharField(max_length = 1500)
     description = models.CharField(max_length = 1000)
     creator = models.CharField(max_length = 50)
+    
+    # class Text_Stimulus_Class(models.TextChoices):
+    #     Consonant = 'C'
+    #     F_W = 'F_W'
+    #     H_R = 'H_R'
+    #     K_T = 'K_T'
+    #     PF_F = 'PF_T'
+    #     R_L = 'R_L'
+    # min_pair_class = models.CharField(
+    #     max_length=4,
+    #     choices=Min_Pair_Class.choices,
+    #     default=None,
+    # )
+
+    def __str__(self):
+        return self.text
 
 class Min_Pair(models.Model):
     first_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False, related_name="first_part")
@@ -92,6 +108,9 @@ class Min_Pair(models.Model):
         choices=Min_Pair_Class.choices,
         default=None,
     )
+
+    def __str__(self):
+        return str(self.first_part) + " " + str(self.second_part)
 
 
 class CI_User_Language(models.Model):

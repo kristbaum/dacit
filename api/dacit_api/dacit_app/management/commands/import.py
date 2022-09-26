@@ -151,11 +151,11 @@ class ImportWordList(Create):
         )
 
 
-class ImportBW(Create):
+class ImportMinPair(Create):
     name = 'Min_Pair'
 
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'B_W_MIN_PAARE.csv')
+    def __init__(self, folder_path, filename):
+        self.file_path = os.path.join(folder_path, filename)
         self.obj = Min_Pair
 
     def convert(self, row):
@@ -163,25 +163,19 @@ class ImportBW(Create):
         word_1_text = text=row.get('Wort_1')
         word_2 = None
         word_2_text = text=row.get('Wort_2')
-        print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
+        #print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
 
-        try:
-            word_1 = Text_Stimulus.objects.get(text=row.get('Wort_1'))
-        except Text_Stimulus.DoesNotExist:
-            print("Create missing Text_Simiulus")
-            word_1 = Text_Stimulus(text=row.get(
-                'Wort_1'), creator=row.get('Madoo_Nutzername'))
+        word_1 = Text_Stimulus.objects.filter(text=word_1_text).first()
+        if word_1 is None:
+            word_1 = Text_Stimulus(text=word_1_text, creator=row.get('Madoo_Nutzername'))
             word_1.save()
 
-        try:
-            word_2 = Text_Stimulus.objects.get(text=row.get('Wort_2'))
-        except Text_Stimulus.DoesNotExist:
-            print("Create missing Text_Simiulus")
-            word_2 = Text_Stimulus(text=row.get(
-                'Wort_2'), creator=row.get('Madoo_Nutzername'))
+        word_2 = Text_Stimulus.objects.filter(text=word_2_text).first()
+        if word_2 is None:
+            word_2 = Text_Stimulus(text=word_2_text, creator=row.get('Madoo_Nutzername'))
             word_2.save()
 
-        if (word_1 is not None) and (word_2 is not None):
+        if (word_1 is None) and (word_2 is None):
             print("Error, both words couldn't be found")
 
         return self.obj(
@@ -200,7 +194,12 @@ class Command(BaseCommand):
 
         if os.path.isdir(options['input']):
             ImportWordList(options['input']).process()
- #           ImportBW(options['input']).process()
+            ImportMinPair(options['input'], "B_W_MIN_PAARE.csv").process()
+            ImportMinPair(options['input'], "F_W_MIN_PAARE.csv").process()
+            ImportMinPair(options['input'], "H_R_MIN_PAARE.csv").process()
+            ImportMinPair(options['input'], "K_T_MIN_PAARE.csv").process()
+            ImportMinPair(options['input'], "PF_F_MIN_PAARE.csv").process()
+            ImportMinPair(options['input'], "R_L_MIN_PAARE.csv").process()
         else:
             raise CommandError('Input is not a directory.')
 

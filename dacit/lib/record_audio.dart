@@ -248,8 +248,9 @@ class _RecorderAppState extends State<RecorderApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: showPlayer
+          body: Column(
+        children: <Widget>[
+          showPlayer
               ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: AudioPlayer(
@@ -268,8 +269,14 @@ class _RecorderAppState extends State<RecorderApp> {
                     });
                   },
                 ),
-        ),
-      ),
+        ],
+      )
+          // IconButton(
+          //   icon: const Icon(Icons.volume_up),
+          //   tooltip: 'Increase volume by 10',
+          //   onPressed: () {},
+          // ),
+          ),
     );
   }
 }

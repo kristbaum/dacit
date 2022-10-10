@@ -33,14 +33,13 @@ class MyApp extends StatelessWidget {
         // Define the default `TextTheme`. Use this to specify the default
         // text styling for headlines, titles, bodies of text, and more.
         textTheme: Theme.of(context).textTheme.apply(
-          fontSizeFactor: 1.5,
-          fontSizeDelta: 5.0,
-        ),
-          //fontSizeFactor: 1.1
-          //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          //bodyText1: TextStyle(fontSize: 34.0, fontFamily: 'Hind'),
-        
+              fontSizeFactor: 1.5,
+              fontSizeDelta: 5.0,
+            ),
+        //fontSizeFactor: 1.1
+        //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+        //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+        //bodyText1: TextStyle(fontSize: 34.0, fontFamily: 'Hind'),
       ),
       home: DacitPage(title: 'Dacit'),
       routes: {
@@ -102,48 +101,12 @@ class _DacitPageState extends State<DacitPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Willkommen zu DACIT",
+                  AppLocalizations.of(context).welcome,
                   style: TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
                 )
               ],
             ),
           ),
-/*       body: Container(
-        child: Center(
-          child: Column(
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Click me",
-                style: TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
-              ),
-              ElevatedButton(
-                child: Text(
-                  "Click Here",
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () => {},
-              ),
-              Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), */
         ));
   }
 }

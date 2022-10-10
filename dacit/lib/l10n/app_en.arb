@@ -4,5 +4,9 @@
     "recordAudioDesc": "Record new audio",
     "speakerDisambiguation": "Train Speaker Disambiguation",
     "settings": "Settings",
-    "about": "About"
+    "about": "About",
+    "welcome": "Willkommen zu Dacit\neiner Trainingsapp für Personen mit Cochlear Implantat",
+    "whichdialect": "Welchen Dialekt sprechen Sie?",
+    "whichyear": "In welchem Jahr sind Sie geboren?",
+    "whichmotherlang": "Was ist Ihre Muttersprache?"
 }

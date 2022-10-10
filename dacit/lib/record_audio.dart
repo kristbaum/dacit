@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:just_audio/just_audio.dart' as ap;
 import 'package:record/record.dart';
 import 'package:dacit/audio_player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecordPage extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Record Audio'),
+        title: Text(AppLocalizations.of(context).minimalPairs),
       ),
       body: Center(child: RecorderApp()),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart' as ap;
 import 'package:dacit/micro_player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MinimalPairs extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('MinimalPairs'),
+          title: Text(AppLocalizations.of(context).minimalPairs),
         ),
         body: Column(children: [
           Padding(

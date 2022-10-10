@@ -4,5 +4,9 @@
   "recordAudioDesc": "Nehme Hörbeispiele auf",
   "speakerDisambiguation": "Sprecher Unterscheiden",
   "settings": "Einstellungen",
-  "about": "Über"
+  "about": "Über",
+  "welcome": "Willkommen zu Dacit\neiner Trainingsapp für Personen mit Cochlear Implantat",
+  "whichdialect": "Welchen Dialekt sprechen Sie?",
+  "whichyear": "In welchem Jahr sind Sie geboren?",
+  "whichmotherlang": "Was ist Ihre Muttersprache?"
 }

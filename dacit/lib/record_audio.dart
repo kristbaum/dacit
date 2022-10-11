@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:just_audio/just_audio.dart' as ap;
 import 'package:record/record.dart';
@@ -230,6 +232,16 @@ class _AudioRecorderState extends State<AudioRecorder> {
   }
 }
 
+class TextStimulus {
+  final int id;
+  final String text;
+
+  const TextStimulus({
+    required this.id,
+    required this.text,
+  });
+}
+
 class RecorderApp extends StatefulWidget {
   @override
   _RecorderAppState createState() => _RecorderAppState();
@@ -245,39 +257,84 @@ class _RecorderAppState extends State<RecorderApp> {
     super.initState();
   }
 
+  Future<List<TextStimulus>> getRequest() async {
+    log("Bla1");
+    var url = Uri.parse("http://localhost:5002/api/ts/");
+    final response = await http.get(url);
+    var responseData = json.decode(response.body);
+    List<TextStimulus> textStimuli = [];
+    for (var stimulus in responseData) {
+      TextStimulus textStimulus =
+          TextStimulus(id: stimulus["id"], text: stimulus["text"]);
+
+      //Adding user to the list.
+      textStimuli.add(textStimulus);
+    }
+    return textStimuli;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
           body: Column(
         children: <Widget>[
-          showPlayer
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: AudioPlayer(
-                    source: audioSource!,
-                    onDelete: () {
-                      setState(() => showPlayer = false);
+          Expanded(
+            child: showPlayer
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: AudioPlayer(
+                      source: audioSource!,
+                      onDelete: () {
+                        setState(() => showPlayer = false);
+                      },
+                    ),
+                  )
+                : AudioRecorder(
+                    onStop: (path) {
+                      setState(() {
+                        log(path);
+                        audioSource = ap.AudioSource.uri(Uri.parse(path));
+                        showPlayer = true;
+                      });
                     },
                   ),
-                )
-              : AudioRecorder(
-                  onStop: (path) {
-                    setState(() {
-                      log(path);
-                      audioSource = ap.AudioSource.uri(Uri.parse(path));
-                      showPlayer = true;
-                    });
-                  },
-                ),
-        ],
-      )
-          // IconButton(
-          //   icon: const Icon(Icons.volume_up),
-          //   tooltip: 'Increase volume by 10',
-          //   onPressed: () {},
-          // ),
           ),
+          IconButton(
+            icon: const Icon(Icons.get_app),
+            tooltip: 'Test connection',
+            onPressed: () {
+              getRequest();
+            },
+          ),
+          Flexible(
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              child: FutureBuilder(
+                future: getRequest(),
+                builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                  if (snapshot.data == null) {
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (ctx, index) => ListTile(
+                        title: Text(snapshot.data[index].text),
+                        subtitle: Text(snapshot.data[index].id.toString()),
+                        contentPadding: EdgeInsets.only(bottom: 20.0),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          )
+        ],
+      )),
     );
   }
 }

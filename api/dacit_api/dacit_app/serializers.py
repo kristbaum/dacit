@@ -5,8 +5,8 @@ from dacit_app.models import Text_Stimulus
 class TextStimulusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text_Stimulus
-        fields = ['text', 'id']
-        #fields = '__all__'
+        #fields = ['text', 'id']
+        fields = '__all__'
 
 # text = models.CharField(max_length=500, blank=False)
 #     user_audio_creatable = models.BooleanField(default=True)

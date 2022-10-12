@@ -273,6 +273,17 @@ class _RecorderAppState extends State<RecorderApp> {
     return textStimuli;
   }
 
+  Future<TextStimulus> getTextStimulus() async {
+    log("Bla1");
+    var url = Uri.parse("http://localhost:5002/api/sts/");
+    final response = await http.get(url);
+    var responseData = json.decode(response.body);
+    TextStimulus textStimulus =
+        TextStimulus(id: responseData["id"], text: responseData["text"]);
+
+    return textStimulus;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -311,7 +322,7 @@ class _RecorderAppState extends State<RecorderApp> {
             child: Container(
               padding: EdgeInsets.all(16.0),
               child: FutureBuilder(
-                future: getRequest(),
+                future: getTextStimulus(),
                 builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                   if (snapshot.data == null) {
                     return Container(
@@ -320,16 +331,27 @@ class _RecorderAppState extends State<RecorderApp> {
                       ),
                     );
                   } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (ctx, index) => ListTile(
-                        title: Text(snapshot.data[index].text),
-                        subtitle: Text(snapshot.data[index].id.toString()),
-                        contentPadding: EdgeInsets.only(bottom: 20.0),
-                      ),
-                    );
+                    return Text(snapshot.data.text);
                   }
                 },
+                // builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                //   if (snapshot.data == null) {
+                //     return Container(
+                //       child: Center(
+                //         child: CircularProgressIndicator(),
+                //       ),
+                //     );
+                //   } else {
+                //     return ListView.builder(
+                //       itemCount: snapshot.data.length,
+                //       itemBuilder: (ctx, index) => ListTile(
+                //         title: Text(snapshot.data[index].text),
+                //         subtitle: Text(snapshot.data[index].id.toString()),
+                //         contentPadding: EdgeInsets.only(bottom: 20.0),
+                //       ),
+                //     );
+                //   }
+                // },
               ),
             ),
           )

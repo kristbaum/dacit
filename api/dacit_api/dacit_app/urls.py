@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path('upload/', views.MultipartView.handle_upload, name='upload'),
     path('ts/', views.TextStimuli.as_view(), name='ts'),
+    path('sts/', views.TextStimulus.as_view(), name='ts'),
 ]

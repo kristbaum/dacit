@@ -18,3 +18,10 @@ class TextStimuli(APIView):
         print(all_stimuli)
         json_stimuli = TextStimulusSerializer(all_stimuli, many=True).data
         return Response(json_stimuli) 
+
+class TextStimulus(APIView):
+    def get(self, request, format=None):
+        stimulus = Text_Stimulus.objects.first()
+        print(stimulus)
+        json_stimulus = TextStimulusSerializer(stimulus).data
+        return Response(json_stimulus)

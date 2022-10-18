@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart' as ap;
-import 'package:dacit/micro_player.dart';
+import 'package:dacit/unused_micro_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MinimalPairs extends StatelessWidget {

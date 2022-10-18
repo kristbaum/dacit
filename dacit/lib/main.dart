@@ -1,8 +1,4 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
-import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:dacit/minimal_pairs_page.dart';
 import 'package:dacit/record_audio.dart';
@@ -11,10 +7,10 @@ import 'package:dacit/speaker_dis_page.dart';
 import 'package:dacit/about_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Dacit());
 }
 
-class MyApp extends StatelessWidget {
+class Dacit extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -22,6 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Dacit',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         //primarySwatch: Colors.green,
         brightness: Brightness.light,
@@ -109,36 +106,6 @@ class _DacitPageState extends State<DacitPage> {
           ),
         ));
   }
-}
-
-upload(File imageFile) async {
-  // open a bytestream
-  var stream =
-      new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-  // get file length
-  var length = await imageFile.length();
-
-  // string to uri
-  var uri = Uri.parse("http://ip:8082/composer/predict");
-
-  // create multipart request
-  var request = new http.MultipartRequest("POST", uri);
-
-  // multipart that takes file
-  //var multipartFile = new http.MultipartFile('file', stream, length,
-  //    filename: basename(imageFile.path));
-
-  // add file to multipart
-  //request.files.add(multipartFile);
-
-  // send
-  var response = await request.send();
-  print(response.statusCode);
-
-  // listen for response
-  response.stream.transform(utf8.decoder).listen((value) {
-    print(value);
-  });
 }
 
 Widget drawer(BuildContext context) {

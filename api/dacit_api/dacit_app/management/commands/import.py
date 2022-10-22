@@ -4,6 +4,7 @@ import sys
 import pytz
 import uuid
 import hashlib
+import logging
 
 from tqdm import tqdm
 from dacit_app.models import *
@@ -20,44 +21,6 @@ OBJ_MAPPING = {}
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 TZINFO = pytz.timezone('UTC')
-
-
-def toInt(x):
-    if isinstance(x, str):
-        try:
-            return int(float(x))
-        except:
-            pass
-
-    return None
-
-
-def toScore(x):
-    x = toInt(x)
-
-    if x:
-        return x
-
-    return 0
-
-
-def isURL(x):
-    try:
-        validate = URLValidator()
-        validate(x)
-
-        return True
-    except ValidationError:
-        pass
-
-    return False
-
-
-def toURL(x):
-    if isURL(x):
-        return x
-
-    return ''
 
 
 def toDatetime(x):
@@ -104,36 +67,6 @@ class Create:
             sys.stdout(f'{self.file_path} does not exist.')
 
 
-class CreateUser(Create):
-    name = 'User'
-
-    def __init__(self, folder_path):
-        self.file_path = os.path.join(folder_path, 'user.csv')
-        self.obj = CustomUser
-
-    def convert(self, row):
-        if not row.get('username'):
-            row['username'] = uuid.uuid4().hex[:15]
-
-        if not row.get('email'):
-            row['email'] = f"{row['username']}@artigo.org"
-
-        if not row.get('password'):
-            password = uuid.uuid4().hex.encode('utf-8')
-            row['password'] = hashlib.sha256(password).hexdigest()
-
-        return self.obj(
-            id=toInt(row.get('id')),
-            username=row.get('username'),
-            email=row.get('email'),
-            password=row.get('password'),
-            first_name=row.get('first_name'),
-            last_name=row.get('last_name'),
-            date_joined=toDatetime(row.get('date_joined')),
-            is_anonymous=row.get('is_anonymous') == 'True',
-        )
-
-
 class ImportWordList(Create):
     name = 'Text_Stimulus'
 
@@ -154,32 +87,61 @@ class ImportWordList(Create):
 class ImportMinPair(Create):
     name = 'Min_Pair'
 
-    def __init__(self, folder_path, filename):
+    def __init__(self, folder_path, filename, min_pair_class):
         self.file_path = os.path.join(folder_path, filename)
         self.obj = Min_Pair
+        self.min_pair_class = min_pair_class
 
     def convert(self, row):
         word_1 = None
-        word_1_text = text=row.get('Wort_1')
+        word_1_text = text = row.get('Wort_1')
         word_2 = None
-        word_2_text = text=row.get('Wort_2')
+        word_2_text = text = row.get('Wort_2')
         #print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
 
         word_1 = Text_Stimulus.objects.filter(text=word_1_text).first()
         if word_1 is None:
-            word_1 = Text_Stimulus(text=word_1_text, creator=row.get('Madoo_Nutzername'))
+            word_1 = Text_Stimulus(
+                text=word_1_text, creator=row.get('Madoo_Nutzername'))
             word_1.save()
 
         word_2 = Text_Stimulus.objects.filter(text=word_2_text).first()
         if word_2 is None:
-            word_2 = Text_Stimulus(text=word_2_text, creator=row.get('Madoo_Nutzername'))
+            word_2 = Text_Stimulus(
+                text=word_2_text, creator=row.get('Madoo_Nutzername'))
             word_2.save()
 
         if (word_1 is None) and (word_2 is None):
             print("Error, both words couldn't be found")
 
+        if row.get('Datei_T_Spalte1') is not None:
+            default_speaker = Speaker.objects.filter(
+                first_name='Thomas', last_name='K').first()
+            audio_file = Audio(
+                speaker=default_speaker,
+                audio='assets/audio/words/' +
+                row.get('Datei_T_Spalte1') + '.wav',
+                language='de',
+                dicalect='Hochdeutsch',
+                text_stimulus=word_1
+            )
+            audio_file.save()
+
+        if row.get('Datei_T_Spalte2') is not None:
+            default_speaker = Speaker.objects.filter(
+                first_name='Thomas', last_name='K').first()
+            audio_file = Audio(
+                speaker=default_speaker,
+                audio='assets/audio/words/' +
+                row.get('Datei_T_Spalte2') + '.wav',
+                language='de',
+                dicalect='Hochdeutsch',
+                text_stimulus=word_1
+            )
+            audio_file.save()
+
         return self.obj(
-            min_pair_class="B_W",
+            min_pair_class=self.min_pair_class,
             first_part=word_1,
             second_part=word_2,
         )
@@ -192,14 +154,25 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start_time = timezone.now()
 
+        logging.info('Create default speaker')
+        self.obj = Speaker(first_name='Thomas', last_name='K')
+        self.obj.save()
+
+        logging.info('Create default speaker')
         if os.path.isdir(options['input']):
             ImportWordList(options['input']).process()
-            ImportMinPair(options['input'], "B_W_MIN_PAARE.csv").process()
-            ImportMinPair(options['input'], "F_W_MIN_PAARE.csv").process()
-            ImportMinPair(options['input'], "H_R_MIN_PAARE.csv").process()
-            ImportMinPair(options['input'], "K_T_MIN_PAARE.csv").process()
-            ImportMinPair(options['input'], "PF_F_MIN_PAARE.csv").process()
-            ImportMinPair(options['input'], "R_L_MIN_PAARE.csv").process()
+            ImportMinPair(options['input'],
+                          "B_W_MIN_PAARE.csv", 'B_W').process()
+            ImportMinPair(options['input'],
+                          "F_W_MIN_PAARE.csv", 'F_W').process()
+            ImportMinPair(options['input'],
+                          "H_R_MIN_PAARE.csv", 'H_R').process()
+            ImportMinPair(options['input'],
+                          "K_T_MIN_PAARE.csv", 'K_T').process()
+            ImportMinPair(options['input'],
+                          "PF_F_MIN_PAARE.csv", 'PF_F').process()
+            ImportMinPair(options['input'],
+                          "R_L_MIN_PAARE.csv", 'R_L').process()
         else:
             raise CommandError('Input is not a directory.')
 

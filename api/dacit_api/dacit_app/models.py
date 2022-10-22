@@ -28,7 +28,7 @@ class CI_User(models.Model):
 class Speaker(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE)
+    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     PARENT = 'P'
@@ -49,13 +49,6 @@ class Speaker(models.Model):
     )
 
 
-class Audio(models.Model):
-    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
-    audio = models.FileField(upload_to='audio')
-    language = models.CharField(max_length=2)
-    dicalect = models.CharField(max_length=100)
-
-
 class Text_Stimulus(models.Model):
     text = models.CharField(max_length=500, blank=False)
     user_audio_creatable = models.BooleanField(default=True)
@@ -69,13 +62,13 @@ class Text_Stimulus(models.Model):
         default=Language.GERMAN,
         blank=False
     )
-    
-    wd_lexeme_url = models.CharField(max_length = 50)
-    wd_item_url = models.CharField(max_length = 50)
-    wc_picture_url = models.CharField(max_length = 1500)
-    description = models.CharField(max_length = 1000)
-    creator = models.CharField(max_length = 50)
-    
+
+    wd_lexeme_url = models.CharField(max_length=50)
+    wd_item_url = models.CharField(max_length=50)
+    wc_picture_url = models.CharField(max_length=1500)
+    description = models.CharField(max_length=1000)
+    creator = models.CharField(max_length=50)
+
     # class Text_Stimulus_Class(models.TextChoices):
     #     Consonant = 'C'
     #     F_W = 'F_W'
@@ -92,10 +85,21 @@ class Text_Stimulus(models.Model):
     def __str__(self):
         return self.text
 
+
+class Audio(models.Model):
+    text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
+    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    audio = models.FileField(upload_to='audio')
+    language = models.CharField(max_length=2)
+    dicalect = models.CharField(max_length=100)
+
+
 class Min_Pair(models.Model):
-    first_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False, related_name="first_part")
-    second_part = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE, blank = False, related_name="second_part")
-    
+    first_part = models.ForeignKey(
+        Text_Stimulus, on_delete=models.CASCADE, blank=False, related_name="first_part")
+    second_part = models.ForeignKey(
+        Text_Stimulus, on_delete=models.CASCADE, blank=False, related_name="second_part")
+
     class Min_Pair_Class(models.TextChoices):
         B_W = 'B_W'
         F_W = 'F_W'

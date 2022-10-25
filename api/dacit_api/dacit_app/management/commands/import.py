@@ -114,29 +114,30 @@ class ImportMinPair(Create):
         if (word_1 is None) and (word_2 is None):
             print("Error, both words couldn't be found")
 
-        if row.get('Datei_T_Spalte1') is not None:
+        filename_1 = row.get('Datei_T_Spalte1')
+        filename_2 = row.get('Datei_T_Spalte2')
+
+        if filename_1 is not None and filename_1 is not '':
             default_speaker = Speaker.objects.filter(
                 first_name='Thomas', last_name='K').first()
             audio_file = Audio(
                 speaker=default_speaker,
-                audio='assets/audio/words/' +
-                row.get('Datei_T_Spalte1') + '.wav',
+                audio='audio/' + filename_1 + '.wav',
                 language='de',
                 dicalect='Hochdeutsch',
                 text_stimulus=word_1
             )
             audio_file.save()
 
-        if row.get('Datei_T_Spalte2') is not None:
+        if filename_2 is not None and filename_2 is not '':
             default_speaker = Speaker.objects.filter(
                 first_name='Thomas', last_name='K').first()
             audio_file = Audio(
                 speaker=default_speaker,
-                audio='assets/audio/words/' +
-                row.get('Datei_T_Spalte2') + '.wav',
+                audio='audio/' + filename_2 + '.wav',
                 language='de',
                 dicalect='Hochdeutsch',
-                text_stimulus=word_1
+                text_stimulus=word_2
             )
             audio_file.save()
 

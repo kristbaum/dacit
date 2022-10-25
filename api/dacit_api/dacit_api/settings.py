@@ -23,6 +23,10 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+print(MEDIA_ROOT)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 

@@ -14,7 +14,7 @@ services:
     image: dacit/api
     build:
       context: .
-      dockerfile: ./api/Dockerfile
+      dockerfile: ./api/Dockerfile.dev
     working_dir: /api/dacit_api/
     volumes:
       - type: bind
@@ -31,8 +31,8 @@ services:
       - PYTHONPATH=/api/dacit_api/
     depends_on:
       - db
-    ports:
-      - 8000:8000
+#    ports:
+#      - 8000:8000
   # Activate again when shipping container
   #    env_file:
   #      - ./api/src/artigo_api/.env
@@ -42,15 +42,23 @@ services:
     volumes:
       - type: bind
         source: ./web-api-nginx.conf
-        target: /etc/nginx/nginx.conf:ro
+        target: /etc/nginx/conf.d/api_nginx.conf
+        read_only: true
       - type: bind
         source: ./uwsgi_params
-        target: /uwsgi_params:ro
+        target: /uwsgi_params
+        read_only: true
+      - type: bind
+        source: ./api/dacit_api/media
+        target: /media
+      - type: bind
+        source: ./api/dacit_api/static
+        target: /static
+        read_only: true
     depends_on:
       - api
     ports:
-      - 8001:8000
-
+      - 8000:8000
 
   web:
     image: dacit/dacit

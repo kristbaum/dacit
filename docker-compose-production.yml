@@ -1,0 +1,71 @@
+version: "3.2"
+#name: dacit
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=dacit
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  api:
+    image: dacit/api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    working_dir: /api/dacit_api/
+    volumes:
+      - type: bind
+        source: ./import
+        target: /import
+        read_only: true
+      - type: bind
+        source: ./api/dacit_api/media
+        target: /media
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=False
+      - PYTHONPATH=/api/dacit_api/
+    depends_on:
+      - db
+#    ports:
+#      - 8000:8000
+  # Activate again when shipping container
+  #    env_file:
+  #      - ./api/src/artigo_api/.env
+
+  web-api:
+    image: nginx:latest
+    volumes:
+      - type: bind
+        source: ./web-api-nginx.conf
+        target: /etc/nginx/conf.d/api_nginx.conf
+        read_only: true
+      - type: bind
+        source: ./uwsgi_params
+        target: /uwsgi_params
+        read_only: true
+    depends_on:
+      - api
+    ports:
+      - 8000:8000
+
+
+  web:
+    image: dacit/dacit
+    build:
+      context: .
+      dockerfile: ./dacit/Dockerfile
+    volumes:
+      - type: bind
+        source: ./dacit/build/web
+        target: /web
+    working_dir: /dacit
+    depends_on:
+      - api
+    ports:
+      - 5001:80
+
+volumes:
+  db-data:

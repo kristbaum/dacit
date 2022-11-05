@@ -1,17 +1,22 @@
 FROM python:3.10
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV POETRY_VIRTUALENVS_CREATE=False
 
-RUN pip install pip --upgrade
+RUN addgroup --system django \
+    && adduser --system --ingroup django django
+
+#RUN apt update && apt install -y uwsgi uwsgi-plugin-python3
+RUN apt update && apt install -y build-essential python-dev
 RUN pip install poetry
 
 COPY /api/poetry.lock /api/poetry.lock
 COPY /api/pyproject.toml /api/pyproject.toml
-RUN cd /api; poetry export -f requirements.txt --output requirements.txt --without-hashes
-RUN cd /api; pip install -r requirements.txt
+RUN cd /api; poetry install
 
-
-COPY /api/docker-entrypoint.sh /docker-entrypoint.sh
+COPY --chown=django:django /api/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
+
+USER django
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

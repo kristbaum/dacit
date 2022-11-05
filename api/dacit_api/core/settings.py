@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'dacit_api.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {

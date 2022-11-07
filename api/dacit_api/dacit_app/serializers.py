@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dacit_app.models import Text_Stimulus
+from dacit_app.models import Text_Stimulus, Min_Pair
 
 
 class TextStimulusSerializer(serializers.ModelSerializer):
@@ -7,6 +7,12 @@ class TextStimulusSerializer(serializers.ModelSerializer):
         model = Text_Stimulus
         #fields = ['text', 'id']
         fields = '__all__'
+
+class MinPairSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Min_Pair
+        fields = '__all__'
+
 
 # text = models.CharField(max_length=500, blank=False)
 #     user_audio_creatable = models.BooleanField(default=True)

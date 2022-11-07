@@ -117,7 +117,7 @@ class ImportMinPair(Create):
         filename_1 = row.get('Datei_T_Spalte1')
         filename_2 = row.get('Datei_T_Spalte2')
 
-        if filename_1 is not None and filename_1 is not '':
+        if filename_1 is not None and filename_1 != '':
             default_speaker = Speaker.objects.filter(
                 first_name='Thomas', last_name='K').first()
             audio_file = Audio(
@@ -129,7 +129,7 @@ class ImportMinPair(Create):
             )
             audio_file.save()
 
-        if filename_2 is not None and filename_2 is not '':
+        if filename_2 is not None and filename_2 != '':
             default_speaker = Speaker.objects.filter(
                 first_name='Thomas', last_name='K').first()
             audio_file = Audio(

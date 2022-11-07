@@ -23,7 +23,8 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
-MEDIA_URL = '/media/'
+#MEDIA_URL = '/media/'
+MEDIA_URL = "http://localhost:8000/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 print(MEDIA_ROOT)
@@ -38,8 +39,9 @@ SECRET_KEY = 'django-insecure-t37k4+ss0x7=@j27q-avo4skqhvyd567ww5cq(f(fd6w8hs&sz
 
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'api'
+]
 
 # Application definition
 
@@ -83,7 +85,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dacit_api.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

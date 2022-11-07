@@ -7,10 +7,12 @@ import 'package:dacit/speaker_dis_page.dart';
 import 'package:dacit/about_page.dart';
 
 void main() {
-  runApp(Dacit());
+  runApp(const Dacit());
 }
 
 class Dacit extends StatelessWidget {
+  const Dacit({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -38,13 +40,13 @@ class Dacit extends StatelessWidget {
         //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
         //bodyText1: TextStyle(fontSize: 34.0, fontFamily: 'Hind'),
       ),
-      home: DacitPage(title: 'Dacit'),
+      home: const DacitPage(title: 'Dacit'),
       routes: {
-        '/minpairs': (context) => MinimalPairs(),
-        '/record': (context) => RecordPage(),
-        '/settings': (context) => Settings(),
-        '/speakerdis': (context) => SpeakerDis(),
-        '/about': (context) => About()
+        '/minpairs': (context) => const MinimalPairs(),
+        '/record': (context) => const RecordPage(),
+        '/settings': (context) => const Settings(),
+        '/speakerdis': (context) => const SpeakerDis(),
+        '/about': (context) => const About()
       },
       // home: Main(),
     );
@@ -52,7 +54,7 @@ class Dacit extends StatelessWidget {
 }
 
 class DacitPage extends StatefulWidget {
-  DacitPage({Key? key, required this.title}) : super(key: key);
+  const DacitPage({Key? key, required this.title}) : super(key: key);
 
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
@@ -66,15 +68,8 @@ class DacitPage extends StatefulWidget {
 }
 
 class _DacitPageState extends State<DacitPage> {
-  int _counter = 0;
-
   void _incrementCounter() {
-    setState(() {
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+    setState(() {});
   }
 
   @override
@@ -92,17 +87,16 @@ class _DacitPageState extends State<DacitPage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).welcome,
-                  style: TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
-                )
-              ],
-            ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                AppLocalizations.of(context).welcome,
+                style:
+                    const TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
+              )
+            ],
           ),
         ));
   }
@@ -159,7 +153,7 @@ ListTile _tile(String title, String subtitle, String path, IconData icon,
     ),
     onTap: () {
       Navigator.pop(context);
-      Navigator.pushNamed(context, '/' + path);
+      Navigator.pushNamed(context, '/$path');
     },
   );
 }

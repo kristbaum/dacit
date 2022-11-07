@@ -1,36 +1,71 @@
-import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart' as ap;
-import 'package:dacit/unused_micro_player.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:developer';
 
-class MinimalPairs extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class MinimalPairs extends StatefulWidget {
+  const MinimalPairs({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return Main();
-  }
+  State<StatefulWidget> createState() => MinimalPairsState();
 }
 
-/// This is the stateless widget that the main application instantiates.
-class Main extends StatelessWidget {
-  ap.AudioSource? audioSource = ap.AudioSource.uri(Uri.parse(
-      "blob:http://localhost:36257/54e66aef-6486-4f8c-9488-4dfba21cbe4d"));
-  //ap.AudioSource? audioSource = ap.AudioSource.uri(Uri.parse(
-  //"https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"));
+class MinimalPairsState extends State<MinimalPairs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context).minimalPairs),
-        ),
-        body: Column(children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: MicroPlayer(
-              source: audioSource!,
-              onDelete: () {},
-            ),
+      appBar: AppBar(
+        title: const Text('About'),
+      ),
+      body: Center(
+          child: Column(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.get_app),
+            tooltip: 'Test connection',
+            onPressed: () {
+              getMinPair();
+            },
           ),
-          Center(child: Text('See your messages here!')),
-        ]));
+          const Text('This is an app developed for a master thesis etc')
+        ],
+      )),
+    );
   }
+}
+
+Future<Minpair> getMinPair() async {
+  var response =
+      await http.get(Uri.parse("http://localhost:8000/minpair?category=K_T"));
+  if (response.statusCode == 200) {
+    var responseData = json.decode(response.body);
+    log(responseData.toString());
+    Minpair minPair = Minpair(
+      id: responseData["minpair"],
+      firstStimulus: responseData["first_stimulus"],
+      firstAudio: Uri.parse(responseData["first_audio"]),
+      secondText: responseData["second_text"],
+      secondAudio: Uri.parse(responseData["second_audio"]),
+    );
+    return minPair;
+  } else {
+    log("Server could not be reached");
+    throw Error();
+  }
+}
+
+class Minpair {
+  final int id;
+  final String firstStimulus;
+  final Uri firstAudio;
+  final String secondText;
+  final Uri secondAudio;
+
+  const Minpair(
+      {required this.id,
+      required this.firstStimulus,
+      required this.firstAudio,
+      required this.secondText,
+      required this.secondAudio});
 }

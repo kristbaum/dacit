@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SpeakerDis extends StatelessWidget {
+  const SpeakerDis({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Main();
@@ -13,9 +15,10 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Differantiate between two speakers here'),
+        title: const Text('Differantiate between two speakers here'),
       ),
-      body: Center(child: Text('Is this the same, or a different speaker?')),
+      body: const Center(
+          child: Text('Is this the same, or a different speaker?')),
     );
   }
 }

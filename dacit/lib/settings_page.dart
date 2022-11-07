@@ -17,9 +17,9 @@ class Settings extends StatelessWidget {
           body: Center(
               child: Column(
             children: <Widget>[
-              Text("Ihre App-ID: 1293084076"),
-              Text("Rolle"),
-              RoleSelectionDropdown(),
+              const Text("Ihre App-ID: 1293084076"),
+              const Text("Rolle"),
+              const RoleSelectionDropdown(),
               // TODO: Don't show the other sections until selected
               // When SprecherIn
               Padding(
@@ -34,14 +34,14 @@ class Settings extends StatelessWidget {
               ),
 
               Text(AppLocalizations.of(context).whichmotherlang),
-              LanguageSelectionDropdown(),
+              const LanguageSelectionDropdown(),
 
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
+                    border: const UnderlineInputBorder(),
                     labelText: AppLocalizations.of(context).whichdialect,
                   ),
                 ),
@@ -51,7 +51,7 @@ class Settings extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
+                    border: const UnderlineInputBorder(),
                     labelText: AppLocalizations.of(context).whichyear,
                     //Todo: Limit to 4 Int
                   ),

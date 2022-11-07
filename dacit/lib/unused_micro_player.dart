@@ -12,9 +12,10 @@ class MicroPlayer extends StatefulWidget {
   final VoidCallback onDelete;
 
   const MicroPlayer({
+    Key? key,
     required this.source,
     required this.onDelete,
-  });
+  }) : super(key: key);
 
   @override
   MicroPlayerState createState() => MicroPlayerState();
@@ -80,7 +81,7 @@ class MicroPlayerState extends State<MicroPlayer> {
     Color color;
 
     if (_microPlayer.playerState.playing) {
-      icon = Icon(Icons.pause, color: Colors.red, size: 30);
+      icon = const Icon(Icons.pause, color: Colors.red, size: 30);
       color = Colors.red.withOpacity(0.1);
     } else {
       final theme = Theme.of(context);
@@ -105,7 +106,6 @@ class MicroPlayerState extends State<MicroPlayer> {
       ),
     );
   }
-
 
   Future<void> play() {
     return _microPlayer.play();

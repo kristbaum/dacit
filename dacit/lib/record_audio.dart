@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -12,6 +11,8 @@ import 'package:dacit/audio_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecordPage extends StatelessWidget {
+  const RecordPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +27,7 @@ class RecordPage extends StatelessWidget {
 class AudioRecorder extends StatefulWidget {
   final void Function(String path) onStop;
 
-  const AudioRecorder({required this.onStop});
+  const AudioRecorder({Key? key, required this.onStop}) : super(key: key);
 
   @override
   _AudioRecorderState createState() => _AudioRecorderState();
@@ -88,7 +89,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
     late Color color;
 
     if (_isRecording || _isPaused) {
-      icon = Icon(Icons.stop, color: Colors.red, size: 30);
+      icon = const Icon(Icons.stop, color: Colors.red, size: 30);
       color = Colors.red.withOpacity(0.1);
     } else {
       final theme = Theme.of(context);
@@ -118,11 +119,11 @@ class _AudioRecorderState extends State<AudioRecorder> {
     late Color color;
 
     if (!_isPaused) {
-      icon = Icon(Icons.pause, color: Colors.red, size: 30);
+      icon = const Icon(Icons.pause, color: Colors.red, size: 30);
       color = Colors.red.withOpacity(0.1);
     } else {
       final theme = Theme.of(context);
-      icon = Icon(Icons.play_arrow, color: Colors.red, size: 30);
+      icon = const Icon(Icons.play_arrow, color: Colors.red, size: 30);
       color = theme.primaryColor.withOpacity(0.1);
     }
 
@@ -144,7 +145,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
       return _buildTimer();
     }
 
-    return Text("Waiting to record");
+    return const Text("Waiting to record");
   }
 
   Widget _buildTimer() {
@@ -153,14 +154,14 @@ class _AudioRecorderState extends State<AudioRecorder> {
 
     return Text(
       '$minutes : $seconds',
-      style: TextStyle(color: Colors.red),
+      style: const TextStyle(color: Colors.red),
     );
   }
 
   String _formatNumber(int number) {
     String numberStr = number.toString();
     if (number < 10) {
-      numberStr = '0' + numberStr;
+      numberStr = '0$numberStr';
     }
 
     return numberStr;
@@ -180,7 +181,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
         _startTimer();
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 
@@ -266,6 +267,8 @@ class TextStimulus {
 }
 
 class RecorderApp extends StatefulWidget {
+  const RecorderApp({Key? key}) : super(key: key);
+
   @override
   _RecorderAppState createState() => _RecorderAppState();
 }
@@ -316,7 +319,7 @@ class _RecorderAppState extends State<RecorderApp> {
           Expanded(
             child: showPlayer
                 ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: AudioPlayer(
                       source: audioSource!,
                       onDelete: () {
@@ -343,15 +346,13 @@ class _RecorderAppState extends State<RecorderApp> {
           ),
           Flexible(
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: FutureBuilder(
                 future: getTextStimulus(),
                 builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                   if (snapshot.data == null) {
-                    return Container(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
                   } else {
                     return Text(snapshot.data.text);

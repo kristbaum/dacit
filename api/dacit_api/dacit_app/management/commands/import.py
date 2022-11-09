@@ -118,8 +118,8 @@ class ImportMinPair(Create):
         filename_2 = row.get('Datei_T_Spalte2')
 
         if filename_1 is not None and filename_1 != '':
-            default_speaker = Speaker.objects.filter(
-                first_name='Thomas', last_name='K').first()
+            default_speaker = settings.AUTH_USER_MODEL.objects.filter(
+                name='Thomas K').first()
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_1 + '.wav',
@@ -130,7 +130,7 @@ class ImportMinPair(Create):
             audio_file.save()
 
         if filename_2 is not None and filename_2 != '':
-            default_speaker = Speaker.objects.filter(
+            default_speaker = settings.AUTH_USER_MODEL.objects.filter(
                 first_name='Thomas', last_name='K').first()
             audio_file = Audio(
                 speaker=default_speaker,
@@ -156,7 +156,7 @@ class Command(BaseCommand):
         start_time = timezone.now()
 
         logging.info('Create default speaker')
-        self.obj = Speaker(first_name='Thomas', last_name='K')
+        self.obj = settings.AUTH_USER_MODEL(name='Thomas K')
         self.obj.save()
 
         logging.info('Create default speaker')

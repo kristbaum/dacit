@@ -3,10 +3,41 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
-from dacit_app.models import Text_Stimulus, Min_Pair, Audio, Speaker
+from dacit_app.models import Text_Stimulus, Min_Pair, Audio, User
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer
+from rest_framework.permissions import IsAdminUser
 import logging
 from random import choice
+
+
+class UserRecordView(APIView):
+    """
+    API View to create or get a list of all the registered
+    users. GET request returns the registered users whereas
+    a POST request allows to create a new user.
+    """
+    permission_classes = [IsAdminUser]
+
+    def get(self, format=None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=ValueError):
+            serializer.create(validated_data=request.data)
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {
+                "error": True,
+                "error_msg": serializer.error_messages,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class MultipartView(APIView):
@@ -58,8 +89,10 @@ class MinPair(APIView):
         random_pk = choice(pks)
         minpair = class_selection.get(pk=random_pk)
 
-        first_audio = Audio.objects.get(text_stimulus=minpair.first_part, speaker=selected_speaker)
-        second_audio = Audio.objects.get(text_stimulus=minpair.second_part, speaker=selected_speaker)
+        first_audio = Audio.objects.get(
+            text_stimulus=minpair.first_part, speaker=selected_speaker)
+        second_audio = Audio.objects.get(
+            text_stimulus=minpair.second_part, speaker=selected_speaker)
         print(first_audio.audio.url)
         json_min_pair = {
             "minpair": minpair.pk,

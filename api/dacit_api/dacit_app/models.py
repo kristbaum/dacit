@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.utils import timezone
 
 
 class CI_User(models.Model):
@@ -25,12 +27,38 @@ class CI_User(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
-class Speaker(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
-    created = models.DateTimeField(auto_now_add=True)
+class CustomUserManager(BaseUserManager):
 
+    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
+        now = timezone.now()
+        if not email:
+            raise ValueError('The given email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, is_staff=is_staff, is_active=True,
+                          is_superuser=is_superuser, date_joined=now, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password=None, **extra_fields):
+        return self._create_user(email, password, False, False, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        return self._create_user(email, password, True, True, **extra_fields)
+
+
+class User(AbstractBaseUser):
+    first_name = models.CharField(max_length=5000)
+    last_name = models.CharField(max_length=5000)
+    email = models.EmailField(max_length=5000, unique=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(null=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    objects = CustomUserManager()
+
+    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
     PARENT = 'P'
     SIBLING = 'S'
     FRIEND = 'F'
@@ -69,26 +97,13 @@ class Text_Stimulus(models.Model):
     description = models.CharField(max_length=1000)
     creator = models.CharField(max_length=50)
 
-    # class Text_Stimulus_Class(models.TextChoices):
-    #     Consonant = 'C'
-    #     F_W = 'F_W'
-    #     H_R = 'H_R'
-    #     K_T = 'K_T'
-    #     PF_F = 'PF_T'
-    #     R_L = 'R_L'
-    # min_pair_class = models.CharField(
-    #     max_length=4,
-    #     choices=Min_Pair_Class.choices,
-    #     default=None,
-    # )
-
     def __str__(self):
         return self.text
 
 
 class Audio(models.Model):
     text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
-    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    speaker = models.ForeignKey(User, on_delete=models.CASCADE)
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)

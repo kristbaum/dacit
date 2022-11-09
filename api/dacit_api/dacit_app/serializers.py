@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from dacit_app.models import Text_Stimulus, Min_Pair
+from dacit_app.models import Text_Stimulus, Min_Pair, User
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class TextStimulusSerializer(serializers.ModelSerializer):
@@ -8,27 +9,29 @@ class TextStimulusSerializer(serializers.ModelSerializer):
         #fields = ['text', 'id']
         fields = '__all__'
 
+
 class MinPairSerializer(serializers.ModelSerializer):
     class Meta:
         model = Min_Pair
         fields = '__all__'
 
 
-# text = models.CharField(max_length=500, blank=False)
-#     user_audio_creatable = models.BooleanField(default=True)
+class UserSerializer(serializers.ModelSerializer):
 
-#     class Language(models.TextChoices):
-#         GERMAN = 'DE'
-#         ENGLISH = 'EN'
-#     language = models.CharField(
-#         max_length=2,
-#         choices=Language.choices,
-#         default=Language.GERMAN,
-#         blank=False
-#     )
-    
-#     wd_lexeme_url = models.CharField(max_length = 50)
-#     wd_item_url = models.CharField(max_length = 50)
-#     wc_picture_url = models.CharField(max_length = 1500)
-#     description = models.CharField(max_length = 1000)
-#     creator = models.CharField(max_length = 50)
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+    class Meta:
+        model = User
+        fields = (
+            'name',
+            'email',
+            'password',
+        )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=['email']
+            )
+        ]

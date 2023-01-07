@@ -5,6 +5,7 @@ import pytz
 import uuid
 import hashlib
 import logging
+from core import settings
 
 from tqdm import tqdm
 from dacit_app.models import *

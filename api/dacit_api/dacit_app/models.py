@@ -47,11 +47,13 @@ class CustomUserManager(BaseUserManager):
         return self._create_user(email, password, True, True, **extra_fields)
 
 
-class User(AbstractBaseUser):
-    first_name = models.CharField(max_length=5000)
-    last_name = models.CharField(max_length=5000)
+class CustomUser(AbstractBaseUser):
+    first_name = models.CharField(max_length=5000, null=True)
+    last_name = models.CharField(max_length=5000, null=True)
     email = models.EmailField(max_length=5000, unique=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True)
     USERNAME_FIELD = 'email'
@@ -103,7 +105,7 @@ class Text_Stimulus(models.Model):
 
 class Audio(models.Model):
     text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
-    speaker = models.ForeignKey(User, on_delete=models.CASCADE)
+    speaker = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)

@@ -27,7 +27,7 @@ env = environ.Env(
 MEDIA_URL = "http://localhost:8000/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-print(MEDIA_ROOT)
+#print(MEDIA_ROOT)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -40,7 +40,9 @@ SECRET_KEY = 'django-insecure-t37k4+ss0x7=@j27q-avo4skqhvyd567ww5cq(f(fd6w8hs&sz
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
-    'api'
+    'api',
+    'localhost',
+    'web-api',
 ]
 
 # Application definition
@@ -128,6 +130,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+CSRF_TRUSTED_ORIGINS: [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'http://localhost',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'http://localhost',
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -151,4 +166,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'dacit_app.User'
+
+AUTH_USER_MODEL = 'dacit_app.CustomUser'

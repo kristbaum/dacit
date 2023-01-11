@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
-from dacit_app.models import Text_Stimulus, Min_Pair, Audio, User
+from dacit_app.models import Text_Stimulus, Min_Pair, Audio, CustomUser
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer
 from rest_framework.permissions import IsAdminUser
 import logging
@@ -19,7 +19,7 @@ class UserRecordView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, format=None):
-        users = User.objects.all()
+        users = CustomUser.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 

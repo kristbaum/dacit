@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dacit_app.models import Text_Stimulus, Min_Pair, User
+from dacit_app.models import Text_Stimulus, Min_Pair, CustomUser
 from rest_framework.validators import UniqueTogetherValidator
 
 
@@ -19,11 +19,11 @@ class MinPairSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = CustomUser.objects.create_user(**validated_data)
         return user
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = (
             'name',
             'email',
@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         validators = [
             UniqueTogetherValidator(
-                queryset=User.objects.all(),
+                queryset=CustomUser.objects.all(),
                 fields=['email']
             )
         ]

@@ -16,22 +16,22 @@ class MinPairSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
 
-    def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
-        return user
+#     def create(self, validated_data):
+#         user = CustomUser.objects.create_user(**validated_data)
+#         return user
 
-    class Meta:
-        model = CustomUser
-        fields = (
-            'name',
-            'email',
-            'password',
-        )
-        validators = [
-            UniqueTogetherValidator(
-                queryset=CustomUser.objects.all(),
-                fields=['email']
-            )
-        ]
+#     class Meta:
+#         model = CustomUser
+#         fields = (
+#             'name',
+#             'email',
+#             'password',
+#         )
+#         validators = [
+#             UniqueTogetherValidator(
+#                 queryset=CustomUser.objects.all(),
+#                 fields=['email']
+#             )
+#         ]

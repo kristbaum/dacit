@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
-from dacit_app.models import Text_Stimulus, Min_Pair, Audio, CustomUser
+from dacit_app.models import Text_Stimulus, Min_Pair, Audio, DacitUser
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer
 from rest_framework.permissions import IsAdminUser
 import logging
@@ -101,7 +101,7 @@ class MinPair(APIView):
             "second_stimulus": minpair.second_part.text,
             "second_audio": second_audio.audio.url
         }
-        #minpair = Min_Pair.objects.filter(min_pair_class='B_W')
-        #minpair = Min_Pair.objects.first()
-        #json_min_pair = MinPairSerializer(minpair, first_audio, second_audio).data
+        # minpair = Min_Pair.objects.filter(min_pair_class='B_W')
+        # minpair = Min_Pair.objects.first()
+        # json_min_pair = MinPairSerializer(minpair, first_audio, second_audio).data
         return Response(json_min_pair)

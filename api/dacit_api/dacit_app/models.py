@@ -27,154 +27,84 @@ class CI_User(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
-class CustomUserManager(BaseUserManager):
-
-    def _create_user(self, email, password, **extra_fields):
-        now = timezone.now()
+class DacitUserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
         if not email:
-            raise ValueError('The given email must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, date_joined=now, **extra_fields)
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
-
-    def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-        return self._create_user(email, password, True, True, **extra_fields)
+    def create_superuser(self, email, password=None):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
 
 
-# class AccountManager(BaseUserManager):
-#     use_in_migrations = True
+class DacitUser(AbstractBaseUser):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
 
-#     def _create_user(self, email, name, phone, password, **extra_fields):
-#         values = [email, name, phone]
-#         field_value_map = dict(zip(self.model.REQUIRED_FIELDS, values))
-#         for field_name, value in field_value_map.items():
-#             if not value:
-#                 raise ValueError('The {} value must be set'.format(field_name))
+    objects = DacitUserManager()
 
-#         email = self.normalize_email(email)
-#         user = self.model(
-#             email=email,
-#             name=name,
-#             phone=phone,
-#             **extra_fields
-#         )
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-
-#     def create_user(self, email, name, phone, password=None, **extra_fields):
-#         extra_fields.setdefault('is_staff', False)
-#         extra_fields.setdefault('is_superuser', False)
-#         return self._create_user(email, name, phone, password, **extra_fields)
-
-#     def create_superuser(self, email, name, phone, password=None, **extra_fields):
-#         extra_fields.setdefault('is_staff', True)
-#         extra_fields.setdefault('is_superuser', True)
-
-#         if extra_fields.get('is_staff') is not True:
-#             raise ValueError('Superuser must have is_staff=True.')
-#         if extra_fields.get('is_superuser') is not True:
-#             raise ValueError('Superuser must have is_superuser=True.')
-
-#         return self._create_user(email, name, phone, password, **extra_fields)
-
-
-# class Account(AbstractBaseUser, PermissionsMixin):
-#     email = models.EmailField(unique=True)
-#     name = models.CharField(max_length=150)
-#     phone = models.CharField(max_length=50)
-#     date_of_birth = models.DateField(blank=True, null=True)
-#     is_staff = models.BooleanField(default=False)
-#     is_active = models.BooleanField(default=True)
-#     date_joined = models.DateTimeField(default=timezone.now)
-#     last_login = models.DateTimeField(null=True)
-
-#     objects = AccountManager()
-
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ['name', 'phone']
-
-#     def get_full_name(self):
-#         return self.name
-
-#     def get_short_name(self):
-#         return self.name.split()[0]
-
-# class CustomUser(AbstractBaseUser):
-#     first_name = models.CharField(max_length=5000, null=True)
-#     last_name = models.CharField(max_length=5000, null=True)
-#     email = models.EmailField(max_length=5000, unique=True)
-#     is_staff = models.BooleanField(default=False)
-#     is_superuser = models.BooleanField(default=False)
-#     is_active = models.BooleanField(default=False)
-#     date_joined = models.DateTimeField(auto_now_add=True)
-#     last_login = models.DateTimeField(null=True)
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = []
-#     objects = CustomUserManager()
-
-#     ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
-#     PARENT = 'P'
-#     SIBLING = 'S'
-#     FRIEND = 'F'
-#     GRANDPARENT = 'G'
-#     THERAPIST = 'T'
-#     RELATIONSHIP_TYPES = [
-#         (PARENT, 'Parent'),
-#         (SIBLING, 'Sibling'),
-#         (FRIEND, 'Friend'),
-#         (GRANDPARENT, 'Grandparent'),
-#         (THERAPIST, 'Therapist'),
-#     ]
-#     relationship = models.CharField(
-#         max_length=1,
-#         choices=RELATIONSHIP_TYPES,
-#     )
-
-class CustomUser(AbstractBaseUser):
-#    first_name = models.CharField(max_length=5000, null=True)
-#    last_name = models.CharField(max_length=5000, null=True)
-    email = models.EmailField(max_length=5000, unique=True)
-#    is_staff = models.BooleanField(default=False)
-#    is_superuser = models.BooleanField(default=False)
-#    is_active = models.BooleanField(default=False)
-#    date_joined = models.DateTimeField(auto_now_add=True)
-#    last_login = models.DateTimeField(null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-    objects = CustomUserManager()
-#
-#    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
-#    PARENT = 'P'
-#    SIBLING = 'S'
-#    FRIEND = 'F'
-#    GRANDPARENT = 'G'
-#    THERAPIST = 'T'
-#    RELATIONSHIP_TYPES = [
-#        (PARENT, 'Parent'),
-#        (SIBLING, 'Sibling'),
-#        (FRIEND, 'Friend'),
-#        (GRANDPARENT, 'Grandparent'),
-#        (THERAPIST, 'Therapist'),
-#    ]
-#    relationship = models.CharField(
-#        max_length=1,
-#        choices=RELATIONSHIP_TYPES,
-#    )
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        return self.is_admin
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        return self.is_admin
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        return self.is_admin
+
+    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
+    PARENT = 'P'
+    SIBLING = 'S'
+    FRIEND = 'F'
+    GRANDPARENT = 'G'
+    THERAPIST = 'T'
+    RELATIONSHIP_TYPES = [
+        (PARENT, 'Parent'),
+        (SIBLING, 'Sibling'),
+        (FRIEND, 'Friend'),
+        (GRANDPARENT, 'Grandparent'),
+        (THERAPIST, 'Therapist'),
+    ]
+    relationship = models.CharField(
+        max_length=1,
+        choices=RELATIONSHIP_TYPES,
+    )
 
 
 class Text_Stimulus(models.Model):
@@ -203,7 +133,7 @@ class Text_Stimulus(models.Model):
 
 class Audio(models.Model):
     text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
-    speaker = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    speaker = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)

@@ -32,11 +32,11 @@ services:
       - PYTHONPATH=/api/dacit_api/
     depends_on:
       - db
-    ports:
-      - 8000:8000
-  # Activate again when shipping container
-  #    env_file:
-  #      - ./api/src/artigo_api/.env
+    # ports:
+    #   - 8000:8000
+    # Activate again when shipping container
+    #  env_file:
+    #    - ./api/src/artigo_api/.env
 
   web-api:
     image: nginx:latest
@@ -49,17 +49,17 @@ services:
         source: ./uwsgi_params
         target: /uwsgi_params
         read_only: true
-#      - type: bind
-#        source: ./api/dacit_api/media
-#        target: /media
+      - type: bind
+        source: ./api/dacit_api/media
+        target: /media
       - type: bind
         source: ./api/dacit_api/static
         target: /static
         read_only: true
     depends_on:
       - api
-#    ports:
-#      - 8000:8000
+    ports:
+      - 8000:8000
 
   web:
     image: dacit/dacit

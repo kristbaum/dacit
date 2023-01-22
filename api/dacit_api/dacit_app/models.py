@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
+import random
 
 
 class CI_User(models.Model):
@@ -66,6 +67,11 @@ class DacitUser(AbstractBaseUser):
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    public_id = models.CharField(
+        max_length=500, 
+        blank=False,
+        unique=True,
+        default=random.randint(100000000000,9999999999999))
 
     objects = DacitUserManager()
 
@@ -137,6 +143,9 @@ class Audio(models.Model):
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return str(self.audio.name)
 
 
 class Min_Pair(models.Model):

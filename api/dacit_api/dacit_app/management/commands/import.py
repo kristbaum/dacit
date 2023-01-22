@@ -119,8 +119,8 @@ class ImportMinPair(Create):
         filename_2 = row.get('Datei_T_Spalte2')
 
         if filename_1 is not None and filename_1 != '':
-            default_speaker = settings.AUTH_USER_MODEL.objects.filter(
-                name='Thomas K').first()
+            default_speaker = DacitUser.objects.filter(
+                public_id=1).first()
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_1 + '.wav',
@@ -131,8 +131,8 @@ class ImportMinPair(Create):
             audio_file.save()
 
         if filename_2 is not None and filename_2 != '':
-            default_speaker = settings.AUTH_USER_MODEL.objects.filter(
-                first_name='Thomas', last_name='K').first()
+            default_speaker = DacitUser.objects.filter(
+                public_id=1).first()
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_2 + '.wav',
@@ -157,7 +157,7 @@ class Command(BaseCommand):
         start_time = timezone.now()
 
         logging.info('Create default speaker')
-        self.obj = settings.AUTH_USER_MODEL(name='Thomas K')
+        self.obj = DacitUser(email="default@example.example", public_id=1)
         self.obj.save()
 
         logging.info('Create default speaker')

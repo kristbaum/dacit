@@ -16,22 +16,22 @@ class MinPairSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class UserSerializer(serializers.ModelSerializer):
+class DacitUserSerializer(serializers.ModelSerializer):
 
-#     def create(self, validated_data):
-#         user = DacitUser.objects.create_user(**validated_data)
-#         return user
+    def create(self, validated_data):
+        user = DacitUser.objects.create_user(**validated_data)
+        return user
 
-#     class Meta:
-#         model = DacitUser
-#         fields = (
-#             'name',
-#             'email',
-#             'password',
-#         )
-#         validators = [
-#             UniqueTogetherValidator(
-#                 queryset=DacitUser.objects.all(),
-#                 fields=['email']
-#             )
-#         ]
+    class Meta:
+        model = DacitUser
+        fields = (
+#            'name',
+            'email',
+            'password',
+        )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=DacitUser.objects.all(),
+                fields=['email']
+            )
+        ]

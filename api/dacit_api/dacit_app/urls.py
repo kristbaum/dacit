@@ -6,5 +6,5 @@ urlpatterns = [
     path('ts/', views.TextStimuli.as_view(), name='ts'),
     path('sts/', views.TextStimulus.as_view(), name='sts'),
     path('minpair/', views.MinPair.as_view(), name='minpair'),
-#    path('user/', views.UserRecordView.as_view(), name='users'),
+    path('user/', views.DacitUserRecordView.as_view(), name='users'),
 ]

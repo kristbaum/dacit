@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:dacit/minimal_pairs_page.dart';
-import 'package:dacit/record_audio.dart';
+//import 'package:dacit/minimal_pairs_page.dart';
+//import 'package:dacit/record_audio.dart';
 import 'package:dacit/settings_page.dart';
 import 'package:dacit/speaker_dis_page.dart';
 import 'package:dacit/about_page.dart';
@@ -42,8 +42,8 @@ class Dacit extends StatelessWidget {
       ),
       home: const DacitPage(title: 'Dacit'),
       routes: {
-        '/minpairs': (context) => const MinimalPairs(),
-        '/record': (context) => const RecordPage(),
+//        '/minpairs': (context) => const MinimalPairs(),
+//        '/record': (context) => const RecordPage(),
         '/settings': (context) => const Settings(),
         '/speakerdis': (context) => const SpeakerDis(),
         '/about': (context) => const About()
@@ -68,9 +68,6 @@ class DacitPage extends StatefulWidget {
 }
 
 class _DacitPageState extends State<DacitPage> {
-  void _incrementCounter() {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {

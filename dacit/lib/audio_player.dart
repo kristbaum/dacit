@@ -1,11 +1,11 @@
 import 'dart:async';
-
+import 'package:audioplayers/audioplayers.dart' as ap;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart' as ap;
 
 class AudioPlayer extends StatefulWidget {
   /// Path from where to play recorded audio
-  final ap.AudioSource source;
+  final String source;
 
   /// Callback when audio file should be removed
   /// Setting this to null hides the delete button
@@ -26,30 +26,31 @@ class AudioPlayerState extends State<AudioPlayer> {
   static const double _deleteBtnSize = 24;
 
   final _audioPlayer = ap.AudioPlayer();
-  late StreamSubscription<ap.PlayerState> _playerStateChangedSubscription;
+  late StreamSubscription<void> _playerStateChangedSubscription;
   late StreamSubscription<Duration?> _durationChangedSubscription;
   late StreamSubscription<Duration> _positionChangedSubscription;
+  Duration? _position;
+  Duration? _duration;
 
   @override
   void initState() {
     _playerStateChangedSubscription =
-        _audioPlayer.playerStateStream.listen((state) async {
-      if (state.processingState == ap.ProcessingState.completed) {
-        await stop();
-      }
+        _audioPlayer.onPlayerComplete.listen((state) async {
+      await stop();
       setState(() {});
     });
-    _positionChangedSubscription =
-        _audioPlayer.positionStream.listen((position) => setState(() {}));
-    _durationChangedSubscription =
-        _audioPlayer.durationStream.listen((duration) => setState(() {}));
-    _init();
+    _positionChangedSubscription = _audioPlayer.onPositionChanged.listen(
+      (position) => setState(() {
+        _position = position;
+      }),
+    );
+    _durationChangedSubscription = _audioPlayer.onDurationChanged.listen(
+      (duration) => setState(() {
+        _duration = duration;
+      }),
+    );
 
     super.initState();
-  }
-
-  Future<void> _init() async {
-    await _audioPlayer.setAsset('audio/words/thomas_b.wav');
   }
 
   @override
@@ -75,7 +76,7 @@ class AudioPlayerState extends State<AudioPlayer> {
               icon: const Icon(Icons.delete,
                   color: Color(0xFF73748D), size: _deleteBtnSize),
               onPressed: () {
-                _audioPlayer.stop().then((value) => widget.onDelete());
+                stop().then((value) => widget.onDelete());
               },
             ),
           ],
@@ -88,7 +89,7 @@ class AudioPlayerState extends State<AudioPlayer> {
     Icon icon;
     Color color;
 
-    if (_audioPlayer.playerState.playing) {
+    if (_audioPlayer.state == ap.PlayerState.playing) {
       icon = const Icon(Icons.pause, color: Colors.red, size: 30);
       color = Colors.red.withOpacity(0.1);
     } else {
@@ -104,7 +105,7 @@ class AudioPlayerState extends State<AudioPlayer> {
           child:
               SizedBox(width: _controlSize, height: _controlSize, child: icon),
           onTap: () {
-            if (_audioPlayer.playerState.playing) {
+            if (_audioPlayer.state == ap.PlayerState.playing) {
               pause();
             } else {
               play();
@@ -116,10 +117,11 @@ class AudioPlayerState extends State<AudioPlayer> {
   }
 
   Widget _buildSlider(double widgetWidth) {
-    final position = _audioPlayer.position;
-    final duration = _audioPlayer.duration;
     bool canSetValue = false;
-    if (duration != null) {
+    final duration = _duration;
+    final position = _position;
+
+    if (duration != null && position != null) {
       canSetValue = position.inMilliseconds > 0;
       canSetValue &= position.inMilliseconds < duration.inMilliseconds;
     }
@@ -138,7 +140,7 @@ class AudioPlayerState extends State<AudioPlayer> {
             _audioPlayer.seek(Duration(milliseconds: position.round()));
           }
         },
-        value: canSetValue && duration != null
+        value: canSetValue && duration != null && position != null
             ? position.inMilliseconds / duration.inMilliseconds
             : 0.0,
       ),
@@ -146,15 +148,12 @@ class AudioPlayerState extends State<AudioPlayer> {
   }
 
   Future<void> play() {
-    return _audioPlayer.play();
+    return _audioPlayer.play(
+      kIsWeb ? ap.UrlSource(widget.source) : ap.DeviceFileSource(widget.source),
+    );
   }
 
-  Future<void> pause() {
-    return _audioPlayer.pause();
-  }
+  Future<void> pause() => _audioPlayer.pause();
 
-  Future<void> stop() async {
-    await _audioPlayer.stop();
-    return _audioPlayer.seek(const Duration(milliseconds: 0));
-  }
+  Future<void> stop() => _audioPlayer.stop();
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:just_audio/just_audio.dart';
+import 'package:dacit/audio_player.dart';
 
 class MinimalPairs extends StatefulWidget {
   const MinimalPairs({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class MinimalPairsState extends State<MinimalPairs> {
   void initState() {
     super.initState();
     _minpair = getMinPair();
-    player = AudioPlayer();
+    player = AudioPlayer(source: source, onDelete: null);
   }
 
   @override

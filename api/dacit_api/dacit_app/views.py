@@ -4,40 +4,47 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from dacit_app.models import Text_Stimulus, Min_Pair, Audio, DacitUser
-from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer
-from rest_framework.permissions import IsAdminUser
+from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer
+from rest_framework.permissions import IsAdminUser, AllowAny
 import logging
 from random import choice
 
 
-# class UserRecordView(APIView):
-#     """
-#     API View to create or get a list of all the registered
-#     users. GET request returns the registered users whereas
-#     a POST request allows to create a new user.
-#     """
-#     permission_classes = [IsAdminUser]
+class DacitUserRecordView(APIView):
+    """
+    API View to create or get a list of all the registered
+    users. GET request returns the registered users whereas
+    a POST request allows to create a new user.
+    """
+    # permission_classes = [IsAdminUser]
 
-#     def get(self, format=None):
-#         users = CustomUser.objects.all()
-#         serializer = UserSerializer(users, many=True)
-#         return Response(serializer.data)
+    # def get(self, format=None):
+    #     users = CustomUser.objects.all()
+    #     serializer = DacitUserSerializer(users, many=True)
+    #     return Response(serializer.data)
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        logging.info("Create user")
+        serializer = DacitUserSerializer(data=request.data)
+        logging.info("Create user")
+        if serializer.is_valid(raise_exception=ValueError):
+            serializer.create(validated_data=request.data)
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {
+                "error": True,
+                "error_msg": serializer.error_messages,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-#     def post(self, request):
-#         serializer = UserSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=ValueError):
-#             serializer.create(validated_data=request.data)
-#             return Response(
-#                 serializer.data,
-#                 status=status.HTTP_201_CREATED
-#             )
-#         return Response(
-#             {
-#                 "error": True,
-#                 "error_msg": serializer.error_messages,
-#             },
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
+#class DacitUserPreferences:
+#    def get(self, request):
+
 
 
 class MultipartView(APIView):
@@ -70,7 +77,7 @@ class MinPair(APIView):
         speaker = request.query_params.get('speaker')
         if speaker is None:
             selected_speaker = Speaker.objects.filter(
-                first_name='Thomas', last_name='K').first()
+                public_id=1).first()
         else:
             selected_speaker = Speaker.objects.get(pk=speaker)
 

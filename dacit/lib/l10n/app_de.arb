@@ -13,5 +13,7 @@
   "dacitDescription": "Dacit ist eine Hörtrainings app für CI Hörer",
   "identWord": "Identifiziere einzelne Wörter",
   "identSpeaker": "Indentifiziere Sprecher",
-  "additInfo": "Weitere Informationen"
+  "additInfo": "Weitere Informationen",
+  "training": "Trainingseinheiten seit letzter Woche",
+  "recordings": "erstellte Aufnahmen"
 }

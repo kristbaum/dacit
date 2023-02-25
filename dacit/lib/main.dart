@@ -91,13 +91,13 @@ class _DacitPageState extends State<DacitPage> {
                   Column(
                     children: [
                       const Text("0"),
-                      const Text("Trainingseinheiten seit letzter Woche")
+                      Text(AppLocalizations.of(context).training),
                     ],
                   ),
                   Column(
                     children: [
                       const Text("0"),
-                      const Text("erstellte Aufnahmen")
+                      Text(AppLocalizations.of(context).recordings)
                     ],
                   )
                 ],

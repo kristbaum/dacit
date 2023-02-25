@@ -13,5 +13,7 @@
   "dacitDescription": "Dacit is an audio training app for cochlear implant users",
   "identWord": "Identify single words",
   "identSpeaker": "Identify speakers",
-  "additInfo": "Additional information"
+  "additInfo": "Additional information",
+  "training": "Training sessions since last week",
+  "recordings": "Recordings made"
 }

@@ -8,5 +8,7 @@
   "welcome": "Willkommen zu Dacit\neiner Trainingsapp für Personen mit Cochlear Implantat",
   "whichdialect": "Welchen Dialekt sprechen Sie?",
   "whichyear": "In welchem Jahr sind Sie geboren?",
-  "whichmotherlang": "Was ist Ihre Muttersprache?"
+  "whichmotherlang": "Was ist Ihre Muttersprache?",
+  "recodingPromt": "Nehmen Sie das folgende Wort auf:",
+  "dacitDescription": "Dacit ist eine Hörtrainings app für CI Hörer"
 }

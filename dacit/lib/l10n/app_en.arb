@@ -1,12 +1,14 @@
 {
-    "minimalPairs": "Train Minimal Pairs",
-    "recordAudio": "Record Audio",
-    "recordAudioDesc": "Record new audio",
-    "speakerDisambiguation": "Train Speaker Disambiguation",
-    "settings": "Settings",
-    "about": "About",
-    "welcome": "Willkommen zu Dacit\neiner Trainingsapp für Personen mit Cochlear Implantat",
-    "whichdialect": "Welchen Dialekt sprechen Sie?",
-    "whichyear": "In welchem Jahr sind Sie geboren?",
-    "whichmotherlang": "Was ist Ihre Muttersprache?"
+  "minimalPairs": "Train Minimal Pairs",
+  "recordAudio": "Record Audio",
+  "recordAudioDesc": "Record new audio",
+  "speakerDisambiguation": "Train Speaker Disambiguation",
+  "settings": "Settings",
+  "about": "About",
+  "welcome": "Willkommen zu Dacit\neiner Trainingsapp für Personen mit Cochlear Implantat",
+  "whichdialect": "Welchen Dialekt sprechen Sie?",
+  "whichyear": "In welchem Jahr sind Sie geboren?",
+  "whichmotherlang": "Was ist Ihre Muttersprache?",
+  "recodingPromt": "Nehmen Sie das folgende Wort auf:",
+  "dacitDescription": "Dacit is an audio training app for cochlear implant users"
 }

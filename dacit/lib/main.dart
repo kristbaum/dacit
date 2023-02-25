@@ -114,12 +114,12 @@ Widget drawer(BuildContext context) {
     // Important: Remove any padding from the ListView.
     padding: EdgeInsets.zero,
     children: [
-      const DrawerHeader(
+      DrawerHeader(
         // decoration: BoxDecoration(
         //   color: Colors.blue,
         // ),
         child: Text(
-          'Dacit an audio training app for cochlear implant users',
+          AppLocalizations.of(context).dacitDescription,
           // style: const TextStyle(
           //   fontWeight: FontWeight.w500,
           //   fontSize: 20,

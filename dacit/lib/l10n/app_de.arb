@@ -10,5 +10,8 @@
   "whichyear": "In welchem Jahr sind Sie geboren?",
   "whichmotherlang": "Was ist Ihre Muttersprache?",
   "recodingPromt": "Nehmen Sie das folgende Wort auf:",
-  "dacitDescription": "Dacit ist eine Hörtrainings app für CI Hörer"
+  "dacitDescription": "Dacit ist eine Hörtrainings app für CI Hörer",
+  "identWord": "Identifiziere einzelne Wörter",
+  "identSpeaker": "Indentifiziere Sprecher",
+  "additInfo": "Weitere Informationen"
 }

@@ -132,14 +132,22 @@ Widget drawer(BuildContext context) {
           "record",
           Icons.record_voice_over,
           context),
-      _tile(AppLocalizations.of(context).minimalPairs, "Identify single words",
-          "minpairs", Icons.audiotrack, context),
-      _tile(AppLocalizations.of(context).speakerDisambiguation,
-          "Identify speakers", "speakerdis", Icons.audiotrack, context),
+      _tile(
+          AppLocalizations.of(context).minimalPairs,
+          AppLocalizations.of(context).identWord,
+          "minpairs",
+          Icons.audiotrack,
+          context),
+      _tile(
+          AppLocalizations.of(context).speakerDisambiguation,
+          AppLocalizations.of(context).identSpeaker,
+          "speakerdis",
+          Icons.audiotrack,
+          context),
       _tile(AppLocalizations.of(context).settings, "", "settings",
           Icons.settings, context),
-      _tile(AppLocalizations.of(context).about, "Additional information",
-          "about", Icons.info, context),
+      _tile(AppLocalizations.of(context).about,
+          AppLocalizations.of(context).additInfo, "about", Icons.info, context),
     ],
   ));
 }

@@ -58,6 +58,12 @@ Build translations the first time:
 cd dacit
 flutter gen-l10n
 
+
+### Upgrade Major Flutter Versions
+```
+flutter pub upgrade --major-versions
+```
+
 # Web XML Request Error fix
 see here: https://stackoverflow.com/questions/65630743/how-to-solve-flutter-web-api-cors-error-only-with-dart-code
 # Start
@@ -74,3 +80,4 @@ docker compose exec api python3 manage.py import
 docker compose exec api python3 manage.py createsuperuser
 flutter build web
 ```
+

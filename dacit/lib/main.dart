@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'package:dacit/minimal_pairs_page.dart';
-//import 'package:dacit/record_audio.dart';
 import 'package:dacit/settings_page.dart';
 import 'package:dacit/speaker_dis_page.dart';
 import 'package:dacit/about_page.dart';
+import 'package:dacit/record_page.dart';
 
 void main() {
   runApp(const Dacit());
@@ -24,7 +24,7 @@ class Dacit extends StatelessWidget {
       theme: ThemeData(
         //primarySwatch: Colors.green,
         brightness: Brightness.light,
-        primaryColor: Colors.lightBlue[800],
+        primaryColor: Colors.blueGrey,
 
         // Define the default font family.
         fontFamily: 'Georgia',
@@ -43,7 +43,7 @@ class Dacit extends StatelessWidget {
       home: const DacitPage(title: 'Dacit'),
       routes: {
 //        '/minpairs': (context) => const MinimalPairs(),
-//        '/record': (context) => const RecordPage(),
+        '/record': (context) => const RecordPage(),
         '/settings': (context) => const Settings(),
         '/speakerdis': (context) => const SpeakerDis(),
         '/about': (context) => const About()
@@ -68,7 +68,6 @@ class DacitPage extends StatefulWidget {
 }
 
 class _DacitPageState extends State<DacitPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,13 +77,31 @@ class _DacitPageState extends State<DacitPage> {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              const Image(image: AssetImage('icon.png')),
               Text(
                 AppLocalizations.of(context).welcome,
                 style:
                     const TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
-              )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      const Text("0"),
+                      const Text("Trainingseinheiten seit letzter Woche")
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text("0"),
+                      const Text("erstellte Aufnahmen")
+                    ],
+                  )
+                ],
+              ),
             ],
           ),
         ));

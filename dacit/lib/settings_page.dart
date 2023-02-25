@@ -10,55 +10,50 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: _title,
-        home: Scaffold(
-          appBar: AppBar(title: Text(AppLocalizations.of(context).settings)),
-          body: Center(
-              child: Column(
-            children: <Widget>[
-              const Text("Ihre App-ID: 1293084076"),
-              const Text("Rolle"),
-              const RoleSelectionDropdown(),
-              // TODO: Don't show the other sections until selected
-              // When SprecherIn
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Geben Sie die ID Ihrer Bezugsperson ein',
-                  ),
-                ),
+    return Scaffold(
+      appBar: AppBar(title: Text(AppLocalizations.of(context).settings)),
+      body: Center(
+          child: Column(
+        children: <Widget>[
+          const Text("Ihre App-ID: 1293084076"),
+          const Text("Rolle"),
+          const RoleSelectionDropdown(),
+          // TODO: Don't show the other sections until selected
+          // When SprecherIn
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Geben Sie die ID Ihrer Bezugsperson ein',
               ),
+            ),
+          ),
 
-              Text(AppLocalizations.of(context).whichmotherlang),
-              const LanguageSelectionDropdown(),
+          Text(AppLocalizations.of(context).whichmotherlang),
+          const LanguageSelectionDropdown(),
 
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: const UnderlineInputBorder(),
-                    labelText: AppLocalizations.of(context).whichdialect,
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+            child: TextFormField(
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                labelText: AppLocalizations.of(context).whichdialect,
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: const UnderlineInputBorder(),
-                    labelText: AppLocalizations.of(context).whichyear,
-                    //Todo: Limit to 4 Int
-                  ),
-                ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+            child: TextFormField(
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                labelText: AppLocalizations.of(context).whichyear,
+                //Todo: Limit to 4 Int
               ),
-            ],
-          )),
-        ));
+            ),
+          ),
+        ],
+      )),
+    );
   }
 }

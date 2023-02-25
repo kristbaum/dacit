@@ -1,6 +1,5 @@
+import 'package:dacit/minpairs_api.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:dacit/audio_player.dart';
 
 class MinimalPairs extends StatefulWidget {
@@ -17,12 +16,12 @@ class MinimalPairsState extends State<MinimalPairs> {
   void initState() {
     super.initState();
     _minpair = getMinPair();
-    player = AudioPlayer(source: source, onDelete: null);
+  //  player = AudioPlayer(source: source, onDelete: null);
   }
 
   @override
   void dispose() {
-    player.dispose();
+  //  player.dispose();
     super.dispose();
   }
 
@@ -47,9 +46,9 @@ class MinimalPairsState extends State<MinimalPairs> {
                     if (snapshot.hasData) {
                       return ElevatedButton(
                           onPressed: () async {
-                            await player
-                                .setUrl(snapshot.data!.firstAudio.toString());
-                            player.play();
+        //                    await player
+        //                        .setUrl(snapshot.data!.firstAudio.toString());
+        //                    player.play();
                           },
                           child: const Text('A'));
                     } else if (snapshot.hasError) {
@@ -76,23 +75,23 @@ class MinimalPairsState extends State<MinimalPairs> {
                     ),
                   ],
                 ),
-                FutureBuilder<Minpair>(
-                  future: _minpair,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ElevatedButton(
-                          onPressed: () async {
-                            await player
-                                .setUrl(snapshot.data!.secondAudio.toString());
-                            player.play();
-                          },
-                          child: const Text('B'));
-                    } else if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    }
-                    return const CircularProgressIndicator();
-                  },
-                ),
+                // FutureBuilder<Minpair>(
+                //   future: _minpair,
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       // return ElevatedButton(
+                //       //     onPressed: () async {
+                //       //       await player
+                //       //           .setUrl(snapshot.data!.secondAudio.toString());
+                //       //       player.play();
+                //       //     },
+                //           child: const Text('B'));
+                //     } else if (snapshot.hasError) {
+                //       return Text('${snapshot.error}');
+                //     }
+                //     return const CircularProgressIndicator();
+                //   },
+                // ),
               ],
             ),
           )
@@ -102,38 +101,4 @@ class MinimalPairsState extends State<MinimalPairs> {
   }
 }
 
-Future<Minpair> getMinPair() async {
-  var response =
-      await http.get(Uri.parse("http://localhost:8000/minpair?category=K_T"));
-  if (response.statusCode == 200) {
-    return Minpair.fromJson(json.decode(response.body));
-//    audioSource = ap.AudioSource.uri(minPair.firstAudio);
-  } else {
-    throw Exception("Failed to load Minpair!");
-  }
-}
 
-class Minpair {
-  final int id;
-  final String firstStimulus;
-  final Uri firstAudio;
-  final String secondStimulus;
-  final Uri secondAudio;
-
-  const Minpair(
-      {required this.id,
-      required this.firstStimulus,
-      required this.firstAudio,
-      required this.secondStimulus,
-      required this.secondAudio});
-
-  factory Minpair.fromJson(Map<String, dynamic> json) {
-    return Minpair(
-      id: json['minpair'],
-      firstStimulus: json["first_stimulus"],
-      firstAudio: Uri.parse(json["first_audio"]),
-      secondStimulus: json["second_stimulus"],
-      secondAudio: Uri.parse(json["second_audio"]),
-    );
-  }
-}

@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import environ
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,15 +137,17 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 CSRF_TRUSTED_ORIGINS: [
-    'http://127.0.0.1:8000',
     'http://localhost:8000',
+    'http://127.0.0.1:8000',
     'http://localhost',
     'http://*.localhost',
 ]
 
+logging.info("Disable CORS")
+
 CORS_ORIGIN_WHITELIST = [
-    'http://127.0.0.1:8000',
     'http://localhost:8000',
+    'http://127.0.0.1:8000',
     'http://localhost',
 ]
 
@@ -153,6 +158,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_COOKIE_SECURE = False
 
 
 # Internationalization

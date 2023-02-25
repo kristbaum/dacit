@@ -15,5 +15,6 @@
   "identSpeaker": "Identify speakers",
   "additInfo": "Additional information",
   "training": "Training sessions since last week",
-  "recordings": "Recordings made"
+  "recordings": "Recordings made",
+  "minimalPairsDesc": "Sind diese beiden Worte gleich?"
 }

@@ -15,5 +15,6 @@
   "identSpeaker": "Indentifiziere Sprecher",
   "additInfo": "Weitere Informationen",
   "training": "Trainingseinheiten seit letzter Woche",
-  "recordings": "erstellte Aufnahmen"
+  "recordings": "erstellte Aufnahmen",
+  "minimalPairsDesc": "Sind diese beiden Worte gleich?"
 }

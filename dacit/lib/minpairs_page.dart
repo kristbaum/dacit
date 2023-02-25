@@ -1,6 +1,7 @@
 import 'package:dacit/minpairs_api.dart';
 import 'package:flutter/material.dart';
 import 'package:dacit/audio_player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MinimalPairs extends StatefulWidget {
   const MinimalPairs({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class MinimalPairsState extends State<MinimalPairs> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("Sind diese beiden Worte gleich?"),
+          Text(AppLocalizations.of(context).minimalPairsDesc),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

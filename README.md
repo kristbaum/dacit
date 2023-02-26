@@ -74,6 +74,12 @@ docker run post
 ```
 
 ## Migrate and Import
+
+Delete Database:
+```
+docker container rm dacit-db-1
+docker volume rm dacit_db-data 
+```
 ```
 docker compose exec api python manage.py migrate
 docker compose exec api python3 manage.py import

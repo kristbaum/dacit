@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'package:dacit/minimal_pairs_page.dart';
-import 'package:dacit/settings_page.dart';
-import 'package:dacit/speaker_dis_page.dart';
-import 'package:dacit/about_page.dart';
-import 'package:dacit/record_page.dart';
+import 'package:dacit/pages/settings_page.dart';
+import 'package:dacit/pages/speaker_dis_page.dart';
+import 'package:dacit/pages/about_page.dart';
+import 'package:dacit/pages/record_page.dart';
 
 void main() {
   runApp(const Dacit());

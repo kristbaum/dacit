@@ -40,6 +40,8 @@ class DacitUserManager(BaseUserManager):
             email=self.normalize_email(email),
         )
 
+        user.public_id = random.randint(100000000000, 9999999999999)
+
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -66,11 +68,10 @@ class DacitUser(AbstractBaseUser):
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    public_id = models.CharField(
-        max_length=500, 
+    public_id = models.BigIntegerField(
         blank=False,
-        unique=True,
-        default=random.randint(100000000000,9999999999999))
+        null=False,
+        unique=True)
 
     objects = DacitUserManager()
 
@@ -142,7 +143,7 @@ class Audio(models.Model):
     audio = models.FileField(upload_to='audio')
     language = models.CharField(max_length=2)
     dicalect = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return str(self.audio.name)
 

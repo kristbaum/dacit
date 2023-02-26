@@ -1,6 +1,6 @@
-import 'package:dacit/minpairs_api.dart';
+import 'package:dacit/services/minpairs_api.dart';
 import 'package:flutter/material.dart';
-import 'package:dacit/audio_player.dart';
+import 'package:dacit/services/audio_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MinimalPairs extends StatefulWidget {

@@ -1,9 +1,9 @@
-import 'package:dacit/recorder.dart';
+import 'package:dacit/services/recorder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'audio_player.dart';
+import '../services/audio_player.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);

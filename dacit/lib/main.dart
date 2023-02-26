@@ -1,3 +1,4 @@
+import 'package:dacit/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'package:dacit/minimal_pairs_page.dart';
@@ -40,7 +41,7 @@ class Dacit extends StatelessWidget {
         //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
         //bodyText1: TextStyle(fontSize: 34.0, fontFamily: 'Hind'),
       ),
-      home: const DacitPage(title: 'Dacit'),
+      home: const HomePage(title: 'Dacit'),
       routes: {
 //        '/minpairs': (context) => const MinimalPairs(),
         '/record': (context) => const RecordPage(),
@@ -51,128 +52,4 @@ class Dacit extends StatelessWidget {
       // home: Main(),
     );
   }
-}
-
-class DacitPage extends StatefulWidget {
-  const DacitPage({Key? key, required this.title}) : super(key: key);
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _DacitPageState createState() => _DacitPageState();
-}
-
-class _DacitPageState extends State<DacitPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: drawer(context),
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              const Image(image: AssetImage('icon.png')),
-              Text(
-                AppLocalizations.of(context).welcome,
-                style:
-                    const TextStyle(fontSize: 30, fontStyle: FontStyle.normal),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      const Text("0"),
-                      Text(AppLocalizations.of(context).training),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text("0"),
-                      Text(AppLocalizations.of(context).recordings)
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-        ));
-  }
-}
-
-Widget drawer(BuildContext context) {
-  return Drawer(
-      child: ListView(
-    padding: EdgeInsets.zero,
-    children: [
-      DrawerHeader(
-        decoration: const BoxDecoration(
-          color: Colors.blue,
-        ),
-        child: Text(AppLocalizations.of(context).dacitDescription,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 30,
-              color: Colors.white
-            )),
-      ),
-      _tile(
-          AppLocalizations.of(context).recordAudio,
-          AppLocalizations.of(context).recordAudioDesc,
-          "record",
-          Icons.record_voice_over,
-          context),
-      _tile(
-          AppLocalizations.of(context).minimalPairs,
-          AppLocalizations.of(context).identWord,
-          "minpairs",
-          Icons.audiotrack,
-          context),
-      _tile(
-          AppLocalizations.of(context).speakerDisambiguation,
-          AppLocalizations.of(context).identSpeaker,
-          "speakerdis",
-          Icons.audiotrack,
-          context),
-      const Divider(
-        thickness: 10,
-      ),
-      _tile(AppLocalizations.of(context).settings, "", "settings",
-          Icons.settings, context),
-      _tile(AppLocalizations.of(context).about,
-          AppLocalizations.of(context).additInfo, "about", Icons.info, context),
-    ],
-  ));
-}
-
-ListTile _tile(String title, String subtitle, String path, IconData icon,
-    BuildContext context) {
-  return ListTile(
-    title: Text(title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 25,
-        )),
-    subtitle: Text(subtitle,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 20,
-        )),
-    leading: Icon(
-      icon,
-      color: Colors.blue,
-    ),
-    onTap: () {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/$path');
-    },
-  );
 }

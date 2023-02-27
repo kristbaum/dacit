@@ -16,5 +16,6 @@
   "additInfo": "Additional information",
   "training": "Training sessions since last week",
   "recordings": "Recordings made",
-  "minimalPairsDesc": "Sind diese beiden Worte gleich?"
+  "minimalPairsDesc": "Sind diese beiden Worte gleich?",
+  "waitForRecording": "Waiting to record"
 }

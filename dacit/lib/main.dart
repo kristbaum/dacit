@@ -6,17 +6,39 @@ import 'package:dacit/pages/settings_page.dart';
 import 'package:dacit/pages/speaker_dis_page.dart';
 import 'package:dacit/pages/about_page.dart';
 import 'package:dacit/pages/record_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:logging/logging.dart';
+
+final log = Logger('DacitLogger');
 
 void main() {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
   runApp(const Dacit());
 }
 
 class Dacit extends StatelessWidget {
   const Dacit({Key? key}) : super(key: key);
 
+  final _storage = const FlutterSecureStorage();
+
+  Future<void> _readToken() async {
+    final token = await _storage.read(key: "token");
+    if (token == null) {
+      log.warning("Token not found");
+      //Redirect to login
+    } else {
+      //Test if token is still active
+      log.warning("Testing if token is still active");
+    }
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    _readToken();
     return MaterialApp(
       title: 'Dacit',
       localizationsDelegates: AppLocalizations.localizationsDelegates,

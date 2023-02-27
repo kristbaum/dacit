@@ -1,9 +1,9 @@
-import 'package:dacit/services/recorder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../services/audio_player.dart';
+import 'package:dacit/services/audio_player.dart';
+import 'package:dacit/services/recorder.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class RecordPageState extends State<RecordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Record'),
+          title: Text(AppLocalizations.of(context).recordAudio),
         ),
         body: Center(
             child: Column(

@@ -21,4 +21,6 @@ urlpatterns = [
     path('api/', include('dacit_app.urls')),
     path('admin/', admin.site.urls),
     path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls'))
 ]

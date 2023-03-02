@@ -40,7 +40,9 @@ class DacitUserManager(BaseUserManager):
             email=self.normalize_email(email),
         )
 
-        user.public_id = random.randint(100000000000, 9999999999999)
+        user.username = random.randint(100000000000, 9999999999999)
+        user.public_id = user.username
+        logging.info("Setting this userid as publicid: " + user.public_id)
 
         user.set_password(password)
         user.save(using=self._db)
@@ -68,9 +70,10 @@ class DacitUser(AbstractBaseUser):
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    username = models.CharField(max_length=255)
     public_id = models.BigIntegerField(
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         unique=True)
 
     objects = DacitUserManager()

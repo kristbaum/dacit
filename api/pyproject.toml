@@ -14,11 +14,10 @@ psycopg2-binary = "^2.9.5"
 tqdm = "^4.64.1"
 uwsgi = "^2.0.21"
 django-cors-headers = "^3.13.0"
+dj-rest-auth = "^3.0.0"
+django-allauth = "^0.52.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-
-#tqdm = "^4.64.0"

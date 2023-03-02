@@ -1,7 +1,6 @@
 import os
 import csv
 import sys
-import pytz
 import uuid
 import hashlib
 import logging
@@ -21,7 +20,7 @@ from django.core.exceptions import ValidationError
 OBJ_MAPPING = {}
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
-TZINFO = pytz.timezone('UTC')
+TZINFO = 'UTC'
 
 
 def toDatetime(x):

@@ -1,4 +1,7 @@
 import 'package:dacit/pages/home_page.dart';
+import 'package:dacit/pages/login_page.dart';
+import 'package:dacit/pages/signup_page.dart';
+import 'package:dacit/services/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'package:dacit/minimal_pairs_page.dart';
@@ -6,13 +9,12 @@ import 'package:dacit/pages/settings_page.dart';
 import 'package:dacit/pages/speaker_dis_page.dart';
 import 'package:dacit/pages/about_page.dart';
 import 'package:dacit/pages/record_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 
 final log = Logger('DacitLogger');
 
 void main() {
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
@@ -22,23 +24,23 @@ void main() {
 class Dacit extends StatelessWidget {
   const Dacit({Key? key}) : super(key: key);
 
-  final _storage = const FlutterSecureStorage();
-
-  Future<void> _readToken() async {
-    final token = await _storage.read(key: "token");
+  Future<AppUser> getLogginData() async {
+    final token = await storage.read(key: "token");
     if (token == null) {
       log.warning("Token not found");
       //Redirect to login
+      return user;
     } else {
       //Test if token is still active
       log.warning("Testing if token is still active");
+      user.token = token;
+      return user;
     }
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    _readToken();
     return MaterialApp(
       title: 'Dacit',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -49,7 +51,6 @@ class Dacit extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Colors.blueGrey,
 
-        // Define the default font family.
         fontFamily: 'Georgia',
 
         // Define the default `TextTheme`. Use this to specify the default
@@ -63,15 +64,37 @@ class Dacit extends StatelessWidget {
         //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
         //bodyText1: TextStyle(fontSize: 34.0, fontFamily: 'Hind'),
       ),
-      home: const HomePage(title: 'Dacit'),
+      home: FutureBuilder(
+          future: getLogginData(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Container(
+                  color: Colors.white,
+                  child: const Center(child: CircularProgressIndicator()),
+                );
+              case ConnectionState.active:
+              case ConnectionState.done:
+                if (snapshot.hasData) {
+                  return (snapshot.data == true)
+                      ? const HomePage()
+                      : const LoginPage();
+                }
+                return Container(); // error view
+              default:
+                return Container(); // error view
+            }
+          }),
+      //home: isLoggedIn ? const HomePage(title: 'Dacit') : const LoginPage(),
       routes: {
 //        '/minpairs': (context) => const MinimalPairs(),
         '/record': (context) => const RecordPage(),
-        '/settings': (context) => const Settings(),
-        '/speakerdis': (context) => const SpeakerDis(),
-        '/about': (context) => const About()
+        '/settings': (context) => const SettingsPage(),
+        '/speakerdis': (context) => const SpeakerDisPage(),
+        '/about': (context) => const AboutPage(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
       },
-      // home: Main(),
     );
   }
 }

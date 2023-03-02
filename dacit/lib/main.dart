@@ -29,7 +29,7 @@ class Dacit extends StatelessWidget {
     if (token == null) {
       log.warning("Token not found");
       //Redirect to login
-      return user;
+      throw "No token in storage";
     } else {
       //Test if token is still active
       log.warning("Testing if token is still active");
@@ -75,12 +75,11 @@ class Dacit extends StatelessWidget {
                 );
               case ConnectionState.active:
               case ConnectionState.done:
-                if (snapshot.hasData) {
-                  return (snapshot.data == true)
-                      ? const HomePage()
-                      : const LoginPage();
+                if (snapshot.hasError) {
+                  return const LoginPage();
+                } else {
+                  return const HomePage();
                 }
-                return Container(); // error view
               default:
                 return Container(); // error view
             }

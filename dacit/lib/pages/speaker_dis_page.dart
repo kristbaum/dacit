@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SpeakerDis extends StatelessWidget {
-  const SpeakerDis({Key? key}) : super(key: key);
+class SpeakerDisPage extends StatelessWidget {
+  const SpeakerDisPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

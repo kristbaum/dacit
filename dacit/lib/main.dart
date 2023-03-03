@@ -1,10 +1,10 @@
 import 'package:dacit/pages/home_page.dart';
 import 'package:dacit/pages/login_page.dart';
+import 'package:dacit/pages/minpairs_page.dart';
 import 'package:dacit/pages/signup_page.dart';
 import 'package:dacit/services/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//import 'package:dacit/minimal_pairs_page.dart';
 import 'package:dacit/pages/settings_page.dart';
 import 'package:dacit/pages/speaker_dis_page.dart';
 import 'package:dacit/pages/about_page.dart';
@@ -86,7 +86,7 @@ class Dacit extends StatelessWidget {
           }),
       //home: isLoggedIn ? const HomePage(title: 'Dacit') : const LoginPage(),
       routes: {
-//        '/minpairs': (context) => const MinimalPairs(),
+        '/minpairs': (context) => const MinimalPairs(),
         '/record': (context) => const RecordPage(),
         '/settings': (context) => const SettingsPage(),
         '/speakerdis': (context) => const SpeakerDisPage(),

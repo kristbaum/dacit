@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'globals.dart';
+
 Future<Minpair> getMinPair() async {
-  var response =
-      await http.get(Uri.parse("http://localhost:8000/minpair?category=K_T"));
+  var response = await http.get(
+      Uri.parse("$baseDomain/api/minpair?category=K_T"),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Basic ${user.token}',
+      });
   if (response.statusCode == 200) {
     return Minpair.fromJson(json.decode(response.body));
 //    audioSource = ap.AudioSource.uri(minPair.firstAudio);

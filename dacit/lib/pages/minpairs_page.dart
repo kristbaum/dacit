@@ -12,17 +12,20 @@ class MinimalPairs extends StatefulWidget {
 
 class MinimalPairsState extends State<MinimalPairs> {
   late Future<Minpair> _minpair;
-  late AudioPlayer player;
+  //late AudioPlayer player;
+  bool showPlayer = false;
+  String? audioPath;
+
   @override
   void initState() {
     super.initState();
     _minpair = getMinPair();
-  //  player = AudioPlayer(source: source, onDelete: null);
+    //  player = AudioPlayer(source: source, onDelete: null);
   }
 
   @override
   void dispose() {
-  //  player.dispose();
+    //  player.dispose();
     super.dispose();
   }
 
@@ -30,7 +33,7 @@ class MinimalPairsState extends State<MinimalPairs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About'),
+        title: const Text('Minimalpaare'),
       ),
       body: Center(
           child: Column(
@@ -47,9 +50,8 @@ class MinimalPairsState extends State<MinimalPairs> {
                     if (snapshot.hasData) {
                       return ElevatedButton(
                           onPressed: () async {
-        //                    await player
-        //                        .setUrl(snapshot.data!.firstAudio.toString());
-        //                    player.play();
+//                            audioPath = snapshot.data.firstAudio.toString();
+                            //player.play();
                           },
                           child: const Text('A'));
                     } else if (snapshot.hasError) {
@@ -76,6 +78,12 @@ class MinimalPairsState extends State<MinimalPairs> {
                     ),
                   ],
                 ),
+                AudioPlayer(
+                  source: audioPath!,
+                  onDelete: () {
+                    setState(() => showPlayer = false);
+                  },
+                )
                 // FutureBuilder<Minpair>(
                 //   future: _minpair,
                 //   builder: (context, snapshot) {
@@ -101,5 +109,3 @@ class MinimalPairsState extends State<MinimalPairs> {
     );
   }
 }
-
-

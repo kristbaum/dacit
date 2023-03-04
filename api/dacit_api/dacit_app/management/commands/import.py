@@ -97,6 +97,10 @@ class ImportMinPair(Create):
         word_1_text = text = row.get('Wort_1')
         word_2 = None
         word_2_text = text = row.get('Wort_2')
+        default_speaker, created = DacitUser.objects.get_or_create(
+            email="default@example.example",
+            public_id=1,
+        )
         #print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
 
         word_1 = Text_Stimulus.objects.filter(text=word_1_text).first()
@@ -118,8 +122,6 @@ class ImportMinPair(Create):
         filename_2 = row.get('Datei_T_Spalte2')
 
         if filename_1 is not None and filename_1 != '':
-            default_speaker = DacitUser.objects.filter(
-                public_id=1).first()
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_1 + '.wav',
@@ -130,8 +132,6 @@ class ImportMinPair(Create):
             audio_file.save()
 
         if filename_2 is not None and filename_2 != '':
-            default_speaker = DacitUser.objects.filter(
-                public_id=1).first()
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_2 + '.wav',
@@ -155,11 +155,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start_time = timezone.now()
 
-        logging.info('Create default speaker')
-        self.obj = DacitUser(email="default@example.example", public_id=1)
-        self.obj.save()
 
-        logging.info('Create default speaker')
         if os.path.isdir(options['input']):
             ImportWordList(options['input']).process()
             ImportMinPair(options['input'],

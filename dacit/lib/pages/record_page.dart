@@ -88,15 +88,18 @@ class RecordPageState extends State<RecordPage> {
 
 Future<TextStimulus> fetchTextStimulus() async {
   final response = await http.get(
-    Uri.parse('${baseDomain}api/ts'),
+    Uri.parse('${baseDomain}api/sts'),
     headers: {
-      HttpHeaders.authorizationHeader: "Token ${user.token}",
+      "Authorization": "Token ${user.token}",
     },
   );
+  print("Token ${user.token}");
+  print(response.body);
 
   if (response.statusCode == 200) {
+      print("OK");
     return TextStimulus.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load album');
+    throw Exception('Failed to load new text');
   }
 }

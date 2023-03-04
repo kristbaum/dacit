@@ -9,7 +9,7 @@ class TextStimulus {
 
   factory TextStimulus.fromJson(Map<String, dynamic> json) {
     return TextStimulus(
-      stimulus: json['stimulus'],
+      stimulus: json['text'],
       id: json['id'],
     );
   }

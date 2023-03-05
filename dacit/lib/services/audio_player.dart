@@ -30,8 +30,6 @@ class AudioPlayerState extends State<AudioPlayer> {
   late StreamSubscription<void> _playerStateChangedSubscription;
   late StreamSubscription<Duration?> _durationChangedSubscription;
   late StreamSubscription<Duration> _positionChangedSubscription;
-  Duration? _position;
-  Duration? _duration;
 
   @override
   void initState() {
@@ -40,16 +38,6 @@ class AudioPlayerState extends State<AudioPlayer> {
       await stop();
       setState(() {});
     });
-    _positionChangedSubscription = _audioPlayer.onPositionChanged.listen(
-      (position) => setState(() {
-        _position = position;
-      }),
-    );
-    _durationChangedSubscription = _audioPlayer.onDurationChanged.listen(
-      (duration) => setState(() {
-        _duration = duration;
-      }),
-    );
 
     super.initState();
   }
@@ -72,7 +60,6 @@ class AudioPlayerState extends State<AudioPlayer> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             _buildControl(),
-            _buildSlider(constraints.maxWidth),
             IconButton(
               icon: const Icon(Icons.delete,
                   color: Color(0xFF73748D), size: _deleteBtnSize),
@@ -113,37 +100,6 @@ class AudioPlayerState extends State<AudioPlayer> {
             }
           },
         ),
-      ),
-    );
-  }
-
-  Widget _buildSlider(double widgetWidth) {
-    bool canSetValue = false;
-    final duration = _duration;
-    final position = _position;
-
-    if (duration != null && position != null) {
-      canSetValue = position.inMilliseconds > 0;
-      canSetValue &= position.inMilliseconds < duration.inMilliseconds;
-    }
-
-    double width = widgetWidth - _controlSize - _deleteBtnSize;
-    width -= _deleteBtnSize;
-
-    return SizedBox(
-      width: width,
-      child: Slider(
-        activeColor: Theme.of(context).primaryColor,
-        inactiveColor: Theme.of(context).colorScheme.secondary,
-        onChanged: (v) {
-          if (duration != null) {
-            final position = v * duration.inMilliseconds;
-            _audioPlayer.seek(Duration(milliseconds: position.round()));
-          }
-        },
-        value: canSetValue && duration != null && position != null
-            ? position.inMilliseconds / duration.inMilliseconds
-            : 0.0,
       ),
     );
   }

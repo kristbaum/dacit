@@ -48,8 +48,14 @@ services:
         read_only: true
     depends_on:
       - api
-    ports:
-      - 8000:8000
+    labels:
+        com.centurylinklabs.watchtower.enable: "false"
+        traefik.http.routers.dacit-api.rule: Host(dacit-api.kistbaum.org)
+        traefik.http.routers.dacit-api.tls: "true"
+        traefik.http.routers.dacit-api.entrypoints: web,websecure
+        traefik.http.routers.dacit-api.tls.certresolver: kristbaumorg
+        traefik.http.services.dacit-api.loadbalancer.server.port: "8000"
+        traefik.enable: "true"
 
 
   web:
@@ -64,8 +70,13 @@ services:
     working_dir: /dacit
     depends_on:
       - api
-    ports:
-      - 5001:80
+    labels:
+        com.centurylinklabs.watchtower.enable: "false"
+        traefik.http.routers.dacit.rule: Host(dacit-api.kistbaum.org)
+        traefik.http.routers.dacit.tls: "true"
+        traefik.http.routers.dacit.entrypoints: web,websecure
+        traefik.http.routers.dacit.tls.certresolver: kristbaumorg
+        traefik.enable: "true"
 
 volumes:
   db-data:

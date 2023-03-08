@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, FileUploadParser
 from rest_framework import status
 from dacit_app.models import Text_Stimulus, Min_Pair, Audio, DacitUser
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer
@@ -47,10 +47,20 @@ class DacitUserRecordView(APIView):
 
 
 
-class MultipartView(APIView):
-    def handle_upload(self, request, format=None, *args, **kwargs):
-        return Response({'raw': request.data, 'data': request._request.POST,
-                        'files': str(request._request.FILES)})
+#class MultipartView(APIView):
+ #   def handle_upload(self, request, format=None, *args, **kwargs):
+ #       return Response({'raw': request.data, 'data': request._request.POST,
+ #                       'files': str(request._request.FILES)})
+
+class FileUploadView(APIView):
+    parser_classes = [FileUploadParser]
+
+    def put(self, request, filename, format=None):
+        file_obj = request.data['file']
+        #json_text = request.data['json']
+        print(file_obj)
+
+        return Response(status=204)
 
 
 class TextStimuli(APIView):

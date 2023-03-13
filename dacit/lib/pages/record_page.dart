@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
 import 'package:dacit/services/globals.dart';
 import 'package:dacit/services/text_stimulus.dart';
@@ -104,17 +105,21 @@ Future<TextStimulus> fetchTextStimulus() async {
   }
 }
 
-Future<void> uploadFile(File file) async {
+Future<void> uploadFile(String path) async {
+  final reader = new FileReader();
+  reader.readAsDataUrl(path);
   final request = http.MultipartRequest(
       'POST', Uri.parse("http://localhost:8000/api/upload/"));
-  final fileStream = http.ByteStream(file.openRead());
-  final fileLength = await file.length();
+
+  Uint8List _bytesData =
+      Base64Decoder().convert(file.toString().split(",").last);
+  List<int> _selectedFile = _bytesData;
 
   final multipartFile = http.MultipartFile(
     'file',
     fileStream,
     fileLength,
-    filename: file.name,
+    filename: file.path,
   );
   request.files.add(multipartFile);
 
@@ -129,12 +134,5 @@ Future<void> uploadFile(File file) async {
 }
 
 Future<http.StreamedResponse> sendRequest(http.BaseRequest request) {
-  if (kIsWeb) {
-    // Use the `http` package's browser client for web
-    return http.browserClient.send(request);
-  } else {
-    // Use the regular `http` package client for other platforms
-    return http.Client().send(request);
-  }
+  return http.Client().send(request);
 }
-

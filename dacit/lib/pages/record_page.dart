@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:html';
-import 'dart:io';
+import 'package:cross_file/cross_file.dart';
+import 'package:dacit/main.dart';
 import 'package:dacit/services/globals.dart';
 import 'package:dacit/services/text_stimulus.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +22,7 @@ class RecordPageState extends State<RecordPage> {
   bool showPlayer = false;
   String? audioPath;
   late Future<TextStimulus> futureTextStimulus;
+  late int tsId;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class RecordPageState extends State<RecordPage> {
                 future: futureTextStimulus,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    tsId = snapshot.data!.id;
                     return Text(snapshot.data!.stimulus);
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
@@ -57,10 +59,6 @@ class RecordPageState extends State<RecordPage> {
                   return const CircularProgressIndicator();
                 },
               ),
-              // Text("Apfelstrudel",
-              //     style: DefaultTextStyle.of(context)
-              //         .style
-              //         .apply(fontSizeFactor: 3.0)),
             ),
             showPlayer
                 ? Padding(
@@ -79,7 +77,7 @@ class RecordPageState extends State<RecordPage> {
                         audioPath = path;
                         showPlayer = true;
                       });
-                      uploadFile(path);
+                      uploadAudio(path, tsId);
                     },
                   )),
           ],
@@ -94,45 +92,38 @@ Future<TextStimulus> fetchTextStimulus() async {
       "Authorization": "Token ${user.token}",
     },
   );
-  print("Token ${user.token}");
-  print(response.body);
 
   if (response.statusCode == 200) {
-    print("OK");
     return TextStimulus.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load new text');
   }
 }
 
-Future<void> uploadFile(String path) async {
-  final reader = new FileReader();
-  reader.readAsDataUrl(path);
-  final request = http.MultipartRequest(
-      'POST', Uri.parse("http://localhost:8000/api/upload/"));
+Future<void> uploadAudio(String path, int id) async {
+  log.info(
+      "Try uploading this file: $path with this id: $id");
+  final file = XFile(path);
 
-  Uint8List _bytesData =
-      Base64Decoder().convert(file.toString().split(",").last);
-  List<int> _selectedFile = _bytesData;
+  final request =
+      http.MultipartRequest('PUT', Uri.parse('${baseDomain}api/upload/$id/'));
+
+  request.headers.addAll({"Authorization": "Token ${user.token}"});
+  final fileStream = http.ByteStream(file.openRead());
+  final fileLength = await file.length();
 
   final multipartFile = http.MultipartFile(
     'file',
     fileStream,
     fileLength,
-    filename: file.path,
+    filename: file.name,
   );
   request.files.add(multipartFile);
 
-  request.fields['id'] = "testid";
-
-  final response = await sendRequest(request);
+  final response = await http.Client().send(request);
   if (response.statusCode == 201) {
-    print('File uploaded successfully');
+    log.info('File uploaded successfully');
   } else {
-    print('Error uploading file: ${response.statusCode}');
+    log.warning('Error uploading file: ${response.statusCode}');
   }
-}
-
-Future<http.StreamedResponse> sendRequest(http.BaseRequest request) {
-  return http.Client().send(request);
 }

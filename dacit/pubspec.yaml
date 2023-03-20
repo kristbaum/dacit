@@ -30,6 +30,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   shared_preferences: ^2.0.17
   logging: ^1.1.1
+  cross_file: ^0.3.3+4
 
 dev_dependencies:
   flutter_lints: ^2.0.1

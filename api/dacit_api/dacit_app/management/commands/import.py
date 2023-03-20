@@ -99,6 +99,8 @@ class ImportMinPair(Create):
         word_2_text = text = row.get('Wort_2')
         default_speaker, created = DacitUser.objects.get_or_create(
             email="default@example.example",
+            active_dialect="ST",
+            active_language="DE",
             public_id=1,
         )
         #print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
@@ -125,8 +127,8 @@ class ImportMinPair(Create):
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_1 + '.wav',
-                language='de',
-                dicalect='Hochdeutsch',
+                language=default_speaker.active_language,
+                dialect=default_speaker.active_dialect,
                 text_stimulus=word_1
             )
             audio_file.save()
@@ -135,8 +137,8 @@ class ImportMinPair(Create):
             audio_file = Audio(
                 speaker=default_speaker,
                 audio='audio/' + filename_2 + '.wav',
-                language='de',
-                dicalect='Hochdeutsch',
+                language=default_speaker.active_language,
+                dialect=default_speaker.active_dialect,
                 text_stimulus=word_2
             )
             audio_file.save()

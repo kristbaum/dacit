@@ -1,25 +1,32 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import random
 
 
+class Language(models.TextChoices):
+    GERMAN = 'DE', _('German')
+    ENGLISH = 'EN', _('English')
+
+
+class Dialect(models.TextChoices):
+    STANDARD = 'ST', _('Standard')
+    BAVARIAN = 'BY', _('Bavarian')
+
+
 class CI_User(models.Model):
-    COCHLEARLIMITED = 'CL'
-    ADVANCEDBIONICS = 'AB'
-    MEDEL = 'ME'
-    NEURELEC = 'NC'
-    NUROTRON = 'NN'
-    MANUFACTURERS = [
-        (COCHLEARLIMITED, 'Cochlear Limited'),
-        (ADVANCEDBIONICS, 'Advanced Bionics'),
-        (MEDEL, 'MED-EL'),
-        (NEURELEC, 'Neurelec'),
-        (NUROTRON, 'Nurotron'),
-    ]
+    class Manufacturer(models.TextChoices):
+        COCHLEARLIMITED = 'CL', _('Cochlear Limited')
+        ADVANCEDBIONICS = 'AB'
+        _('Advanced Bionics')
+        MEDEL = 'ME', _('MED-EL')
+        NEURELEC = 'NC', _('Neurelec')
+        NUROTRON = 'NN', _('Nurotron')
+
     manufacturer = models.CharField(
         max_length=2,
-        choices=MANUFACTURERS,
+        choices=Manufacturer.choices,
     )
 
     name = models.CharField(max_length=100)
@@ -98,21 +105,30 @@ class DacitUser(AbstractBaseUser):
         return self.is_admin
 
     ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
-    PARENT = 'P'
-    SIBLING = 'S'
-    FRIEND = 'F'
-    GRANDPARENT = 'G'
-    THERAPIST = 'T'
-    RELATIONSHIP_TYPES = [
-        (PARENT, 'Parent'),
-        (SIBLING, 'Sibling'),
-        (FRIEND, 'Friend'),
-        (GRANDPARENT, 'Grandparent'),
-        (THERAPIST, 'Therapist'),
-    ]
+
+    class Relationship_types(models.TextChoices):
+        PARENT = 'P', _('Parent')
+        SIBLING = 'S', _('Sibling')
+        FRIEND = 'F', _('Friend')
+        GRANDPARENT = 'G', _('Grandparent')
+        THERAPIST = 'T', _('Therapist')
+
     relationship = models.CharField(
         max_length=1,
-        choices=RELATIONSHIP_TYPES,
+        choices=Relationship_types.choices,
+        default=Relationship_types.FRIEND
+    )
+
+    active_language = models.CharField(
+        max_length=2,
+        choices=Language.choices,
+        default=Language.GERMAN,
+    )
+
+    active_dialect = models.CharField(
+        max_length=2,
+        choices=Dialect.choices,
+        default=Dialect.STANDARD,
     )
 
 
@@ -120,9 +136,6 @@ class Text_Stimulus(models.Model):
     text = models.CharField(max_length=500, blank=False)
     user_audio_creatable = models.BooleanField(default=True)
 
-    class Language(models.TextChoices):
-        GERMAN = 'DE'
-        ENGLISH = 'EN'
     language = models.CharField(
         max_length=2,
         choices=Language.choices,
@@ -144,8 +157,17 @@ class Audio(models.Model):
     text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
     speaker = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
     audio = models.FileField(upload_to='audio')
-    language = models.CharField(max_length=2)
-    dicalect = models.CharField(max_length=100)
+    language = models.CharField(
+        max_length=2,
+        choices=Language.choices,
+        default=Language.GERMAN,
+    )
+
+    dialect = models.CharField(
+        max_length=2,
+        choices=Dialect.choices,
+        default=Dialect.STANDARD,
+    )
 
     def __str__(self):
         return str(self.audio.name)
@@ -164,6 +186,7 @@ class Min_Pair(models.Model):
         K_T = 'K_T'
         PF_F = 'PF_T'
         R_L = 'R_L'
+
     min_pair_class = models.CharField(
         max_length=4,
         choices=Min_Pair_Class.choices,
@@ -172,12 +195,6 @@ class Min_Pair(models.Model):
 
     def __str__(self):
         return str(self.first_part) + " " + str(self.second_part)
-
-
-class CI_User_Language(models.Model):
-    language = models.CharField(max_length=2)
-    dicalect = models.CharField(max_length=100)
-    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE)
 
 
 class Audio_to_Users(models.Model):

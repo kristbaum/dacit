@@ -23,7 +23,7 @@ class DacitUserRecordView(APIView):
     #     serializer = DacitUserSerializer(users, many=True)
     #     return Response(serializer.data)
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         logging.info("Create user")
         serializer = DacitUserSerializer(data=request.data)
@@ -42,12 +42,11 @@ class DacitUserRecordView(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-#class DacitUserPreferences:
+# class DacitUserPreferences:
 #    def get(self, request):
 
 
-
-#class MultipartView(APIView):
+# class MultipartView(APIView):
  #   def handle_upload(self, request, format=None, *args, **kwargs):
  #       return Response({'raw': request.data, 'data': request._request.POST,
  #                       'files': str(request._request.FILES)})
@@ -57,10 +56,21 @@ class FileUploadView(APIView):
 
     def put(self, request, filename, format=None):
         file_obj = request.data['file']
-        #json_text = request.data['json']
-        print(file_obj)
+        dacit_user = request.user
+        
+        logging.info(filename)
+        matching_ts = Text_Stimulus.objects.get(pk=int(filename))
+        logging.info(matching_ts)
 
+        # json_text = request.data['json']
+        print(file_obj)
+        new_audio = Audio(text_stimulus=matching_ts, speaker=dacit_user, audio=file_obj,
+                          language=dacit_user.active_language, dialect=dacit_user.active_dialect)
+        new_audio.save()
         return Response(status=204)
+
+    def __str__(self):
+        return str(self.audio.name)
 
 
 class TextStimuli(APIView):

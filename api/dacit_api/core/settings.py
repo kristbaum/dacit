@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
 import os
 import logging
 
@@ -19,12 +18,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Load env variables
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-env = environ.Env(
-    DEBUG=(bool, False)
-)
 
 # MEDIA_URL = '/media/'
 MEDIA_URL = "http://localhost:8000/media/"
@@ -36,11 +29,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t37k4+ss0x7=@j27q-avo4skqhvyd567ww5cq(f(fd6w8hs&sz'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = env('DEBUG')
+DEBUG = os.environ['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = [
     'api',
@@ -113,14 +106,13 @@ REST_FRAMEWORK = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "db",  # set in docker-compose.yml
-        "PORT": 5432,  # default postgres port
+        "NAME": os.environ['POSTGRES_DB'],
+        "USER": os.environ['POSTGRES_USER'],
+        "PASSWORD": os.environ['POSTGRES_PASSWORD'],
+        "HOST": os.environ['POSTGRES_HOST'],
+        "PORT": os.environ['POSTGRES_PORT'],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

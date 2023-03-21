@@ -1,14 +1,13 @@
 version: "3.2"
-#name: dacit
 services:
   db:
     image: postgres:14
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=dacit
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   api:
     image: dacit/api
@@ -25,8 +24,15 @@ services:
         source: ./api/dacit_api/media
         target: /media
     environment:
-      - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/api/dacit_api/
+      - POETRY_VIRTUALENVS_CREATE: False
+      - PYTHONPATH: /api/dacit_api/
+      - POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_HOST: "db"
+      - POSTGRES_PORT: 5432
+      - DJANGO_DEBUG: ${DJANGO_DEBUG}
+      - DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
     depends_on:
       - db
   #    ports:
@@ -50,10 +56,10 @@ services:
       - api
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-      traefik.http.routers.dacit-api.rule: Host(dacit-api.kistbaum.org)
+      traefik.http.routers.dacit-api.rule: Host(${DACIT_WEB})
       traefik.http.routers.dacit-api.tls: "true"
       traefik.http.routers.dacit-api.entrypoints: web,websecure
-      traefik.http.routers.dacit-api.tls.certresolver: kristbaumorg
+      traefik.http.routers.dacit-api.tls.certresolver: ${CERTRESOLVER}
       traefik.http.services.dacit-api.loadbalancer.server.port: "8000"
       traefik.enable: "true"
 
@@ -71,10 +77,10 @@ services:
       - api
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-      traefik.http.routers.dacit.rule: Host(dacit.kistbaum.org)
+      traefik.http.routers.dacit.rule: Host(${DACIT_API})
       traefik.http.routers.dacit.tls: "true"
       traefik.http.routers.dacit.entrypoints: web,websecure
-      traefik.http.routers.dacit.tls.certresolver: kristbaumorg
+      traefik.http.routers.dacit.tls.certresolver: ${CERTRESOLVER}
       traefik.enable: "true"
 
 volumes:

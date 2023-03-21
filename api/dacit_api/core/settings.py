@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.DEBUG)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_URL = '/media/'
-#MEDIA_URL = "http://localhost:8000/media/"
+# MEDIA_URL = "http://localhost:8000/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # print(MEDIA_ROOT)
@@ -139,6 +139,7 @@ CSRF_TRUSTED_ORIGINS: [
     'http://localhost',
     'http://*.localhost',
     'https://' + os.environ['DACIT_WEB'],
+    'https://' + os.environ['DACIT_API'],
 ]
 
 CORS_ORIGIN_WHITELIST = [
@@ -153,6 +154,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://localhost',
     'https://' + os.environ['DACIT_WEB'],
+    'https://' + os.environ['DACIT_API'],
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

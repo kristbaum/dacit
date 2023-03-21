@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import random
+import logging
 
 
 class Language(models.TextChoices):

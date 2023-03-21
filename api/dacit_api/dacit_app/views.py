@@ -58,7 +58,7 @@ class FileUploadView(APIView):
         logging.info(request.data)
         file_obj = request.data['file']
         dacit_user = request.user
-        
+
         logging.info(filename)
         logging.info(file_obj)
         matching_ts = Text_Stimulus.objects.get(pk=int(filename))

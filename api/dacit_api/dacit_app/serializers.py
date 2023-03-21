@@ -6,7 +6,7 @@ from rest_framework.validators import UniqueTogetherValidator
 class TextStimulusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text_Stimulus
-        #fields = ['text', 'id']
+        # fields = ['text', 'id']
         fields = '__all__'
 
 
@@ -25,7 +25,7 @@ class DacitUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DacitUser
         fields = (
-#            'name',
+            #            'name',
             'email',
             'password',
         )

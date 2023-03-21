@@ -77,6 +77,8 @@ services:
     working_dir: /dacit
     depends_on:
       - api
+    environment:
+      DACIT_API: ${DACIT_API}
     labels:
       com.centurylinklabs.watchtower.enable: "false"
       traefik.http.routers.dacit.rule: Host("${DACIT_WEB}")

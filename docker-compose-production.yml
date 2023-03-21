@@ -33,6 +33,8 @@ services:
       POSTGRES_PORT: 5432
       DJANGO_DEBUG: ${DJANGO_DEBUG}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DACIT_WEB: ${DACIT_WEB}
+      DACIT_API: ${DACIT_API}
     depends_on:
       - db
   #    ports:

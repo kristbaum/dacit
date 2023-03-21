@@ -41,7 +41,7 @@ services:
   #    env_file:
   #      - ./api/src/artigo_api/.env
 
-  web-api:
+  dacit-api:
     image: nginx:latest
     volumes:
       - type: bind
@@ -63,7 +63,7 @@ services:
       traefik.http.services.dacit-api.loadbalancer.server.port: "8000"
       traefik.enable: "true"
 
-  web:
+  dacit:
     image: dacit/dacit
     build:
       context: .

@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-const String baseDomain = "http://localhost:8000/";
+const String baseDomain =
+    String.fromEnvironment('DACIT_API', defaultValue: 'http://localhost:8000/');
 const storage = FlutterSecureStorage();
 final AppUser user = AppUser();
 

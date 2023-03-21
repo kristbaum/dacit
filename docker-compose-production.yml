@@ -5,9 +5,9 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB: ${POSTGRES_DB}
-      - POSTGRES_USER: ${POSTGRES_USER}
-      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   api:
     image: dacit/api
@@ -24,15 +24,15 @@ services:
         source: ./api/dacit_api/media
         target: /media
     environment:
-      - POETRY_VIRTUALENVS_CREATE: False
-      - PYTHONPATH: /api/dacit_api/
-      - POSTGRES_DB: ${POSTGRES_DB}
-      - POSTGRES_USER: ${POSTGRES_USER}
-      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      - POSTGRES_HOST: "db"
-      - POSTGRES_PORT: 5432
-      - DJANGO_DEBUG: ${DJANGO_DEBUG}
-      - DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      POETRY_VIRTUALENVS_CREATE: False
+      PYTHONPATH: /api/dacit_api/
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: "db"
+      POSTGRES_PORT: 5432
+      DJANGO_DEBUG: ${DJANGO_DEBUG}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
     depends_on:
       - db
   #    ports:

@@ -50,7 +50,7 @@ class DacitUserManager(BaseUserManager):
 
         user.username = random.randint(100000000000, 9999999999999)
         user.public_id = user.username
-        logging.info("Setting this userid as publicid: " + user.public_id)
+        logging.info("Setting this userid as publicid: " + str(user.public_id))
 
         user.set_password(password)
         user.save(using=self._db)

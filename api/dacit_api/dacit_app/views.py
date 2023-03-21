@@ -55,15 +55,17 @@ class FileUploadView(APIView):
     parser_classes = [FileUploadParser]
 
     def put(self, request, filename, format=None):
+        logging.info(request.data)
         file_obj = request.data['file']
         dacit_user = request.user
         
         logging.info(filename)
+        logging.info(file_obj)
         matching_ts = Text_Stimulus.objects.get(pk=int(filename))
         logging.info(matching_ts)
 
         # json_text = request.data['json']
-        print(file_obj)
+        logging.info(file_obj)
         new_audio = Audio(text_stimulus=matching_ts, speaker=dacit_user, audio=file_obj,
                           language=dacit_user.active_language, dialect=dacit_user.active_dialect)
         new_audio.save()
@@ -77,7 +79,7 @@ class TextStimuli(APIView):
     # return a number of textstimuli
     def get(self, request, format=None):
         all_stimuli = Text_Stimulus.objects.order_by('text')[:5]
-        print(all_stimuli)
+        logging.info(all_stimuli)
         json_stimuli = TextStimulusSerializer(all_stimuli).data
         return Response(json_stimuli)
 
@@ -86,7 +88,7 @@ class TextStimulus(APIView):
     # return a random single text stimulus
     def get(self, request, format=None):
         stimulus = Text_Stimulus.objects.first()
-        print(stimulus)
+        logging.info(stimulus)
         json_stimulus = TextStimulusSerializer(stimulus).data
         return Response(json_stimulus)
 
@@ -120,7 +122,7 @@ class MinPair(APIView):
             text_stimulus=minpair.first_part, speaker=selected_speaker)
         second_audio = Audio.objects.get(
             text_stimulus=minpair.second_part, speaker=selected_speaker)
-        print(first_audio.audio.url)
+        logging.info(first_audio.audio.url)
         json_min_pair = {
             "minpair": minpair.pk,
             "first_stimulus": minpair.first_part.text,

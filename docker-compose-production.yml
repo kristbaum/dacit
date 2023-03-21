@@ -29,8 +29,8 @@ services:
       - PYTHONPATH=/api/dacit_api/
     depends_on:
       - db
-#    ports:
-#      - 8000:8000
+  #    ports:
+  #      - 8000:8000
   # Activate again when shipping container
   #    env_file:
   #      - ./api/src/artigo_api/.env
@@ -49,14 +49,13 @@ services:
     depends_on:
       - api
     labels:
-        com.centurylinklabs.watchtower.enable: "false"
-        traefik.http.routers.dacit-api.rule: Host(dacit-api.kistbaum.org)
-        traefik.http.routers.dacit-api.tls: "true"
-        traefik.http.routers.dacit-api.entrypoints: web,websecure
-        traefik.http.routers.dacit-api.tls.certresolver: kristbaumorg
-        traefik.http.services.dacit-api.loadbalancer.server.port: "8000"
-        traefik.enable: "true"
-
+      com.centurylinklabs.watchtower.enable: "false"
+      traefik.http.routers.dacit-api.rule: Host(dacit-api.kistbaum.org)
+      traefik.http.routers.dacit-api.tls: "true"
+      traefik.http.routers.dacit-api.entrypoints: web,websecure
+      traefik.http.routers.dacit-api.tls.certresolver: kristbaumorg
+      traefik.http.services.dacit-api.loadbalancer.server.port: "8000"
+      traefik.enable: "true"
 
   web:
     image: dacit/dacit
@@ -71,12 +70,12 @@ services:
     depends_on:
       - api
     labels:
-        com.centurylinklabs.watchtower.enable: "false"
-        traefik.http.routers.dacit.rule: Host(dacit-api.kistbaum.org)
-        traefik.http.routers.dacit.tls: "true"
-        traefik.http.routers.dacit.entrypoints: web,websecure
-        traefik.http.routers.dacit.tls.certresolver: kristbaumorg
-        traefik.enable: "true"
+      com.centurylinklabs.watchtower.enable: "false"
+      traefik.http.routers.dacit.rule: Host(dacit.kistbaum.org)
+      traefik.http.routers.dacit.tls: "true"
+      traefik.http.routers.dacit.entrypoints: web,websecure
+      traefik.http.routers.dacit.tls.certresolver: kristbaumorg
+      traefik.enable: "true"
 
 volumes:
   db-data:

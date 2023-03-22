@@ -69,7 +69,7 @@ class FileUploadView(APIView):
         new_audio = Audio(text_stimulus=matching_ts, speaker=dacit_user, audio=file_obj,
                           language=dacit_user.active_language, dialect=dacit_user.active_dialect)
         new_audio.save()
-        return Response(status=204)
+        return Response(status=status.HTTP_201_CREATED)
 
     def __str__(self):
         return str(self.audio.name)

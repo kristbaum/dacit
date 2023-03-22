@@ -79,6 +79,7 @@ class _SignupPageState extends State<SignupPage> {
                       labelText: 'Email',
                     ),
                     keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [AutofillHints.email],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -91,6 +92,7 @@ class _SignupPageState extends State<SignupPage> {
                     decoration: const InputDecoration(
                       labelText: 'Password',
                     ),
+                    autofillHints: const [AutofillHints.password],
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -104,6 +106,7 @@ class _SignupPageState extends State<SignupPage> {
                     decoration: const InputDecoration(
                       labelText: 'Confirm password',
                     ),
+                    autofillHints: const [AutofillHints.password],
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {

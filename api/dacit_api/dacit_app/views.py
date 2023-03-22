@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import FormParser, FileUploadParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework import status
 from dacit_app.models import Text_Stimulus, Min_Pair, Audio, DacitUser
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer
@@ -52,11 +52,11 @@ class DacitUserRecordView(APIView):
  #                       'files': str(request._request.FILES)})
 
 class FileUploadView(APIView):
-    parser_classes = [FileUploadParser]
+    parser_classes = [MultiPartParser]
 
     def put(self, request, filename, format=None):
         logging.info(request.data)
-        file_obj = request.data['file']
+        file_obj = request.FILES['file']
         dacit_user = request.user
 
         logging.info(filename)
@@ -64,7 +64,6 @@ class FileUploadView(APIView):
         matching_ts = Text_Stimulus.objects.get(pk=int(filename))
         logging.info(matching_ts)
 
-        # json_text = request.data['json']
         logging.info(file_obj)
         new_audio = Audio(text_stimulus=matching_ts, speaker=dacit_user, audio=file_obj,
                           language=dacit_user.active_language, dialect=dacit_user.active_dialect)

@@ -23,8 +23,6 @@ class AudioPlayer extends StatefulWidget {
 }
 
 class AudioPlayerState extends State<AudioPlayer> {
-  static const double _controlSize = 56;
-  static const double _deleteBtnSize = 24;
 
   final _audioPlayer = ap.AudioPlayer();
   late StreamSubscription<void> _playerStateChangedSubscription;
@@ -91,11 +89,7 @@ class AudioPlayerState extends State<AudioPlayer> {
       color: color,
       icon: icon,
       onPressed: () {
-        if (_audioPlayer.state == ap.PlayerState.playing) {
-          pause();
-        } else {
-          play();
-        }
+        play();
       },
     );
   }
@@ -105,8 +99,6 @@ class AudioPlayerState extends State<AudioPlayer> {
       kIsWeb ? ap.UrlSource(widget.source) : ap.DeviceFileSource(widget.source),
     );
   }
-
-  Future<void> pause() => _audioPlayer.pause();
 
   Future<void> stop() => _audioPlayer.stop();
 }

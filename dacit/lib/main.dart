@@ -41,22 +41,32 @@ class Dacit extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    ColorSwatch defaultColor = Colors.blueGrey;
     return MaterialApp(
       title: 'Dacit',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        //primarySwatch: Colors.green,
+        primarySwatch: Colors.blueGrey, 
         brightness: Brightness.light,
-        primaryColor: Colors.blueGrey,
+        //primaryColor: Colors.blueGrey,
 
         fontFamily: 'Georgia',
+        useMaterial3: true,
+        iconTheme: const IconThemeData(
+          size: 50.0,
+        ),
+        iconButtonTheme: IconButtonThemeData(
+            style: IconButton.styleFrom(
+          backgroundColor: Colors.blueGrey.shade100,
+        )),
 
         // Define the default `TextTheme`. Use this to specify the default
         // text styling for headlines, titles, bodies of text, and more.
+
         textTheme: Theme.of(context).textTheme.apply(
-              fontSizeFactor: 1.5,
+              fontSizeFactor: 2,
               fontSizeDelta: 5.0,
             ),
         //fontSizeFactor: 1.1
@@ -70,7 +80,7 @@ class Dacit extends StatelessWidget {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Container(
-                  color: Colors.white,
+                  //color: Colors.white,
                   child: const Center(child: CircularProgressIndicator()),
                 );
               case ConnectionState.active:

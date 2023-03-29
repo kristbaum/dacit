@@ -17,5 +17,9 @@
   "training": "Training sessions since last week",
   "recordings": "Recordings made",
   "minimalPairsDesc": "Sind diese beiden Worte gleich?",
-  "waitForRecording": "Waiting to record"
+  "waitForRecording": "Waiting to record",
+  "pleaseEnterPassword": "Please enter your password",
+  "password": "Password",
+  "pleaseEnterEmail": "Please enter your email",
+  "email": "Email"
 }

@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:dacit/services/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:dacit/main.dart';
 
 class SignupPage extends StatefulWidget {
@@ -68,6 +67,12 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Image(image: AssetImage('icon.png')),
+                  Text(
+                    AppLocalizations.of(context).welcome,
+                    style: const TextStyle(
+                        fontSize: 30, fontStyle: FontStyle.normal),
+                  ),
                   if (_errorMessage != null)
                     Text(
                       _errorMessage!,
@@ -75,28 +80,28 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).email,
                     ),
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
+                        return AppLocalizations.of(context).pleaseEnterEmail;
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     controller: _password1Controller,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).password,
                     ),
                     autofillHints: const [AutofillHints.password],
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
+                        return AppLocalizations.of(context).pleaseEnterPassword;
                       }
                       return null;
                     },

@@ -3,11 +3,9 @@ import 'package:cross_file/cross_file.dart';
 import 'package:dacit/main.dart';
 import 'package:dacit/services/globals.dart';
 import 'package:dacit/services/text_stimulus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:dacit/services/audio_player.dart';
 import 'package:dacit/services/recorder.dart';
 
@@ -33,6 +31,8 @@ class RecordPageState extends State<RecordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).recordAudio),
@@ -40,6 +40,7 @@ class RecordPageState extends State<RecordPage> {
         body: Center(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Container(
@@ -47,6 +48,9 @@ class RecordPageState extends State<RecordPage> {
                 child: const Text("Nehmen Sie das folgende Wort auf:")),
             Container(
               padding: const EdgeInsets.all(25.0),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).secondaryHeaderColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0))),
               child: FutureBuilder<TextStimulus>(
                 future: futureTextStimulus,
                 builder: (context, snapshot) {
@@ -61,25 +65,47 @@ class RecordPageState extends State<RecordPage> {
               ),
             ),
             showPlayer
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: AudioPlayer(
-                      source: audioPath!,
-                      onDelete: () {
-                        setState(() => showPlayer = false);
+                ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: AudioPlayer(
+                        source: audioPath!,
+                        onDelete: () {
+                          setState(() => showPlayer = false);
+                        },
+                      ),
+                    ),
+                    if (audioPath != null)
+                      IconButton(
+                        onPressed: () {
+                          futureTextStimulus = fetchTextStimulus();
+                        },
+                        icon: const Icon(
+                          Icons.check,
+                        ),
+                        color: colors.primary.withOpacity(0.1),
+                      ),
+                  ])
+                : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    AudioRecorder(
+                      onStop: (path) {
+                        log.info('Recorded file path: $path');
+                        setState(() {
+                          audioPath = path;
+                          showPlayer = true;
+                        });
+                        uploadAudio(path, tsId);
                       },
                     ),
-                  )
-                : Expanded(child: AudioRecorder(
-                    onStop: (path) {
-                      if (kDebugMode) print('Recorded file path: $path');
-                      setState(() {
-                        audioPath = path;
-                        showPlayer = true;
-                      });
-                      uploadAudio(path, tsId);
-                    },
-                  )),
+                    IconButton(
+                      onPressed: () {
+                        futureTextStimulus = fetchTextStimulus();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_right,
+                      ),
+                    ),
+                  ])
           ],
         )));
   }
@@ -94,6 +120,7 @@ Future<TextStimulus> fetchTextStimulus() async {
   );
 
   if (response.statusCode == 200) {
+    log.info("Downloading new Stimulus");
     return TextStimulus.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load new text');
@@ -101,8 +128,7 @@ Future<TextStimulus> fetchTextStimulus() async {
 }
 
 Future<void> uploadAudio(String path, int id) async {
-  log.info(
-      "Try uploading this file: $path with this id: $id");
+  log.info("Try uploading this file: $path with this id: $id");
   final file = XFile(path);
 
   final request =

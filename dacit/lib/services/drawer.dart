@@ -8,13 +8,14 @@ Widget drawer(BuildContext context) {
     children: [
       DrawerHeader(
         decoration: const BoxDecoration(
-          color: Colors.blue,
-        ),
+            //color: Colors.blue,
+            ),
         child: Text(AppLocalizations.of(context).dacitDescription,
             style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 30,
-                color: Colors.white)),
+                //color: Colors.white
+                )),
       ),
       _tile(
           AppLocalizations.of(context).recordAudio,
@@ -60,7 +61,7 @@ ListTile _tile(String title, String subtitle, String path, IconData icon,
         )),
     leading: Icon(
       icon,
-      color: Colors.blue,
+      //color: Colors.blue,
     ),
     onTap: () {
       Navigator.pop(context);

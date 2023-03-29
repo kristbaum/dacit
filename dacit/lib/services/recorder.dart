@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:record/record.dart';
 
+import '../main.dart';
+
 class AudioRecorder extends StatefulWidget {
   final void Function(String path) onStop;
 
@@ -36,16 +38,15 @@ class _AudioRecorderState extends State<AudioRecorder> {
   }
 
   Future<void> _start() async {
-    print("Start recording");
+    log.info("Start recording");
     try {
       if (await _audioRecorder.hasPermission()) {
         // We don't do anything with this but printing
         final isSupported = await _audioRecorder.isEncoderSupported(
           AudioEncoder.aacLc,
         );
-        if (kDebugMode) {
-          print('${AudioEncoder.aacLc.name} supported: $isSupported');
-        }
+
+        log.info('${AudioEncoder.aacLc.name} supported: $isSupported');
 
         // final devs = await _audioRecorder.listInputDevices();
         // final isRecording = await _audioRecorder.isRecording();
@@ -56,9 +57,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
         _startTimer();
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      log.severe(e);
     }
   }
 
@@ -85,26 +84,21 @@ class _AudioRecorderState extends State<AudioRecorder> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _buildRecordStopControl(),
-            const SizedBox(width: 20),
-            _buildPauseResumeControl(),
-            const SizedBox(width: 20),
-            _buildText(),
-          ],
-        ),
-        if (_amplitude != null) ...[
+      children: <Widget>[
+        _buildRecordStopControl(),
+        const SizedBox(width: 20),
+        _buildPauseResumeControl(),
+        const SizedBox(width: 20),
+        _buildText(),
+      ],
+    );
+    /* if (_amplitude != null) ...[
           const SizedBox(height: 40),
           Text('Current: ${_amplitude?.current ?? 0.0}'),
           Text('Max: ${_amplitude?.max ?? 0.0}'),
-        ],
-      ],
-    );
+        ], */
   }
 
   @override
@@ -121,24 +115,16 @@ class _AudioRecorderState extends State<AudioRecorder> {
     late Color color;
 
     if (_recordState != RecordState.stop) {
-      icon = const Icon(Icons.stop, color: Colors.red, size: 30);
-      color = Colors.red.withOpacity(0.1);
+      icon = const Icon(Icons.stop, color: Colors.red);
     } else {
-      final theme = Theme.of(context);
-      icon = Icon(Icons.mic, color: theme.primaryColor, size: 30);
-      color = theme.primaryColor.withOpacity(0.1);
+      icon = const Icon(Icons.mic);
     }
 
-    return ClipOval(
-      child: Material(
-        color: color,
-        child: InkWell(
-          child: SizedBox(width: 56, height: 56, child: icon),
-          onTap: () {
-            (_recordState != RecordState.stop) ? _stop() : _start();
-          },
-        ),
-      ),
+    return IconButton(
+      icon: icon,
+      onPressed: () {
+        (_recordState != RecordState.stop) ? _stop() : _start();
+      },
     );
   }
 
@@ -151,24 +137,20 @@ class _AudioRecorderState extends State<AudioRecorder> {
     late Color color;
 
     if (_recordState == RecordState.record) {
-      icon = const Icon(Icons.pause, color: Colors.red, size: 30);
+      icon = const Icon(Icons.pause, color: Colors.red);
       color = Colors.red.withOpacity(0.1);
     } else {
       final theme = Theme.of(context);
-      icon = const Icon(Icons.play_arrow, color: Colors.red, size: 30);
+      icon = const Icon(Icons.play_arrow, color: Colors.red);
       color = theme.primaryColor.withOpacity(0.1);
     }
 
-    return ClipOval(
-      child: Material(
-        color: color,
-        child: InkWell(
-          child: SizedBox(width: 56, height: 56, child: icon),
-          onTap: () {
-            (_recordState == RecordState.pause) ? _resume() : _pause();
-          },
-        ),
-      ),
+    return IconButton(
+      color: color,
+      icon: icon,
+      onPressed: () {
+        (_recordState == RecordState.pause) ? _resume() : _pause();
+      },
     );
   }
 
@@ -177,7 +159,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
       return _buildTimer();
     }
 
-    return Text(AppLocalizations.of(context).waitForRecording);
+    return const SizedBox.shrink();
   }
 
   Widget _buildTimer() {

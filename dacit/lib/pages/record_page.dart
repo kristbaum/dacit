@@ -17,20 +17,24 @@ class RecordPage extends StatefulWidget {
 }
 
 class _RecordPageState extends State<RecordPage> {
-  bool showPlayer = false;
-  String? audioPath;
-  //late Future<TextStimulus> futureTextStimulus;
-  late int tsId;
+  bool _showPlayer = false;
+  late TextStimulus ts;
+  bool _loadNewTs = true;
+  String? _audioPath;
 
   @override
   void initState() {
-    showPlayer = false;
+    _showPlayer = false;
     super.initState();
     //futureTextStimulus = fetchTextStimulus();
   }
 
   Future<void> _refreshTextStimulus() async {
-    setState(() {});
+    setState(() {
+      _showPlayer = false;
+      _loadNewTs = true;
+      _audioPath = null;
+    });
   }
 
   Future<TextStimulus> _fetchTextStimulus() async {
@@ -49,7 +53,7 @@ class _RecordPageState extends State<RecordPage> {
     }
   }
 
-  Future<void> uploadAudio(String path, int id) async {
+  Future<void> _uploadAudio(String path, int id) async {
     log.info("Try uploading this file: $path with this id: $id");
     final file = XFile(path);
 
@@ -80,8 +84,6 @@ class _RecordPageState extends State<RecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).recordAudio),
@@ -100,39 +102,45 @@ class _RecordPageState extends State<RecordPage> {
               decoration: BoxDecoration(
                   color: Theme.of(context).secondaryHeaderColor,
                   borderRadius: const BorderRadius.all(Radius.circular(10.0))),
-              child: FutureBuilder<TextStimulus>(
-                future: _fetchTextStimulus(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    tsId = snapshot.data!.id;
-                    return Text(snapshot.data!.stimulus);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
+              child: _loadNewTs
+                  ? FutureBuilder<TextStimulus>(
+                      future: _fetchTextStimulus(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          ts = snapshot.data!;
+                          return Text(snapshot.data!.stimulus);
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return const CircularProgressIndicator();
+                      },
+                    )
+                  : Text(ts.stimulus),
             ),
-            showPlayer
+            _showPlayer
                 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: AudioPlayer(
-                        source: audioPath!,
+                        source: _audioPath!,
                         onDelete: () {
-                          setState(() => showPlayer = false);
+                          setState(() {
+                            //ts = ts;
+                            _loadNewTs = false;
+                            _showPlayer = false;
+                          });
                         },
                       ),
                     ),
-                    if (audioPath != null)
+                    if (_audioPath != null)
                       IconButton(
                         onPressed: () {
-                          _fetchTextStimulus();
+                          _uploadAudio(_audioPath!, ts.id);
+                          _refreshTextStimulus();
                         },
                         icon: const Icon(
                           Icons.check,
                         ),
-                        color: colors.primary.withOpacity(0.1),
                       ),
                   ])
                 : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -140,10 +148,11 @@ class _RecordPageState extends State<RecordPage> {
                       onStop: (path) {
                         log.info('Recorded file path: $path');
                         setState(() {
-                          audioPath = path;
-                          showPlayer = true;
+                          _audioPath = path;
+                          //ts = ts;
+                          _loadNewTs = false;
+                          _showPlayer = true;
                         });
-                        uploadAudio(path, tsId);
                       },
                     ),
                     IconButton(

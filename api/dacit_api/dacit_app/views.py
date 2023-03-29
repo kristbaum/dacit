@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework import status
-from dacit_app.models import Text_Stimulus, Min_Pair, Audio, DacitUser
+from dacit_app.models import Text_Stimulus, Text_Stimulus_Sent, Min_Pair, Audio, DacitUser
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer
 from rest_framework.permissions import IsAdminUser, AllowAny
 import logging
@@ -84,12 +84,32 @@ class TextStimuli(APIView):
 
 
 class TextStimulus(APIView):
-    # return a random single text stimulus
+
     def get(self, request, format=None):
-        stimulus = Text_Stimulus.objects.first()
-        logging.info(stimulus)
-        json_stimulus = TextStimulusSerializer(stimulus).data
-        return Response(json_stimulus)
+        # Get all the Text_Stimulus objects
+        all_text_stimuli = Text_Stimulus.objects.all()
+        
+        # Check if any Text_Stimulus has already been sent to the user
+        text_stimuli_sent_to_user = Text_Stimulus_Sent.objects.filter(user=request.user)
+        text_stimuli_sent_to_user_ids = [text_stimulus_sent.text_stimulus.id for text_stimulus_sent in text_stimuli_sent_to_user]
+        
+        # Exclude any Text_Stimulus that has already been sent to the user
+        text_stimuli_to_send = all_text_stimuli.exclude(id__in=text_stimuli_sent_to_user_ids)
+        
+        if text_stimuli_to_send.exists():
+            # Choose a random Text_Stimulus to send to the user
+            text_stimulus = choice(text_stimuli_to_send)
+            
+            # Track that this Text_Stimulus has been sent to the user
+            text_stimulus_sent = Text_Stimulus_Sent(user=request.user, text_stimulus=text_stimulus, sent=1)
+            text_stimulus_sent.save()
+            
+            logging.info(text_stimulus)
+            json_stimulus = TextStimulusSerializer(text_stimulus).data
+            return Response(json_stimulus)
+        else:
+            # If all Text_Stimuli have been sent to the user, return an empty Response
+            return Response({})
 
 
 class MinPair(APIView):

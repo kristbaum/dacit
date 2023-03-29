@@ -13,20 +13,67 @@ class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => RecordPageState();
+  State<StatefulWidget> createState() => _RecordPageState();
 }
 
-class RecordPageState extends State<RecordPage> {
+class _RecordPageState extends State<RecordPage> {
   bool showPlayer = false;
   String? audioPath;
-  late Future<TextStimulus> futureTextStimulus;
+  //late Future<TextStimulus> futureTextStimulus;
   late int tsId;
 
   @override
   void initState() {
     showPlayer = false;
     super.initState();
-    futureTextStimulus = fetchTextStimulus();
+    //futureTextStimulus = fetchTextStimulus();
+  }
+
+  Future<void> _refreshTextStimulus() async {
+    setState(() {});
+  }
+
+  Future<TextStimulus> _fetchTextStimulus() async {
+    final response = await http.get(
+      Uri.parse('${baseDomain}api/sts'),
+      headers: {
+        "Authorization": "Token ${user.token}",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      log.info("Downloading new Stimulus");
+      return TextStimulus.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load new text');
+    }
+  }
+
+  Future<void> uploadAudio(String path, int id) async {
+    log.info("Try uploading this file: $path with this id: $id");
+    final file = XFile(path);
+
+    final request =
+        http.MultipartRequest('PUT', Uri.parse('${baseDomain}api/upload/$id/'));
+
+    request.headers.addAll({"Authorization": "Token ${user.token}"});
+    final fileStream = http.ByteStream(file.openRead());
+    final fileLength = await file.length();
+
+    final multipartFile = http.MultipartFile(
+      'file',
+      fileStream,
+      fileLength,
+      filename: file.name,
+    );
+    request.files.add(multipartFile);
+
+    final response = await http.Client().send(request);
+    if (response.statusCode == 201) {
+      log.info('File uploaded successfully');
+    } else {
+      log.warning('Error uploading file: ${response.statusCode}');
+    }
   }
 
   @override
@@ -52,7 +99,7 @@ class RecordPageState extends State<RecordPage> {
                   color: Theme.of(context).secondaryHeaderColor,
                   borderRadius: const BorderRadius.all(Radius.circular(10.0))),
               child: FutureBuilder<TextStimulus>(
-                future: futureTextStimulus,
+                future: _fetchTextStimulus(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     tsId = snapshot.data!.id;
@@ -78,7 +125,7 @@ class RecordPageState extends State<RecordPage> {
                     if (audioPath != null)
                       IconButton(
                         onPressed: () {
-                          futureTextStimulus = fetchTextStimulus();
+                          _fetchTextStimulus();
                         },
                         icon: const Icon(
                           Icons.check,
@@ -98,58 +145,13 @@ class RecordPageState extends State<RecordPage> {
                       },
                     ),
                     IconButton(
-                      onPressed: () {
-                        futureTextStimulus = fetchTextStimulus();
-                      },
+                      onPressed: _refreshTextStimulus,
                       icon: const Icon(
-                        Icons.arrow_right,
+                        Icons.skip_next,
                       ),
                     ),
                   ])
           ],
         )));
-  }
-}
-
-Future<TextStimulus> fetchTextStimulus() async {
-  final response = await http.get(
-    Uri.parse('${baseDomain}api/sts'),
-    headers: {
-      "Authorization": "Token ${user.token}",
-    },
-  );
-
-  if (response.statusCode == 200) {
-    log.info("Downloading new Stimulus");
-    return TextStimulus.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load new text');
-  }
-}
-
-Future<void> uploadAudio(String path, int id) async {
-  log.info("Try uploading this file: $path with this id: $id");
-  final file = XFile(path);
-
-  final request =
-      http.MultipartRequest('PUT', Uri.parse('${baseDomain}api/upload/$id/'));
-
-  request.headers.addAll({"Authorization": "Token ${user.token}"});
-  final fileStream = http.ByteStream(file.openRead());
-  final fileLength = await file.length();
-
-  final multipartFile = http.MultipartFile(
-    'file',
-    fileStream,
-    fileLength,
-    filename: file.name,
-  );
-  request.files.add(multipartFile);
-
-  final response = await http.Client().send(request);
-  if (response.statusCode == 201) {
-    log.info('File uploaded successfully');
-  } else {
-    log.warning('Error uploading file: ${response.statusCode}');
   }
 }

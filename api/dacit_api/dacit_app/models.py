@@ -154,6 +154,22 @@ class Text_Stimulus(models.Model):
         return self.text
 
 
+class Text_Stimulus_Sent(models.Model):
+    user = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
+    text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
+
+    # Number of times the user has had this text stimulus
+    sent = models.IntegerField(default=0)
+    #skipped = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'text_stimulus',)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.text_stimulus.text}"
+
+
 class Audio(models.Model):
     text_stimulus = models.ForeignKey(Text_Stimulus, on_delete=models.CASCADE)
     speaker = models.ForeignKey(DacitUser, on_delete=models.CASCADE)

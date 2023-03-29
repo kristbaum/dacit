@@ -79,10 +79,7 @@ class Dacit extends StatelessWidget {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return Container(
-                  //color: Colors.white,
-                  child: const Center(child: CircularProgressIndicator()),
-                );
+                return const Center(child: CircularProgressIndicator());
               case ConnectionState.active:
               case ConnectionState.done:
                 if (snapshot.hasError) {

@@ -86,4 +86,3 @@ docker compose exec api python3 manage.py import
 docker compose exec api python3 manage.py createsuperuser
 flutter build web
 ```
-

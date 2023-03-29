@@ -53,8 +53,8 @@ class _RecordPageState extends State<RecordPage> {
     log.info("Try uploading this file: $path with this id: $id");
     final file = XFile(path);
 
-    final request =
-        http.MultipartRequest('PUT', Uri.parse('${baseDomain}api/upload/$id/'));
+    final request = http.MultipartRequest(
+        'POST', Uri.parse('${baseDomain}api/upload/$id/'));
 
     request.headers.addAll({"Authorization": "Token ${user.token}"});
     final fileStream = http.ByteStream(file.openRead());
@@ -64,11 +64,13 @@ class _RecordPageState extends State<RecordPage> {
       'file',
       fileStream,
       fileLength,
-      filename: file.name,
+      filename: "user_audio.wav",
     );
     request.files.add(multipartFile);
 
-    final response = await http.Client().send(request);
+    log.info(request.files.toString());
+
+    final response = await request.send();
     if (response.statusCode == 201) {
       log.info('File uploaded successfully');
     } else {

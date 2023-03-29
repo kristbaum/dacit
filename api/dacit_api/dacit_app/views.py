@@ -55,20 +55,23 @@ class FileUploadView(APIView):
     parser_classes = [MultiPartParser]
 
     def put(self, request, filename, format=None):
-        logging.info(request.data)
+        logging.info("Filename: " + filename)
+        logging.info("Requestdata: " + request.data)
         file_obj = request.FILES['file']
         dacit_user = request.user
 
-        logging.info(filename)
-        logging.info(file_obj)
         matching_ts = Text_Stimulus.objects.get(pk=int(filename))
-        logging.info(matching_ts)
 
-        logging.info(file_obj)
-        new_audio = Audio(text_stimulus=matching_ts, speaker=dacit_user, audio=file_obj,
-                          language=dacit_user.active_language, dialect=dacit_user.active_dialect)
-        new_audio.save()
-        return Response(status=status.HTTP_201_CREATED)
+        if matching_ts.exists():
+            logging.info(matching_ts)
+
+            logging.info(file_obj)
+            new_audio = Audio(text_stimulus=matching_ts, speaker=dacit_user, audio=file_obj,
+                              language=dacit_user.active_language, dialect=dacit_user.active_dialect)
+            new_audio.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def __str__(self):
         return str(self.audio.name)
@@ -88,22 +91,26 @@ class TextStimulus(APIView):
     def get(self, request, format=None):
         # Get all the Text_Stimulus objects
         all_text_stimuli = Text_Stimulus.objects.all()
-        
+
         # Check if any Text_Stimulus has already been sent to the user
-        text_stimuli_sent_to_user = Text_Stimulus_Sent.objects.filter(user=request.user)
-        text_stimuli_sent_to_user_ids = [text_stimulus_sent.text_stimulus.id for text_stimulus_sent in text_stimuli_sent_to_user]
-        
+        text_stimuli_sent_to_user = Text_Stimulus_Sent.objects.filter(
+            user=request.user)
+        text_stimuli_sent_to_user_ids = [
+            text_stimulus_sent.text_stimulus.id for text_stimulus_sent in text_stimuli_sent_to_user]
+
         # Exclude any Text_Stimulus that has already been sent to the user
-        text_stimuli_to_send = all_text_stimuli.exclude(id__in=text_stimuli_sent_to_user_ids)
-        
+        text_stimuli_to_send = all_text_stimuli.exclude(
+            id__in=text_stimuli_sent_to_user_ids)
+
         if text_stimuli_to_send.exists():
             # Choose a random Text_Stimulus to send to the user
             text_stimulus = choice(text_stimuli_to_send)
-            
+
             # Track that this Text_Stimulus has been sent to the user
-            text_stimulus_sent = Text_Stimulus_Sent(user=request.user, text_stimulus=text_stimulus, sent=1)
+            text_stimulus_sent = Text_Stimulus_Sent(
+                user=request.user, text_stimulus=text_stimulus, sent=1)
             text_stimulus_sent.save()
-            
+
             logging.info(text_stimulus)
             json_stimulus = TextStimulusSerializer(text_stimulus).data
             return Response(json_stimulus)

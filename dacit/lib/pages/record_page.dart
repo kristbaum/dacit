@@ -43,7 +43,7 @@ class _RecordPageState extends State<RecordPage> {
 
     if (response.statusCode == 200) {
       log.info("Downloading new Stimulus");
-      return TextStimulus.fromJson(jsonDecode(response.body));
+      return TextStimulus.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to load new text');
     }

@@ -98,10 +98,11 @@ class ImportMinPair(Create):
         word_2 = None
         word_2_text = text = row.get('Wort_2')
         default_speaker, created = DacitUser.objects.get_or_create(
-            email="default@example.example",
+            email="default@test.test",
             active_dialect="ST",
             active_language="DE",
             public_id=1,
+            gender="M"
         )
         #print("Wort1 und 2: " + str(word_1_text) + " " + str(word_2_text))
 

@@ -41,7 +41,6 @@ class Dacit extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    ColorSwatch defaultColor = Colors.blueGrey;
     return MaterialApp(
       title: 'Dacit',
       localizationsDelegates: AppLocalizations.localizationsDelegates,

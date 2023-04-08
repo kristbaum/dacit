@@ -16,26 +16,6 @@ class Dialect(models.TextChoices):
     BAVARIAN = 'BY', _('Bavarian')
 
 
-class CI_User(models.Model):
-    class Manufacturer(models.TextChoices):
-        COCHLEARLIMITED = 'CL', _('Cochlear Limited')
-        ADVANCEDBIONICS = 'AB'
-        _('Advanced Bionics')
-        MEDEL = 'ME', _('MED-EL')
-        NEURELEC = 'NC', _('Neurelec')
-        NUROTRON = 'NN', _('Nurotron')
-
-    manufacturer = models.CharField(
-        max_length=2,
-        choices=Manufacturer.choices,
-    )
-
-    name = models.CharField(max_length=100)
-    theraphist = models.CharField(max_length=100)
-    birthdate = models.DateField()
-    created = models.DateTimeField(auto_now_add=True)
-
-
 class DacitUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -80,8 +60,6 @@ class DacitUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     username = models.CharField(max_length=255)
     public_id = models.BigIntegerField(
-        blank=True,
-        null=True,
         unique=True)
 
     objects = DacitUserManager()
@@ -105,7 +83,54 @@ class DacitUser(AbstractBaseUser):
         "Is the user a member of staff?"
         return self.is_admin
 
-    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE, null=True)
+    active_language = models.CharField(
+        max_length=2,
+        choices=Language.choices,
+        default=Language.GERMAN,
+    )
+
+    active_dialect = models.CharField(
+        max_length=2,
+        choices=Dialect.choices,
+        default=Dialect.STANDARD,
+    )
+
+    class Manufacturer(models.TextChoices):
+        COCHLEARLIMITED = 'CL', _('Cochlear Limited')
+        ADVANCEDBIONICS = 'AB'
+        _('Advanced Bionics')
+        MEDEL = 'ME', _('MED-EL')
+        NEURELEC = 'NC', _('Neurelec')
+        NUROTRON = 'NN', _('Nurotron')
+
+    manufacturer = models.CharField(
+        max_length=2,
+        null=True,
+        choices=Manufacturer.choices,
+        default=None
+    )
+
+    class Gender(models.TextChoices):
+        FEMALE = 'F', _('Female')
+        MALE = 'M', _('Male')
+        DIVERS = 'D', _('Divers')
+
+    gender = models.CharField(
+        max_length=1,
+        choices=Gender.choices,
+        null=True,
+        default=None
+    )
+
+    #birthdate = models.DateField()
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class User_Relationship(models.Model):
+    user = models.ForeignKey(DacitUser, on_delete=models.CASCADE, related_name="active_user")
+    target_user = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
+    self_description = models.CharField(max_length=500)
+    unique_together = ["user", "target_user"]
 
     class Relationship_types(models.TextChoices):
         PARENT = 'P', _('Parent')
@@ -118,18 +143,6 @@ class DacitUser(AbstractBaseUser):
         max_length=1,
         choices=Relationship_types.choices,
         default=Relationship_types.FRIEND
-    )
-
-    active_language = models.CharField(
-        max_length=2,
-        choices=Language.choices,
-        default=Language.GERMAN,
-    )
-
-    active_dialect = models.CharField(
-        max_length=2,
-        choices=Dialect.choices,
-        default=Dialect.STANDARD,
     )
 
 
@@ -215,7 +228,7 @@ class Min_Pair(models.Model):
 
 
 class Audio_to_Users(models.Model):
-    ci_user = models.ForeignKey(CI_User, on_delete=models.CASCADE)
+    user = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
     audio = models.ForeignKey(Audio, on_delete=models.CASCADE)
     ts_sent = models.DateTimeField(auto_now_add=True)
     ts_recieved = models.DateTimeField()

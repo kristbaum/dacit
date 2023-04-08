@@ -15,7 +15,7 @@ class SettingsPage extends StatelessWidget {
       body: Center(
           child: Column(
         children: <Widget>[
-          const Text("Ihre App-ID: 1293084076"),
+          Text("${AppLocalizations.of(context).appID}1293084076"),
           const Text("Rolle"),
           const RoleSelectionDropdown(),
           // TODO: Don't show the other sections until selected

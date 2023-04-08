@@ -18,8 +18,9 @@
   "recordings": "erstellte Aufnahmen",
   "minimalPairsDesc": "Sind diese beiden Worte gleich?",
   "waitForRecording": "Warte auf Aufnahme",
-  "pleaseEnterPassword": "Please enter your password",
-  "password": "Password",
-  "pleaseEnterEmail": "Please enter your email",
-  "email": "Email"
+  "pleaseEnterPassword": "Geben sie bitte Ihr Passwort ein",
+  "password": "Passwort",
+  "pleaseEnterEmail": "Geben Sie Ihre Email ein",
+  "email": "Email",
+  "appID": "Ihre App-ID: "
 }

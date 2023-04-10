@@ -38,8 +38,7 @@ class DacitUserManager(BaseUserManager):
 
     def create_superuser(self, email, password=None):
         """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
+        Creates and saves a superuser with the given email and password.
         """
         user = self.create_user(
             email,
@@ -60,7 +59,8 @@ class DacitUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     username = models.CharField(max_length=255)
     public_id = models.BigIntegerField(
-        unique=True)
+        unique=True,
+        null=True)
 
     objects = DacitUserManager()
 
@@ -127,7 +127,8 @@ class DacitUser(AbstractBaseUser):
 
 
 class User_Relationship(models.Model):
-    user = models.ForeignKey(DacitUser, on_delete=models.CASCADE, related_name="active_user")
+    user = models.ForeignKey(
+        DacitUser, on_delete=models.CASCADE, related_name="active_user")
     target_user = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
     self_description = models.CharField(max_length=500)
     unique_together = ["user", "target_user"]

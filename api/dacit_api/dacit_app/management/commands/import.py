@@ -101,6 +101,7 @@ class ImportMinPair(Create):
             email="default@test.test",
             active_dialect="ST",
             active_language="DE",
+            username=1,
             public_id=1,
             gender="M"
         )

@@ -1,6 +1,6 @@
 import 'package:dacit/pages/home_page.dart';
 import 'package:dacit/pages/login_page.dart';
-import 'package:dacit/pages/minpairs_page.dart';
+import 'package:dacit/pages/minpairs_page2.dart';
 import 'package:dacit/pages/signup_page.dart';
 import 'package:dacit/services/globals.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +92,7 @@ class Dacit extends StatelessWidget {
           }),
       //home: isLoggedIn ? const HomePage(title: 'Dacit') : const LoginPage(),
       routes: {
-        '/minpairs': (context) => const MinimalPairs(),
+        '/minpairs': (context) => const MinimalPairsPage(),
         '/record': (context) => const RecordPage(),
         '/settings': (context) => const SettingsPage(),
         '/speakerdis': (context) => const SpeakerDisPage(),

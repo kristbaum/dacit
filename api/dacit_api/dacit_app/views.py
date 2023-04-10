@@ -127,7 +127,7 @@ class MinPair(APIView):
         speaker = request.query_params.get('speaker')
         if speaker is None:
             selected_speaker = Speaker.objects.filter(
-                public_id=1).first()
+                username=1).first()
         else:
             selected_speaker = Speaker.objects.get(pk=speaker)
 

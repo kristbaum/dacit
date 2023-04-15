@@ -96,7 +96,7 @@ class _RecordPageState extends State<RecordPage> {
           children: <Widget>[
             Container(
                 padding: const EdgeInsets.all(25.0),
-                child: const Text("Nehmen Sie das folgende Wort auf:")),
+                child: Text(AppLocalizations.of(context).recordThisWord)),
             Container(
               padding: const EdgeInsets.all(25.0),
               decoration: BoxDecoration(

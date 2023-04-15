@@ -22,5 +22,14 @@
   "password": "Password",
   "pleaseEnterEmail": "Please enter your email",
   "email": "Email",
-  "appID": "Your App-ID: "
+  "appID": "Your App-ID: ",
+  "aboutText": "This is an app developed for a master thesis etc",
+  "invalidUserNorP":"Invalid username or password",
+  "login":"Login",
+  "createAccount":"Create an account",
+  "recordThisWord":"Please make a recording to this word ",
+  "role":"role"
+
+
+
 }

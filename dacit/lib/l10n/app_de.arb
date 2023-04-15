@@ -22,5 +22,12 @@
   "password": "Passwort",
   "pleaseEnterEmail": "Geben Sie Ihre Email ein",
   "email": "Email",
-  "appID": "Ihre App-ID: "
+  "appID": "Ihre App-ID: ",
+  "aboutText": "Diese App wurde im Rahmen einer Masterarbeit entwickelt.",
+  "invalidUserNorP":"Ungültiger Benutzername oder Passwort",
+  "Login":"Einloggen",
+  "createAccount":"Erstelle ein Benutzerkonto",
+  "recordThisWord":"Nehme das folgende Wort auf: ",
+  "role":"Rolle"
+
 }

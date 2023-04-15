@@ -49,10 +49,10 @@ class _LoginPageState extends State<LoginPage> {
             .push(MaterialPageRoute(builder: (context) => const HomePage()));
       } else {
         // Login failed
-        setState(() {
+        setState() {
           _isLoading = false;
-          _errorMessage = 'Invalid username or password';
-        });
+          _errorMessage = AppLocalizations.of(context).invalidUserNorP;
+        };
       }
     }
   }
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text(AppLocalizations.of(context).login),
       ),
       body: Center(
         child: Padding(
@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: _isLoading ? null : _submit,
                   child: _isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Login'),
+                      : Text(AppLocalizations.of(context).login),
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                       builder: (context) => const SignupPage(),
                     ));
                   },
-                  child: const Text('Create an account'),
+                  child: Text(AppLocalizations.of(context).createAccount),
                 ),
               ],
             ),

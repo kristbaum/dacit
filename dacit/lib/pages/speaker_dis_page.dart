@@ -5,12 +5,14 @@ class SpeakerDisPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Main();
+    return const Main();
   }
 }
 
 /// This is the stateless widget that the main application instantiates.
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

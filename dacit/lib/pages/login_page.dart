@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         setState() {
           _isLoading = false;
           _errorMessage = AppLocalizations.of(context).invalidUserNorP;
-        };
+        }
       }
     }
   }

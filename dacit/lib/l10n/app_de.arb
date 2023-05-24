@@ -25,9 +25,8 @@
   "appID": "Ihre App-ID: ",
   "aboutText": "Diese App wurde im Rahmen einer Masterarbeit entwickelt.",
   "invalidUserNorP":"Ungültiger Benutzername oder Passwort",
-  "Login":"Einloggen",
+  "login":"Einloggen",
   "createAccount":"Erstelle ein Benutzerkonto",
   "recordThisWord":"Nehme das folgende Wort auf: ",
   "role":"Rolle"
-
 }

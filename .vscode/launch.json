@@ -16,6 +16,13 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
+        },
+        {
+            "name": "Flutter (lib/main.dart)",
+            "type": "dart",
+            "request": "launch",
+            "cwd": "dacit",
+            "program": "lib/main.dart"
         }
     ]
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cross_file/cross_file.dart';
 import 'package:dacit/main.dart';
 import 'package:dacit/services/globals.dart';
+import 'package:dacit/services/min_pair.dart';
 import 'package:dacit/services/text_stimulus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,8 +19,8 @@ class MinimalPairsPage extends StatefulWidget {
 
 class _MinimalPairsPageState extends State<MinimalPairsPage> {
   bool _showPlayer = false;
-  late TextStimulus ts;
-  bool _loadNewTs = true;
+  late MinPair minPair;
+  bool _loadNewMP = true;
   String? _audioPath;
 
   @override
@@ -29,25 +30,25 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
     //futureTextStimulus = fetchTextStimulus();
   }
 
-  Future<void> _refreshTextStimulus() async {
+  Future<void> _refreshMinPair() async {
     setState(() {
       _showPlayer = false;
-      _loadNewTs = true;
+      _loadNewMP = true;
       _audioPath = null;
     });
   }
 
-  Future<TextStimulus> _fetchMinPair() async {
+  Future<MinPair> _fetchMinPair() async {
     final response = await http.get(
-      Uri.parse('${baseDomain}api/sts'),
+      Uri.parse('${baseDomain}api/minpair'),
       headers: {
         "Authorization": "Token ${user.token}",
       },
     );
 
     if (response.statusCode == 200) {
-      log.info("Downloading new Stimulus");
-      return TextStimulus.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      log.info("Downloading new Minpair");
+      return MinPair.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to load new text');
     }
@@ -96,26 +97,26 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
           children: <Widget>[
             Container(
                 padding: const EdgeInsets.all(25.0),
-                child: const Text("Nehmen Sie das folgende Wort auf:")),
+                child: const Text("Welches:")),
             Container(
               padding: const EdgeInsets.all(25.0),
               decoration: BoxDecoration(
                   color: Theme.of(context).secondaryHeaderColor,
                   borderRadius: const BorderRadius.all(Radius.circular(10.0))),
-              child: _loadNewTs
-                  ? FutureBuilder<TextStimulus>(
+              child: _loadNewMP
+                  ? FutureBuilder<MinPair>(
                       future: _fetchMinPair(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          ts = snapshot.data!;
-                          return Text(snapshot.data!.stimulus);
+                          minPair = snapshot.data!;
+                          return Text(snapshot.data!.category);
                         } else if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         }
                         return const CircularProgressIndicator();
                       },
                     )
-                  : Text(ts.stimulus),
+                  : Text(minPair.secondStimulus),
             ),
             _showPlayer
                 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -126,7 +127,7 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
                         onDelete: () {
                           setState(() {
                             //ts = ts;
-                            _loadNewTs = false;
+                            _loadNewMP = false;
                             _showPlayer = false;
                           });
                         },
@@ -135,8 +136,8 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
                     if (_audioPath != null)
                       IconButton(
                         onPressed: () {
-                          _uploadAudio(_audioPath!, ts.id);
-                          _refreshTextStimulus();
+                          _uploadAudio(_audioPath!, minPair.id);
+                          _refreshMinPair();
                         },
                         icon: const Icon(
                           Icons.check,
@@ -150,13 +151,13 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
                         setState(() {
                           _audioPath = path;
                           //ts = ts;
-                          _loadNewTs = false;
+                          _loadNewMP = false;
                           _showPlayer = true;
                         });
                       },
                     ),
                     IconButton(
-                      onPressed: _refreshTextStimulus,
+                      onPressed: _refreshMinPair,
                       icon: const Icon(
                         Icons.skip_next,
                       ),

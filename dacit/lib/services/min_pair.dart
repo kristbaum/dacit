@@ -1,5 +1,6 @@
 class MinPair {
   final int id;
+  final String category;
   final String firstStimulus;
   final Uri firstAudio;
   final String secondStimulus;
@@ -7,6 +8,7 @@ class MinPair {
 
   const MinPair(
       {required this.id,
+      required this.category,
       required this.firstStimulus,
       required this.firstAudio,
       required this.secondStimulus,
@@ -15,6 +17,7 @@ class MinPair {
   factory MinPair.fromJson(Map<String, dynamic> json) {
     return MinPair(
       id: json['minpair'],
+      category: json['category'],
       firstStimulus: json["first_stimulus"],
       firstAudio: Uri.parse(json["first_audio"]),
       secondStimulus: json["second_stimulus"],

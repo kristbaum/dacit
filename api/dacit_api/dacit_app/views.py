@@ -126,10 +126,10 @@ class MinPair(APIView):
     def get(self, request, format=None):
         speaker = request.query_params.get('speaker')
         if speaker is None:
-            selected_speaker = Speaker.objects.filter(
+            selected_speaker = DacitUser.objects.filter(
                 username=1).first()
         else:
-            selected_speaker = Speaker.objects.get(pk=speaker)
+            selected_speaker = DacitUser.objects.get(pk=speaker)
 
         text_category = request.query_params.get('category')
         category = None
@@ -138,8 +138,12 @@ class MinPair(APIView):
                 category = min_pair_cat
                 break
         if category is None:
-            logging.warning("Category not found")
-            return Response({"error": "Category not defined"}, status=status.HTTP_404_NOT_FOUND)
+            logging.warning("Category not found, returning random category")
+            category = choice(Min_Pair.Min_Pair_Class.choices)
+            print(category)
+            print(Min_Pair.Min_Pair_Class.choices)
+            #return Response({"error": "Category not defined"}, status=status.HTTP_404_NOT_FOUND)
+
 
         class_selection = Min_Pair.objects.filter(min_pair_class=category[0])
         pks = class_selection.values_list('pk', flat=True)
@@ -153,6 +157,7 @@ class MinPair(APIView):
         logging.info(first_audio.audio.url)
         json_min_pair = {
             "minpair": minpair.pk,
+            "category": minpair.min_pair_class[0],
             "first_stimulus": minpair.first_part.text,
             "first_audio": first_audio.audio.url,
             "second_stimulus": minpair.second_part.text,

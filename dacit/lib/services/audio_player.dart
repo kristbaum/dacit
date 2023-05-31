@@ -1,29 +1,30 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart' as ap;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AudioPlayer extends StatefulWidget {
   /// Path from where to play recorded audio
-  final String source;
+  String source = "";
 
   /// Callback when audio file should be removed
   /// Setting this to null hides the delete button
-  final VoidCallback onDelete;
+  VoidCallback onDelete;
 
-  const AudioPlayer({
+  AudioPlayer({
     Key? key,
-    required this.source,
+    this.source = "",
     required this.onDelete,
   }) : super(key: key);
 
   @override
   AudioPlayerState createState() => AudioPlayerState();
+
 }
 
 class AudioPlayerState extends State<AudioPlayer> {
-
   final _audioPlayer = ap.AudioPlayer();
   late StreamSubscription<void> _playerStateChangedSubscription;
   late StreamSubscription<Duration?> _durationChangedSubscription;
@@ -101,4 +102,8 @@ class AudioPlayerState extends State<AudioPlayer> {
   }
 
   Future<void> stop() => _audioPlayer.stop();
+
+  void setSource(bool web, String source) {
+    if (web) _audioPlayer.setSource(UrlSource(source));
+  }
 }

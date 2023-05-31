@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny
 import logging
 from random import choice
 from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
 
 
 class DacitUserRecordView(APIView):
@@ -79,6 +80,19 @@ class FileUploadView(APIView):
         return str(self.audio.name)
 
 
+class Download(APIView):
+    def get(self, request, filename, format=None):
+        with open('media/audio/' + filename + ".wav", 'rb') as read_file:
+            response = HttpResponse(
+                read_file,
+                headers={
+                    "Content-Type": "audio/wav",
+                    "Content-Disposition": 'attachment; filename="audio.wav"',
+                },
+            )
+            return response
+
+
 class TextStimuli(APIView):
     # return a number of textstimuli
     def get(self, request, format=None):
@@ -139,11 +153,12 @@ class MinPair(APIView):
                 break
         if category is None:
             logging.warning("Category not found, returning random category")
-            category = choice(Min_Pair.Min_Pair_Class.choices)
+            # Todo: choice doesn't work yet, only ('K_T', 'K T') examples exist!
+            # category = choice(Min_Pair.Min_Pair_Class.choices)
+            category = ('K_T', 'K T')
             print(category)
-            print(Min_Pair.Min_Pair_Class.choices)
-            #return Response({"error": "Category not defined"}, status=status.HTTP_404_NOT_FOUND)
-
+            # print(Min_Pair.Min_Pair_Class.choices)
+            # return Response({"error": "Category not defined"}, status=status.HTTP_404_NOT_FOUND)
 
         class_selection = Min_Pair.objects.filter(min_pair_class=category[0])
         pks = class_selection.values_list('pk', flat=True)

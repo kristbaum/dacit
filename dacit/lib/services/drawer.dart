@@ -21,7 +21,7 @@ Widget drawer(BuildContext context) {
           AppLocalizations.of(context).recordAudio,
           AppLocalizations.of(context).recordAudioDesc,
           "record",
-          Icons.record_voice_over,
+          Icons.mic_rounded,
           context),
       _tile(
           AppLocalizations.of(context).minimalPairs,
@@ -33,7 +33,7 @@ Widget drawer(BuildContext context) {
           AppLocalizations.of(context).speakerDisambiguation,
           AppLocalizations.of(context).identSpeaker,
           "speakerdis",
-          Icons.audiotrack,
+          Icons.record_voice_over,
           context),
       const Divider(
         thickness: 10,

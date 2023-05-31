@@ -122,7 +122,7 @@ class DacitUser(AbstractBaseUser):
         default=None
     )
 
-    #birthdate = models.DateField()
+    # birthdate = models.DateField()
     created = models.DateTimeField(auto_now_add=True)
 
 
@@ -174,7 +174,7 @@ class Text_Stimulus_Sent(models.Model):
 
     # Number of times the user has had this text stimulus
     sent = models.IntegerField(default=0)
-    #skipped = models.IntegerField(default=0)
+    # skipped = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -204,6 +204,15 @@ class Audio(models.Model):
         return str(self.audio.name)
 
 
+class Audio_to_Users(models.Model):
+    user = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
+    audio = models.ForeignKey(Audio, on_delete=models.CASCADE)
+    ts_sent = models.DateTimeField(auto_now_add=True)
+    ts_recieved = models.DateTimeField()
+    skipped = models.BooleanField()
+    mode = models.CharField(max_length=100)
+
+
 class Min_Pair(models.Model):
     first_part = models.ForeignKey(
         Text_Stimulus, on_delete=models.CASCADE, blank=False, related_name="first_part")
@@ -227,11 +236,38 @@ class Min_Pair(models.Model):
     def __str__(self):
         return str(self.first_part) + " " + str(self.second_part)
 
-
-class Audio_to_Users(models.Model):
+class Min_Pair_Sent(models.Model):
     user = models.ForeignKey(DacitUser, on_delete=models.CASCADE)
-    audio = models.ForeignKey(Audio, on_delete=models.CASCADE)
-    ts_sent = models.DateTimeField(auto_now_add=True)
-    ts_recieved = models.DateTimeField()
-    skipped = models.BooleanField()
-    mode = models.CharField(max_length=100)
+    min_pair = models.ForeignKey(Min_Pair, on_delete=models.CASCADE)
+
+    sent_equal = models.BooleanField()
+    answer_equal = models.BooleanField()
+
+    # Number of times the user has had this min_pair
+    sent = models.IntegerField(default=0)
+    # skipped = models.IntegerField(default=0)
+    timestamp_sent = models.DateTimeField(auto_now_add=True)
+    timestamp_recieved = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('user', 'min_pair',)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.min_pair}"
+
+class Speaker_Dis_Sent(models.Model):
+    user = models.ForeignKey(DacitUser, on_delete=models.CASCADE, related_name="user")
+    speaker1 = models.ForeignKey(DacitUser, on_delete=models.CASCADE, related_name="speaker1")
+    speaker2 = models.ForeignKey(DacitUser, on_delete=models.CASCADE, related_name="speaker2")
+
+    # Number of times the user has had this speaker dis
+    sent = models.IntegerField(default=0)
+    # skipped = models.IntegerField(default=0)
+    timestamp_sent = models.DateTimeField(auto_now_add=True)
+    timestamp_recieved = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('user', 'speaker1', 'speaker2')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.main_pair}"

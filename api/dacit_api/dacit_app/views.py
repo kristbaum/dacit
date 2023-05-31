@@ -141,8 +141,12 @@ class TextStimulus(APIView):
 
 
 class MinPair(APIView):
-    # return a random single text stimulus
+    # return a random single min pair
     def get(self, request, format=None):
+        # Initialize some values
+        json_min_pair = {}
+        first_audio, first_stimulus, second_audio, second_stimulus
+
         speaker = request.query_params.get('speaker')
         if speaker is None:
             selected_speaker = DacitUser.objects.filter(
@@ -150,12 +154,14 @@ class MinPair(APIView):
         else:
             selected_speaker = DacitUser.objects.get(pk=speaker)
 
+        # TODO: Filter if min_pair has been viewed yet
         text_category = request.query_params.get('category')
         category = None
         for min_pair_cat in Min_Pair.Min_Pair_Class.choices:
             if text_category == min_pair_cat[0]:
                 category = min_pair_cat
                 break
+
         if category is None:
             logging.warning("Category not found, returning random category")
             # TODO: choice doesn't work yet, only ('K_T', 'K T') examples exist!
@@ -168,24 +174,67 @@ class MinPair(APIView):
         class_selection = Min_Pair.objects.filter(min_pair_class=category[0])
         pks = class_selection.values_list('pk', flat=True)
         random_pk = choice(pks)
+        json_min_pair["category"] = minpair.min_pair_class[0],
         minpair = class_selection.get(pk=random_pk)
 
-        first_audio = Audio.objects.get(
-            text_stimulus=minpair.first_part, speaker=selected_speaker)
-        second_audio = Audio.objects.get(
-            text_stimulus=minpair.second_part, speaker=selected_speaker)
-        logging.info(first_audio.audio.url)
-        json_min_pair = {
-            "minpair": minpair.pk,
-            "category": minpair.min_pair_class[0],
-            "first_stimulus": minpair.first_part.text,
-            # remove path and extension from filename
-            "first_audio": first_audio.audio.name.rsplit('/', 1)[-1].rsplit(".", 1)[0],
-            "second_stimulus": minpair.second_part.text,
-            # remove path and extension from filename
-            "second_audio": second_audio.audio.name.rsplit('/', 1)[-1].rsplit(".", 1)[0]
-        }
-        # minpair = Min_Pair.objects.filter(min_pair_class='B_W')
-        # minpair = Min_Pair.objects.first()
-        # json_min_pair = MinPairSerializer(minpair, first_audio, second_audio).data
+        # Decide to send equal or not
+        send_equal = random.choice([False, True])
+        if send_equal:
+            send_first = random.choice([False, True])
+            if send_first:
+                first_audio = Audio.objects.get(
+                    text_stimulus=minpair.first_part, speaker=selected_speaker)
+                first_stimulus = minpair.first_part
+                second_audio = first_audio
+                second_stimulus = first_stimulus
+            else:
+                second_audio = Audio.objects.get(
+                    text_stimulus=minpair.second_part, speaker=selected_speaker)
+                second_stimulus = minpair.second_part
+                first_audio = second_audio
+                first_stimulus = second_stimulus
+        else:
+            first_audio = Audio.objects.get(
+                text_stimulus=minpair.first_part, speaker=selected_speaker)
+            first_stimulus = minpair.first_part
+            second_audio = Audio.objects.get(
+                text_stimulus=minpair.second_part, speaker=selected_speaker)
+            second_stimulus = minpair.second_part
+
+        json_min_pair["first_stimulus"] = first_stimulus.text
+        # remove path and extension from filename
+        json_min_pair["first_audio"] = first_audio.audio.name.rsplit(
+            '/', 1)[-1].rsplit(".", 1)[0]
+        json_min_pair["second_stimulus"] = second_stimulus.text
+        # remove path and extension from filename
+        json_min_pair["second_audio"] = second_audio.audio.name.rsplit(
+            '/', 1)[-1].rsplit(".", 1)[0]
+
+        # Track that this Min_Pair has been sent to the user
+        # TODO: accumulate sent
+        min_pair_sent = Min_Pair_Sent(
+            user=request.user, min_pair=minpair, send_equal=send_equal, sent=1)
+        min_pair_sent.save()
+        json_min_pair["minpair"] = min_pair_sent.pk
         return Response(json_min_pair)
+
+    def post(self, request, format=None):
+        logging.info("Create user")
+        serializer = MinPairResponseSerializer(data=request.data)
+        logging.info("Create user")
+        if serializer.is_valid(raise_exception=ValueError):
+            try:
+                min_pair_sent = Min_Pair_Sent.objects.get(
+                    pk=serializer.validated_data.min_pair)
+                
+            except:
+                return Response(
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        return Response(
+            {
+                "error": True,
+                "error_msg": serializer.error_messages,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

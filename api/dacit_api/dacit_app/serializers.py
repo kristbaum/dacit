@@ -35,3 +35,8 @@ class DacitUserSerializer(serializers.ModelSerializer):
                 fields=['email']
             )
         ]
+
+
+class MinPairResponseSerializer(serializers.Serializer):
+    min_pair = serializers.IntegerField()
+    answer_equal = serializers.BooleanField()

@@ -97,7 +97,7 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
                             "${baseDomain}api/download/${minPair.firstAudio}";
                         log.info(firstAudioUrl);
                         _audioPlayer.setSource(UrlSource(firstAudioUrl));
-                        return const Text("Los!");
+                        return Text(minPair.category);
                       } else if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       }

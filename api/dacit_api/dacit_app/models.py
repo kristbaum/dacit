@@ -241,13 +241,13 @@ class Min_Pair_Sent(models.Model):
     min_pair = models.ForeignKey(Min_Pair, on_delete=models.CASCADE)
 
     sent_equal = models.BooleanField()
-    answer_equal = models.BooleanField()
+    answer_equal = models.BooleanField(null=True)
 
     # Number of times the user has had this min_pair
     sent = models.IntegerField(default=0)
     # skipped = models.IntegerField(default=0)
     timestamp_sent = models.DateTimeField(auto_now_add=True)
-    timestamp_recieved = models.DateTimeField()
+    timestamp_recieved = models.DateTimeField(null=True)
 
     class Meta:
         unique_together = ('user', 'min_pair',)
@@ -264,7 +264,7 @@ class Speaker_Dis_Sent(models.Model):
     sent = models.IntegerField(default=0)
     # skipped = models.IntegerField(default=0)
     timestamp_sent = models.DateTimeField(auto_now_add=True)
-    timestamp_recieved = models.DateTimeField()
+    timestamp_recieved = models.DateTimeField(null=True)
 
     class Meta:
         unique_together = ('user', 'speaker1', 'speaker2')

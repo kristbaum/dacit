@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from rest_framework import status
-from dacit_app.models import Text_Stimulus, Text_Stimulus_Sent, Min_Pair, Audio, DacitUser
+from dacit_app.models import Text_Stimulus, Text_Stimulus_Sent, Min_Pair, Audio, DacitUser, Min_Pair_Sent
 from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer
 from rest_framework.permissions import IsAdminUser, AllowAny
 import logging
@@ -145,7 +145,12 @@ class MinPair(APIView):
     def get(self, request, format=None):
         # Initialize some values
         json_min_pair = {}
-        first_audio, first_stimulus, second_audio, second_stimulus
+        first_audio = None
+        first_stimulus = None
+        second_audio = None
+        second_stimulus = None
+        category = None
+
 
         speaker = request.query_params.get('speaker')
         if speaker is None:
@@ -156,7 +161,6 @@ class MinPair(APIView):
 
         # TODO: Filter if min_pair has been viewed yet
         text_category = request.query_params.get('category')
-        category = None
         for min_pair_cat in Min_Pair.Min_Pair_Class.choices:
             if text_category == min_pair_cat[0]:
                 category = min_pair_cat
@@ -174,13 +178,13 @@ class MinPair(APIView):
         class_selection = Min_Pair.objects.filter(min_pair_class=category[0])
         pks = class_selection.values_list('pk', flat=True)
         random_pk = choice(pks)
-        json_min_pair["category"] = minpair.min_pair_class[0],
         minpair = class_selection.get(pk=random_pk)
+        json_min_pair["category"] = minpair.min_pair_class[0]
 
         # Decide to send equal or not
-        send_equal = random.choice([False, True])
+        send_equal = choice([False, True])
         if send_equal:
-            send_first = random.choice([False, True])
+            send_first = choice([False, True])
             if send_first:
                 first_audio = Audio.objects.get(
                     text_stimulus=minpair.first_part, speaker=selected_speaker)
@@ -213,9 +217,10 @@ class MinPair(APIView):
         # Track that this Min_Pair has been sent to the user
         # TODO: accumulate sent
         min_pair_sent = Min_Pair_Sent(
-            user=request.user, min_pair=minpair, send_equal=send_equal, sent=1)
+            user=request.user, min_pair=minpair, sent_equal=send_equal, sent=1)
         min_pair_sent.save()
         json_min_pair["minpair"] = min_pair_sent.pk
+        logging.info(json_min_pair)
         return Response(json_min_pair)
 
     def post(self, request, format=None):
@@ -226,7 +231,7 @@ class MinPair(APIView):
             try:
                 min_pair_sent = Min_Pair_Sent.objects.get(
                     pk=serializer.validated_data.min_pair)
-                
+
             except:
                 return Response(
                     status=status.HTTP_404_NOT_FOUND

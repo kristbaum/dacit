@@ -6,8 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
-  static const String _title = 'Settings';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +46,7 @@ class SettingsPage extends StatelessWidget {
               decoration: InputDecoration(
                 border: const UnderlineInputBorder(),
                 labelText: AppLocalizations.of(context).whichyear,
-                //Todo: Limit to 4 Int
+                //TODO: Limit to 4 Int
               ),
             ),
           ),

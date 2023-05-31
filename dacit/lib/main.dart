@@ -1,6 +1,6 @@
 import 'package:dacit/pages/home_page.dart';
 import 'package:dacit/pages/login_page.dart';
-import 'package:dacit/pages/minpairs_page2.dart';
+import 'package:dacit/pages/minpairs_page.dart';
 import 'package:dacit/pages/signup_page.dart';
 import 'package:dacit/services/globals.dart';
 import 'package:flutter/material.dart';

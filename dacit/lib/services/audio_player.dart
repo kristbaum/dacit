@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart' as ap;
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -21,14 +20,11 @@ class AudioPlayer extends StatefulWidget {
 
   @override
   AudioPlayerState createState() => AudioPlayerState();
-
 }
 
 class AudioPlayerState extends State<AudioPlayer> {
   final _audioPlayer = ap.AudioPlayer();
   late StreamSubscription<void> _playerStateChangedSubscription;
-  late StreamSubscription<Duration?> _durationChangedSubscription;
-  late StreamSubscription<Duration> _positionChangedSubscription;
 
   @override
   void initState() {
@@ -44,8 +40,6 @@ class AudioPlayerState extends State<AudioPlayer> {
   @override
   void dispose() {
     _playerStateChangedSubscription.cancel();
-    _positionChangedSubscription.cancel();
-    _durationChangedSubscription.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -102,8 +96,4 @@ class AudioPlayerState extends State<AudioPlayer> {
   }
 
   Future<void> stop() => _audioPlayer.stop();
-
-  void setSource(bool web, String source) {
-    if (web) _audioPlayer.setSource(UrlSource(source));
-  }
 }

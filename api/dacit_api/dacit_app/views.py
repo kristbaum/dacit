@@ -81,16 +81,21 @@ class FileUploadView(APIView):
 
 
 class Download(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, filename, format=None):
-        with open('media/audio/' + filename + ".wav", 'rb') as read_file:
-            response = HttpResponse(
-                read_file,
-                headers={
-                    "Content-Type": "audio/wav",
-                    "Content-Disposition": 'attachment; filename="audio.wav"',
-                },
-            )
-            return response
+        try:
+            with open('media/audio/' + filename + ".wav", 'rb') as read_file:
+                response = HttpResponse(
+                    read_file,
+                    headers={
+                        "Content-Type": "audio/wav",
+                        "Content-Disposition": 'attachment; filename="audio.wav"',
+                    },
+                )
+                return response
+        except:
+            return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TextStimuli(APIView):
@@ -153,7 +158,7 @@ class MinPair(APIView):
                 break
         if category is None:
             logging.warning("Category not found, returning random category")
-            # Todo: choice doesn't work yet, only ('K_T', 'K T') examples exist!
+            # TODO: choice doesn't work yet, only ('K_T', 'K T') examples exist!
             # category = choice(Min_Pair.Min_Pair_Class.choices)
             category = ('K_T', 'K T')
             print(category)
@@ -174,9 +179,11 @@ class MinPair(APIView):
             "minpair": minpair.pk,
             "category": minpair.min_pair_class[0],
             "first_stimulus": minpair.first_part.text,
-            "first_audio": first_audio.audio.url,
+            # remove path and extension from filename
+            "first_audio": first_audio.audio.name.rsplit('/', 1)[-1].rsplit(".", 1)[0],
             "second_stimulus": minpair.second_part.text,
-            "second_audio": second_audio.audio.url
+            # remove path and extension from filename
+            "second_audio": second_audio.audio.name.rsplit('/', 1)[-1].rsplit(".", 1)[0]
         }
         # minpair = Min_Pair.objects.filter(min_pair_class='B_W')
         # minpair = Min_Pair.objects.first()

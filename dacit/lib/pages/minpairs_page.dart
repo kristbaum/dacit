@@ -53,6 +53,23 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
     }
   }
 
+  Future<MinPair> _postMinPairAnswer(answerEqual) async {
+    final response =
+        await http.post(Uri.parse('${baseDomain}api/minpair'), headers: {
+      "Authorization": "Token ${user.token}",
+    }, body: {
+      "minpair": minPair.id,
+      "answer_equal": answerEqual
+    });
+
+    if (response.statusCode == 200) {
+      log.info("Downloading new Minpair");
+      return MinPair.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to load new text');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Icon icon;
@@ -136,6 +153,7 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
                 children: [
                   IconButton(
                     onPressed: () {
+                      _postMinPairAnswer(false);
                       _refreshMinPair();
                     },
                     icon: const Icon(
@@ -144,6 +162,7 @@ class _MinimalPairsPageState extends State<MinimalPairsPage> {
                   ),
                   IconButton(
                     onPressed: () {
+                      _postMinPairAnswer(true);
                       _refreshMinPair();
                     },
                     icon: const Icon(

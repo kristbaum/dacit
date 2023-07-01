@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from rest_framework import status
 from dacit_app.models import Text_Stimulus, Text_Stimulus_Sent, Min_Pair, Audio, DacitUser, Min_Pair_Sent
-from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer
+from dacit_app.serializers import TextStimulusSerializer, MinPairSerializer, DacitUserSerializer, MinPairResponseSerializer
 from rest_framework.permissions import IsAdminUser, AllowAny
 import logging
 from random import choice
@@ -224,14 +224,12 @@ class MinPair(APIView):
         return Response(json_min_pair)
 
     def post(self, request, format=None):
-        logging.info("Create user")
+        logging.info("Recieve minpair result")
         serializer = MinPairResponseSerializer(data=request.data)
-        logging.info("Create user")
         if serializer.is_valid(raise_exception=ValueError):
             try:
                 min_pair_sent = Min_Pair_Sent.objects.get(
                     pk=serializer.validated_data.min_pair)
-
             except:
                 return Response(
                     status=status.HTTP_404_NOT_FOUND

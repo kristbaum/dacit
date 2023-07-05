@@ -216,6 +216,9 @@ class MinPair(APIView):
 
         # Track that this Min_Pair has been sent to the user
         # TODO: accumulate sent
+        min_pair_sent, created = Min_Pair_Sent.objects.get_or_create(
+            user=request.user, min_pair=minpair
+        )
         min_pair_sent = Min_Pair_Sent(
             user=request.user, min_pair=minpair, sent_equal=send_equal, sent=1)
         min_pair_sent.save()
